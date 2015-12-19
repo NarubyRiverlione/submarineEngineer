@@ -11,10 +11,36 @@ namespace Console_App {
 
             // create submarine (with all spaces)
             Sub mySub = new Sub();
+            // tuple of x,y coordinates
+            Tuple<int, int> coordinate;
 
             // show spaces
             ShowSubmarine(mySub);
 
+            // get command
+            char command='0' ;
+            while (! command.Equals('q')) {
+                Console.Write("Your command (Add/Quit)? ");
+                command = Console.ReadKey().KeyChar;
+
+                switch (command) {
+                    case 'a':
+                        // get coordinates
+                        Console.WriteLine("Add a room to coordinates :");
+                        coordinate= ReadCoordinates();
+                        // get room type to add
+                        RoomType addRoomType = ReadRoomType();
+
+                        Console.WriteLine("ADDING "+ addRoomType.ToString() + " to x=" + coordinate.Item1 + ", y=" + coordinate.Item2);
+
+                        mySub.AddSpaceToRoom(coordinate.Item1, coordinate.Item2, addRoomType);
+
+                        Console.Clear();
+                        ShowSubmarine(mySub);
+                        break;
+                    }
+
+                }
 
             // END !!
             Console.WriteLine(""); Console.WriteLine("");
@@ -22,12 +48,51 @@ namespace Console_App {
             Console.ReadKey();
             }
 
+        private static RoomType ReadRoomType() {
+            int roomTypeInt = ReadNumbers  ("Select room type (int) ");
+            switch (roomTypeInt) {
+                case 0: return RoomType.Empty;
+                case 1:return RoomType.Engine;
+                case 2: return RoomType.Generator;
 
+                default: return RoomType.Empty;
+                }
+
+        
+            }
+
+        static Tuple<int, int> ReadCoordinates() {
+            Console.WriteLine("");
+            int x = ReadNumbers("X:");
+            int y = ReadNumbers("Y:");
+            return new Tuple<int, int>(x, y);
+            }
+        static int ReadNumbers(string ask) {
+            bool readOk = false;
+            int readNumber=0;
+            while (! readOk) {
+                Console.Write(ask);
+                string reading = Console.ReadLine();
+                try { readNumber = Convert.ToInt16(reading); }
+                catch { readOk = false; }
+                readOk = true;
+                }
+            return readNumber;
+            }
+            
+        
         // show room type of each space
         static void ShowSubmarine(Sub subToShow) {
             for (int y = 0; y < subToShow.heightOfSub; y++) {
                 for (int x = 0; x < subToShow.lengthOfSub; x++) {
-                    Console.Write(VisulizeSpace(subToShow.space[x, y]));
+                    Space showSpace = subToShow.GetSpaceAt(x, y);
+                    if (!showSpace.canContainRoom) Console.Write("XXX");
+                    else {
+                        RoomType showRoomType = subToShow.GetRoomTypeOfSpace(showSpace);
+                        Console.Write((int)showRoomType); // show int value for room type to limited to 1 char
+                        if (showSpace.roomID!=0) { Console.Write("R" + showSpace.roomID); } // show roomID
+                        else { Console.Write("  "); }
+                        }
                     Console.Write(" ");
                     }
                 Console.WriteLine("");
@@ -35,14 +100,5 @@ namespace Console_App {
             
             }
 
-        // visualize room type of 1 space
-        private static string VisulizeSpace(Space showSpace) {
-            
-            int spaceAsString = (int)showSpace.roomType;   // get room type of space
-            if (!showSpace.canContainRoom) spaceAsString = -1;  // cannot contain a room
-
-        
-            return spaceAsString.ToString().Length<2 ?  spaceAsString.ToString()+ ' ' : spaceAsString.ToString();
-            }
         }
     }
