@@ -1,0 +1,55 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "_space": {
+      "id": "http://jsonschema.net/_space",
+      "type": "array",
+      "items": {
+        "id": "auto-generated-schema-646"
+      }
+    },
+    "rooms": {
+      "id": "http://jsonschema.net/rooms",
+      "type": "object",
+      "properties": {
+        "1": {
+          "id": "http://jsonschema.net/rooms/1",
+          "type": "object",
+          "properties": {
+            "type": {
+              "id": "http://jsonschema.net/rooms/1/type",
+              "type": "integer"
+            },
+            "size": {
+              "id": "http://jsonschema.net/rooms/1/size",
+              "type": "integer"
+            },
+            "spacesInRoom": {
+              "id": "http://jsonschema.net/rooms/1/spacesInRoom",
+              "type": "array",
+              "items": {
+                "id": "auto-generated-schema-421"
+              }
+            }
+          }
+        }
+      }
+    },
+    "lengthOfSub": {
+      "id": "http://jsonschema.net/lengthOfSub",
+      "type": "integer"
+    },
+    "heightOfSub": {
+      "id": "http://jsonschema.net/heightOfSub",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "_space",
+    "rooms",
+    "lengthOfSub",
+    "heightOfSub"
+  ]
+}
