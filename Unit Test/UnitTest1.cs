@@ -91,11 +91,13 @@ namespace Unit_Test {
 
             // add space between= should merge (adding checks East before West => should add to room id 1 and change room west to 1 also)
             x = 9; y = 2;
-            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,3);
-            // check room East: should be still Room ID 1
-            Assert.AreEqual( 1, testSpaceExists(testSub, 10, 2).roomID, "Room East should be still room ID 1");
-            // check room  West should now also be room ID 1
-            Assert.AreEqual(1, testSpaceExists(testSub, 8, 2).roomID);//, "Room West should now also be room ID 1");
+            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,3); // size should be now 3
+            // check space East: should be still Room ID 1
+            Assert.AreEqual( 1, testSpaceExists(testSub, 10, 2).roomID, "space East should be still room ID 1");
+            // check space  West should now also be room ID 1
+            Assert.AreEqual(1, testSpaceExists(testSub, 8, 2).roomID, "space West should now also be room ID 1");
+            // no room with ID 2 should exist any more
+            Assert.IsNull(testSub.GetRoom(2), "Room with ID 2 still exists, should be removed");
             }
 
 

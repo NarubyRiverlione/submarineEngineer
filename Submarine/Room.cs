@@ -41,6 +41,7 @@ namespace Submarine {
         public void RemoveSpace(Space removeSpace) {
             spacesInRoom.Remove(removeSpace);
             }
+
         }
 
         

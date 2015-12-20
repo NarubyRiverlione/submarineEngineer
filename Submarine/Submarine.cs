@@ -51,6 +51,25 @@ namespace Submarine
         public Room GetRoom(int roomID) {
             return rooms.ContainsKey(roomID) ? rooms[roomID] : null;
             }
+
+        public void MergeRooms(int newRoomID, int oldRoomID) {
+            Room oldRoom = GetRoom(oldRoomID);
+            if (oldRoom == null) { Debug.WriteLine("ERROR: cannot change room because old room (ID:" + oldRoomID + ") doesn't exist"); }
+            else {
+                Room newRoom = GetRoom(newRoomID);
+                if (newRoom == null) { Debug.WriteLine("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist"); }
+                else {
+                    foreach (Space oldRoomSpace in oldRoom.spacesInRoom) {
+                        // change roomID of each space in old room
+                        oldRoomSpace.roomID = newRoomID;
+                        // add spaces to new room (no need to removed them form old room as old room will be destroyed)
+                        newRoom.AddSpace(oldRoomSpace);
+                        }
+                    // remove old room form sub
+                    RemoveRoom(oldRoomID);
+                    }
+                }
+            }
         #endregion
 
         #region Spaces
@@ -109,7 +128,7 @@ namespace Submarine
                             // neighbor space is same room type but another room (id) = merge rooms now
                             Debug.WriteLine("space (" + x + "," + y + ") has roomID " + newRoomSpace.roomID + " neighbor has roomID " + checkSpace.roomID);
                             Debug.WriteLine("Merge rooms now");
-                            //TODO: merge rooms
+                            MergeRooms(newRoomSpace.roomID ,checkSpace.roomID);
                             }
                         }
                     }
