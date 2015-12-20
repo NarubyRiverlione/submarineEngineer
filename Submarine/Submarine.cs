@@ -107,6 +107,24 @@ namespace Submarine
                 }
             }
 
+        // remove space of room (remove room is it's last space)
+        public void RemoveSpaceOfRoom(int x, int y) {
+            Space spaceToBeRemoved = space[x, y];
+            if (spaceToBeRemoved == null) { Debug.WriteLine("ERROR cannot remove space that doesn't exists"); }
+            else {
+                // remove space of room
+                Room ofRoom = GetRoom(spaceToBeRemoved.roomID);
+                ofRoom.RemoveSpace(spaceToBeRemoved);
+                // check if it was the last space of the room
+                if (ofRoom.size==0) {
+                    // destroy room
+                    RemoveRoom(spaceToBeRemoved.roomID);
+                    }
+                // set roomID of space to 0
+                spaceToBeRemoved.roomID = 0;
+                }
+            }
+
         private int GetNewRoomID() {
             return rooms.Keys.Count()+1;
             }

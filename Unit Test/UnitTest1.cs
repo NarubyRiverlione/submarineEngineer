@@ -26,26 +26,11 @@ namespace Unit_Test {
         // add spaces N,E,S,W of existing room => room ID should be always 1
         [TestMethod]
         public void AddSpacesToExistingRoom() {
-            Sub testSub = new Sub();
-            int x = 10, y = 2;
-            RoomType testRoomType = RoomType.Bridge;
-            // first space will create new room = expect room ID = 1
-            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,1);
-
-            // add space North of existing room => add to existing room ==> room ID =1
-            x = 10;  y = 1;
-            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,2);
-            // add space East of existing room => add to existing room ==> room ID =1
-            x = 11; y = 2;
-            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,3);
-            // add space South of existing room => add to existing room ==> room ID =1
-            x = 10; y = 3;
-            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,4);
-            // add space West of existing room => add to existing room ==> room ID =1
-            x = 9; y = 2;
-            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,5);
+            createCrossRoom(10,2,RoomType.Bridge);
 
             }
+
+    
 
         // create rooms (N,E,S,W) around existing room  (other room type = not adding to neighbor)
         [TestMethod]
@@ -76,7 +61,6 @@ namespace Unit_Test {
 
             }
 
-
         // merge 2 rooms
         [TestMethod]
         public void Merge2Rooms() {
@@ -88,7 +72,7 @@ namespace Unit_Test {
             // create room 2
             x = 8; y = 2;
             testRoomCreateOrExpand(testSub, x, y, testRoomType, 2,1);
-
+            
             // add space between= should merge (adding checks East before West => should add to room id 1 and change room west to 1 also)
             x = 9; y = 2;
             testRoomCreateOrExpand(testSub, x, y, testRoomType, 1,3); // size should be now 3
@@ -100,6 +84,38 @@ namespace Unit_Test {
             Assert.IsNull(testSub.GetRoom(2), "Room with ID 2 still exists, should be removed");
             }
 
+        // remove space from room
+        [TestMethod]
+        public void RemoveSpaceFromRoom() {
+            int x = 10, y = 2, expectedSize = 5;
+            Sub testSub = createCrossRoom(x,y, RoomType.Cabin);
+
+            // remove North
+            x = 10;y = 1; expectedSize = 4;
+            testSub.RemoveSpaceOfRoom(x,y);
+            Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
+            Assert.AreEqual(expectedSize, testSub.GetRoom(1).size, "Size of room isn't " + expectedSize);
+            // remove East
+            x = 11; y = 2; expectedSize = 3;
+            testSub.RemoveSpaceOfRoom(x, y);
+            Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
+            Assert.AreEqual(expectedSize, testSub.GetRoom(1).size, "Size of room isn't " + expectedSize);
+            // remove South
+            x = 10; y = 3; expectedSize = 2;
+            testSub.RemoveSpaceOfRoom(x, y);
+            Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
+            Assert.AreEqual(expectedSize, testSub.GetRoom(1).size, "Size of room isn't " + expectedSize);
+            // remove West
+            x = 9; y = 2; expectedSize = 1;
+            testSub.RemoveSpaceOfRoom(x, y);
+            Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
+            Assert.AreEqual(expectedSize, testSub.GetRoom(1).size, "Size of room isn't " + expectedSize);
+            // remove last space
+            x = 10; y = 2; expectedSize = 0;
+            testSub.RemoveSpaceOfRoom(x, y);
+            Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
+            Assert.IsNull(testSub.GetRoom(1), "Room should exist any more, has no spaces left");
+            }
 
         // set room type of a space = create new room or add it to existing neighbor
         private static void testRoomCreateOrExpand(Sub testSub, int x, int y, RoomType testRoomType,int expectRoomID, int expectedRoomSize) {
@@ -112,6 +128,28 @@ namespace Unit_Test {
             Assert.AreEqual(testSpace.roomID, expectRoomID, "Room ID of new room isn't '"+ expectRoomID + "'");
             Assert.IsNotNull(testRoom,"Room with id  '"+expectRoomID+"' doesn't exist in submarine");
             Assert.AreEqual(expectedRoomSize, testRoom.size,"Expect room size '"+ expectedRoomSize +"' but is '"+testRoom.size+"'");
+            }
+
+        // create test room  with 5 spaces : N E W S and center(x,y)
+        private static Sub createCrossRoom(int x, int y, RoomType testRoomType) {
+            Sub testSub = new Sub();
+            
+            // first space will create new room = expect room ID = 1
+            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1, 1);
+
+            // add space North of existing room => add to existing room ==> room ID =1
+            x = 10; y = 1;
+            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1, 2);
+            // add space East of existing room => add to existing room ==> room ID =1
+            x = 11; y = 2;
+            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1, 3);
+            // add space South of existing room => add to existing room ==> room ID =1
+            x = 10; y = 3;
+            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1, 4);
+            // add space West of existing room => add to existing room ==> room ID =1
+            x = 9; y = 2;
+            testRoomCreateOrExpand(testSub, x, y, testRoomType, 1, 5);
+            return testSub;
             }
 
         private static Space testSpaceExists(Sub testSub, int x, int y) {
