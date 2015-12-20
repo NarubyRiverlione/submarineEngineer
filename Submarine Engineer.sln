@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Submarine", "Submarine\Subm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console App", "Console App\Console App.csproj", "{86CE5A5C-25F5-45B6-8268-33F734253948}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit Test", "Unit Test\Unit Test.csproj", "{81833D44-5304-4518-B161-1E23D68DB8CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{86CE5A5C-25F5-45B6-8268-33F734253948}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86CE5A5C-25F5-45B6-8268-33F734253948}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86CE5A5C-25F5-45B6-8268-33F734253948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81833D44-5304-4518-B161-1E23D68DB8CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81833D44-5304-4518-B161-1E23D68DB8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81833D44-5304-4518-B161-1E23D68DB8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81833D44-5304-4518-B161-1E23D68DB8CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
