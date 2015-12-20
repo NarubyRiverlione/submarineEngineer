@@ -82,30 +82,32 @@ namespace Submarine
         // add a space to a existing room, or start a new room
         public void AddSpaceToRoom(int x, int y, RoomType type) {
             Space newRoomSpace = GetSpaceAt(x, y);
-            if (newRoomSpace == null) { Debug.WriteLine("ERROR: cannot create a room outside the submarine"); }
-            else {
-                Space checkSpace;
-                // get info of space North
-                checkSpace = GetSpaceAt(x, y - 1);
-                if (checkSpace!= null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
-                // get info of space East
-                checkSpace = GetSpaceAt(x + 1, y);
-                if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
-                // get info of space South
-                checkSpace = GetSpaceAt(x, y + 1);
-                if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
-                // get info of space West
-                checkSpace = GetSpaceAt(x - 1, y);
-                if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+            if (newRoomSpace == null) { Debug.WriteLine("ERROR: cannot create/expand a room outside the submarine"); }
+            else {if (!newRoomSpace.canContainRoom) { Debug.WriteLine("ERROR: cannot create/expand a room at unavailable space (" + x + "," + y + ")"); }
+                else {
+                    Space checkSpace;
+                    // get info of space North
+                    checkSpace = GetSpaceAt(x, y - 1);
+                    if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+                    // get info of space East
+                    checkSpace = GetSpaceAt(x + 1, y);
+                    if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+                    // get info of space South
+                    checkSpace = GetSpaceAt(x, y + 1);
+                    if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+                    // get info of space West
+                    checkSpace = GetSpaceAt(x - 1, y);
+                    if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
 
-                if (newRoomSpace.roomID == 0) {
-                    // if no neighbor space is part of same room type then start a new room with this space
-                    Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
-                    int newRoomID = GetNewRoomID();
-                    newRoomSpace.roomID = newRoomID;        // set roomID in space
-                    Room newRoom = new Room(type);          // create new room of this room type
-                    AddRoom(newRoom, newRoomID);            // add new room to submarine
-                    rooms[newRoomID].AddSpace(newRoomSpace);// add space to room
+                    if (newRoomSpace.roomID == 0) {
+                        // if no neighbor space is part of same room type then start a new room with this space
+                        Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
+                        int newRoomID = GetNewRoomID();
+                        newRoomSpace.roomID = newRoomID;        // set roomID in space
+                        Room newRoom = new Room(type);          // create new room of this room type
+                        AddRoom(newRoom, newRoomID);            // add new room to submarine
+                        rooms[newRoomID].AddSpace(newRoomSpace);// add space to room
+                        }
                     }
                 }
             }

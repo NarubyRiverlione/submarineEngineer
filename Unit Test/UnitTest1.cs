@@ -43,6 +43,18 @@ namespace Unit_Test {
             Assert.IsNull(testSub.GetRoom(1), "Room shouldn't exist outside submarine");
             }
 
+        // try creating new rooms in unavailable space
+        [TestMethod]
+        public void TryCreatingRoomInUnavailableSpace() {
+            Sub testSub = new Sub();
+            int x = 5, y = 0;
+            RoomType testRoomType = RoomType.Bridge;
+            // make sure test space is set unavailable
+            Assert.AreEqual(false, testSub.GetSpaceAt(x, y).canContainRoom);
+
+            testSub.AddSpaceToRoom(x, y, testRoomType);
+            Assert.IsNull(testSub.GetRoom(1), "Room shouldn't exist at unavailable space");
+            }
 
         // add spaces N,E,S,W of existing room => room ID should be always 1
         [TestMethod]
