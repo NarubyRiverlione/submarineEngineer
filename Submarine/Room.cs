@@ -18,19 +18,32 @@ namespace Submarine {
         ConnTower=9
         };
 
-    public class Room : IRoomValidation {
+    public class Room  {
         public RoomType type { get; set; }
         //public bool isValid { get; private set; }
-        public int size { get; set; }
 
-        public bool isRoomValid(Room checkThisRoom) {
-            return false;
-            }
+        //public bool isRoomValid(Room checkThisRoom) {
+        //    return false;
+        //    }
+
+        public int size { get { return spacesInRoom.Count(); } }
+        public List<Space> spacesInRoom { get;private set; }
+
 
         public Room(RoomType setType) {
             type = setType;
+            spacesInRoom = new List<Space>();
+            }
+
+        public void AddSpace(Space addSpace) {
+            spacesInRoom.Add(addSpace);
+            }
+        public void RemoveSpace(Space removeSpace) {
+            spacesInRoom.Remove(removeSpace);
             }
         }
+
+        
 
     public interface IRoomValidation {
         bool isRoomValid(Room checkThisRoom);

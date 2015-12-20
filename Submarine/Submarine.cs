@@ -48,6 +48,9 @@ namespace Submarine
         private void RemoveRoom(int roomID) {
             rooms.Remove(roomID);
             }
+        public Room GetRoom(int roomID) {
+            return rooms.ContainsKey(roomID) ? rooms[roomID] : null;
+            }
         #endregion
 
         #region Spaces
@@ -78,9 +81,10 @@ namespace Submarine
                 // if no neighbor space is part of same room type then start a new room with this space
                 Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
                 int newRoomID = GetNewRoomID();
-                newRoomSpace.roomID = newRoomID;  // set roomID in space
-                Room newRoom = new Room(type);  // create new room of this room type
-                AddRoom(newRoom, newRoomID);    // add new room to submarine
+                newRoomSpace.roomID = newRoomID;        // set roomID in space
+                Room newRoom = new Room(type);          // create new room of this room type
+                AddRoom(newRoom, newRoomID);            // add new room to submarine
+                rooms[newRoomID].AddSpace(newRoomSpace);// add space to room
                 }
             }
 
@@ -97,8 +101,8 @@ namespace Submarine
                     if (newRoomSpace.roomID == 0) {
                         // space is not assigned to a room yet, add it tot neighbor room now
                         Debug.WriteLine("Add space (" + x + "," + y + ") to existing room ID:" + checkSpace.roomID);
-                        newRoomSpace.roomID = checkSpace.roomID;    // store existing roomID in newRoomSpace
-                        rooms[checkSpace.roomID].size++;            // inc size of room
+                        newRoomSpace.roomID = checkSpace.roomID;            // store existing roomID in newRoomSpace
+                        rooms[newRoomSpace.roomID].AddSpace(newRoomSpace);  // add space to room
                         }
                     else {// space is already in a room: check if neighborer is in same room
                         if (newRoomSpace.roomID != checkSpace.roomID) {
