@@ -137,10 +137,11 @@ namespace Submarine
             }
 
         // check is neighbor space is in a room
-        private void CheckSameRoomType(int x, int y, RoomType type, Space newRoomSpace, Space checkSpace) {
-            if (checkSpace != null) {
+		private void CheckSameRoomType(int x, int y, RoomType wantedRoomType, Space newRoomSpace, Space checkSpace) {
+            if (checkSpace != null ) {
+				RoomType roomTypeOfNeighbor = GetRoomTypeOfSpace (checkSpace);
                 // neighbor space exists
-                if (type == GetRoomTypeOfSpace(checkSpace)) {
+				if (wantedRoomType == roomTypeOfNeighbor && roomTypeOfNeighbor != RoomType.Empty) {
                     // if neighborer space has same room type as this space
                     if (newRoomSpace.roomID == 0) {
                         // space is not assigned to a room yet, add it tot neighbor room now
