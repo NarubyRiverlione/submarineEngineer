@@ -65,9 +65,15 @@ namespace Console_App {
             int roomTypeInt = ReadNumbers  ("Select room type (int) ");
             switch (roomTypeInt) {
                 case 0: return RoomType.Empty;
-                case 1:return RoomType.Engine;
+                case 1: return RoomType.Engine;
                 case 2: return RoomType.Generator;
-
+				case 3:	return RoomType.Battery;
+				case 4:	return RoomType.Bridge;
+				case 5:	return RoomType.Gallery;
+				case 6:	return RoomType.Mess;
+				case 7:	return RoomType.Cabin;
+				case 8:	return RoomType.Bunks;
+				case 9:	return RoomType.Conn;
                 default: return RoomType.Empty;
                 }
 

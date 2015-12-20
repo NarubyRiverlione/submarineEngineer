@@ -15,7 +15,7 @@ namespace Submarine {
         Mess=6,
         Cabin=7,
         Bunks=8,
-        ConnTower=9
+        Conn=9
         };
 
     public class Room  {
