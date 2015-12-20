@@ -23,6 +23,27 @@ namespace Unit_Test {
    
             }
 
+        // try creating new rooms outside sub
+        [TestMethod]
+        public void TryCreatingRoomsOutsideSub() {
+            Sub testSub = new Sub();
+            int x = testSub.lengthOfSub, y = 1;
+            RoomType testRoomType = RoomType.Bridge;
+            testSub.AddSpaceToRoom( x, y, testRoomType);
+            Assert.IsNull(testSub.GetRoom(1),"Room shouldn't exist outside submarine");
+            x = -2;
+            testSub.AddSpaceToRoom(x, y, testRoomType);
+            Assert.IsNull(testSub.GetRoom(1), "Room shouldn't exist outside submarine");
+            x = testSub.lengthOfSub / 2;
+            y = -1;
+            testSub.AddSpaceToRoom(x, y, testRoomType);
+            Assert.IsNull(testSub.GetRoom(1), "Room shouldn't exist outside submarine");
+            y = testSub.heightOfSub;
+            testSub.AddSpaceToRoom(x, y, testRoomType);
+            Assert.IsNull(testSub.GetRoom(1), "Room shouldn't exist outside submarine");
+            }
+
+
         // add spaces N,E,S,W of existing room => room ID should be always 1
         [TestMethod]
         public void AddSpacesToExistingRoom() {
@@ -115,6 +136,15 @@ namespace Unit_Test {
             testSub.RemoveSpaceOfRoom(x, y);
             Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
             Assert.IsNull(testSub.GetRoom(1), "Room should exist any more, has no spaces left");
+            }
+
+        // remove space from not-existing room
+        [TestMethod]
+        public void RemoveFormNotExistingRoom() {
+            Sub testSub = new Sub();
+            int x = 7, y = 3;
+            testSub.RemoveSpaceOfRoom(x, y);
+            Assert.AreEqual(0, testSub.GetSpaceAt(x, y).roomID, "Space has still a room ID, should be '0'");
             }
 
         // set room type of a space = create new room or add it to existing neighbor

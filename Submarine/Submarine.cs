@@ -12,29 +12,29 @@ namespace Submarine
         public int lengthOfSub { get; private set; }
         public int heightOfSub { get; private set; }
 
-        Space[,] space;
+        Space[,] _space;
         Dictionary<int, Room> rooms;
 
         #region CONSTRUCTOR
         public Sub() {
             lengthOfSub = 40; heightOfSub = 5;
-            space = new Space[lengthOfSub, heightOfSub]; // initialize 2D array, still doesn't contain anything
+            _space = new Space[lengthOfSub, heightOfSub]; // initialize 2D array, still doesn't contain anything
             // instantiate spaces
             for (int x = 0; x < lengthOfSub; x++) {
                 for (int y = 0; y < heightOfSub; y++) {
-                    space[x, y] = new Space();
+                    _space[x, y] = new Space();
                     }
                 }
 
             // set space's outside sub outlines as unavailable
             // upper engine room
-            for (int x = 0; x <= 3; x++) { space[x, 1].canContainRoom = false; }
+            for (int x = 0; x <= 3; x++) { _space[x, 1].canContainRoom = false; }
             // lower engine room
-            for (int x = 0; x <= 3; x++) { space[x, heightOfSub - 1].canContainRoom = false; }
+            for (int x = 0; x <= 3; x++) { _space[x, heightOfSub - 1].canContainRoom = false; }
             // left of Conn tower
-            for (int x = 0; x < lengthOfSub / 3 * 2; x++) { space[x, 0].canContainRoom = false; }
+            for (int x = 0; x < lengthOfSub / 3 * 2; x++) { _space[x, 0].canContainRoom = false; }
             //right of Conn tower
-            for (int x = lengthOfSub / 3 * 2 + 5; x < lengthOfSub; x++) { space[x, 0].canContainRoom = false; }
+            for (int x = lengthOfSub / 3 * 2 + 5; x < lengthOfSub; x++) { _space[x, 0].canContainRoom = false; }
 
             // instantiate rooms
             rooms = new Dictionary<int, Room>();
@@ -74,54 +74,59 @@ namespace Submarine
 
         #region Spaces
         public Space GetSpaceAt(int x, int y) {
-            if (x > lengthOfSub || x < 0) { Debug.WriteLine("ERROR: get space x (" + x + ")is outside length (" + lengthOfSub + ") of submarine"); return null; }
-            if (y > heightOfSub || y < 0) { Debug.WriteLine("ERROR: get space x (" + y + ")is outside height (" + heightOfSub + ") of submarine"); return null; }
-            return space[x, y];
+            if (x > lengthOfSub-1 || x < 0) { Debug.WriteLine("ERROR: get space x (" + x + ")is outside length (" + lengthOfSub + ") of submarine"); return null; }
+            if (y > heightOfSub-1 || y < 0) { Debug.WriteLine("ERROR: get space x (" + y + ")is outside height (" + heightOfSub + ") of submarine"); return null; }
+            return _space[x, y];
             }
 
         // add a space to a existing room, or start a new room
         public void AddSpaceToRoom(int x, int y, RoomType type) {
-            Space newRoomSpace = space[x, y];
-            Space checkSpace;
-            // get info of space North
-            checkSpace = GetSpaceAt(x, y - 1);
-            CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
-            // get info of space East
-            checkSpace = GetSpaceAt(x + 1, y);
-            CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
-            // get info of space South
-            checkSpace = GetSpaceAt(x, y + 1);
-            CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
-            // get info of space West
-            checkSpace = GetSpaceAt(x - 1, y);
-            CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+            Space newRoomSpace = GetSpaceAt(x, y);
+            if (newRoomSpace == null) { Debug.WriteLine("ERROR: cannot create a room outside the submarine"); }
+            else {
+                Space checkSpace;
+                // get info of space North
+                checkSpace = GetSpaceAt(x, y - 1);
+                if (checkSpace!= null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+                // get info of space East
+                checkSpace = GetSpaceAt(x + 1, y);
+                if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+                // get info of space South
+                checkSpace = GetSpaceAt(x, y + 1);
+                if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+                // get info of space West
+                checkSpace = GetSpaceAt(x - 1, y);
+                if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
 
-            if (newRoomSpace.roomID == 0) {
-                // if no neighbor space is part of same room type then start a new room with this space
-                Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
-                int newRoomID = GetNewRoomID();
-                newRoomSpace.roomID = newRoomID;        // set roomID in space
-                Room newRoom = new Room(type);          // create new room of this room type
-                AddRoom(newRoom, newRoomID);            // add new room to submarine
-                rooms[newRoomID].AddSpace(newRoomSpace);// add space to room
+                if (newRoomSpace.roomID == 0) {
+                    // if no neighbor space is part of same room type then start a new room with this space
+                    Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
+                    int newRoomID = GetNewRoomID();
+                    newRoomSpace.roomID = newRoomID;        // set roomID in space
+                    Room newRoom = new Room(type);          // create new room of this room type
+                    AddRoom(newRoom, newRoomID);            // add new room to submarine
+                    rooms[newRoomID].AddSpace(newRoomSpace);// add space to room
+                    }
                 }
             }
-
         // remove space of room (remove room is it's last space)
         public void RemoveSpaceOfRoom(int x, int y) {
-            Space spaceToBeRemoved = space[x, y];
+            Space spaceToBeRemoved = GetSpaceAt(x, y);
             if (spaceToBeRemoved == null) { Debug.WriteLine("ERROR cannot remove space that doesn't exists"); }
             else {
                 // remove space of room
                 Room ofRoom = GetRoom(spaceToBeRemoved.roomID);
-                ofRoom.RemoveSpace(spaceToBeRemoved);
-                // check if it was the last space of the room
-                if (ofRoom.size==0) {
-                    // destroy room
-                    RemoveRoom(spaceToBeRemoved.roomID);
+                if (ofRoom == null) { Debug.WriteLine("ERROR space doesn't belong to a room"); }
+                else {
+                    ofRoom.RemoveSpace(spaceToBeRemoved);
+                    // check if it was the last space of the room
+                    if (ofRoom.size == 0) {
+                        // destroy room
+                        RemoveRoom(spaceToBeRemoved.roomID);
+                        }
+                    // set roomID of space to 0
+                    spaceToBeRemoved.roomID = 0;
                     }
-                // set roomID of space to 0
-                spaceToBeRemoved.roomID = 0;
                 }
             }
 

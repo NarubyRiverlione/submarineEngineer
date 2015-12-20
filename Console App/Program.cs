@@ -20,13 +20,13 @@ namespace Console_App {
             // get command
             char command='0' ;
             while (! command.Equals('q')) {
-                Console.Write("Your command (Add/Quit)? ");
+                Console.Write("Your command (Add/Remove/Quit)? ");
                 command = Console.ReadKey().KeyChar;
 
                 switch (command) {
                     case 'a':
                         // get coordinates
-                        Console.WriteLine("Add a room to coordinates :");
+                        Console.WriteLine("Create/expand a room at coordinates :");
                         coordinate= ReadCoordinates();
                         // get room type to add
                         RoomType addRoomType = ReadRoomType();
@@ -38,6 +38,19 @@ namespace Console_App {
                         Console.Clear();
                         ShowSubmarine(mySub);
                         break;
+                    case 'r':
+                        // get coordinates
+                        Console.WriteLine("Shrink / remove a room at coordinates :");
+                        coordinate = ReadCoordinates();
+             
+                        Console.WriteLine("REMOVING at x=" + coordinate.Item1 + ", y=" + coordinate.Item2);
+
+                        mySub.RemoveSpaceOfRoom(coordinate.Item1, coordinate.Item2);
+
+                        Console.Clear();
+                        ShowSubmarine(mySub);
+                        break;
+
                     }
 
                 }
