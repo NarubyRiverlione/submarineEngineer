@@ -14,7 +14,9 @@ namespace Submarine
 		[JsonProperty]
 		public int heightOfSub { get; private set; }
 		[JsonProperty]
-		public int sizeOfBridgeTower { get; private set; }
+		public int lenghtOfBridgeTower { get; private set; }
+		[JsonProperty]
+		public int heightOfBridgeTower { get; private set; }
 
 		[JsonProperty]
 		Space[,] _space;
@@ -28,7 +30,7 @@ namespace Submarine
 			}
 
 		[JsonProperty]
-		int _nextRoomID = 1;
+		int _nextRoomID = 1; // ID 0 = no room assigned to space
 
 
 		#region SAVE / LOAD
@@ -48,7 +50,7 @@ namespace Submarine
 
 		#region CONSTRUCTOR
 		public Sub() {
-			lengthOfSub = 20; heightOfSub = 6; sizeOfBridgeTower = 4;
+			lengthOfSub = 20; heightOfSub = 6; lenghtOfBridgeTower = 4;heightOfBridgeTower = 1;
 
 		   // initialize 2D array, still doesn't contain anything
 			_space = new Space[lengthOfSub, heightOfSub]; 
@@ -68,13 +70,13 @@ namespace Submarine
 			// lower engine room
 			for (int x = 0; x <= lengthOfSub/10; x++) { _space[x, heightOfSub - 1].canContainRoom = false; }
 			// left of Bridge tower
-			for (int x = 0; x < lengthOfSub / 3 * 2; x++) { for (int y = 0; y <= 1; y++) { _space[x, y].canContainRoom = false; } }
+			for (int x = 0; x < lengthOfSub / 3 * 2; x++) { for (int y = 0; y <= heightOfBridgeTower; y++) { _space[x, y].canContainRoom = false; } }
 			//right of Bridge tower
-			for (int x = lengthOfSub / 3 * 2 + sizeOfBridgeTower; x < lengthOfSub; x++) { for (int y = 0; y <= 1; y++) { _space[x, y].canContainRoom = false; } }
+			for (int x = lengthOfSub / 3 * 2 + lenghtOfBridgeTower; x < lengthOfSub; x++) { for (int y = 0; y <= heightOfBridgeTower; y++) { _space[x, y].canContainRoom = false; } }
 
-			// add Bridge
-			for (int x = lengthOfSub / 3 * 2 ; x < lengthOfSub / 3 * 2 +sizeOfBridgeTower; x++) {
-				for (int y = 0; y <= 1; y++) {
+			// add Bridge Tower
+			for (int x = lengthOfSub / 3 * 2 ; x < lengthOfSub / 3 * 2 +lenghtOfBridgeTower; x++) {
+				for (int y = 0; y <= heightOfBridgeTower; y++) {
 					AddSpaceToRoom(x, y, RoomType.Bridge);
 					}
 				}
@@ -154,7 +156,7 @@ namespace Submarine
 						// if no neighbor space is part of same room type then start a new room with this space
 						Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
 
-						Room newRoom = Room.CreateRoomOfType(type);     // create new room of this room type
+						Room newRoom = Room.CreateRoomOfType(type,inThisSub:this);     // create new room of this room type
 						AddRoomToSubmarine(newRoom);                    // add new room to submarine
 						newRoom.AddSpace(newRoomSpace);                 // add space to room
 						newRoomSpace.roomID = _nextRoomID-1;            // set roomID in space

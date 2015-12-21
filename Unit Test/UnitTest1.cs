@@ -201,16 +201,34 @@ namespace Unit_Test {
         // create valid Conn (should be below Bridge)
         [TestMethod]
         public void CreateValid_Conn() {
-            CreateValidSizedRoom(RoomType.Bunks);
+			Sub testSub = new Sub ();
+			int belowTower_Y = testSub.heightOfBridgeTower+1;
+			int belowTower_X = testSub.lengthOfSub / 3 * 2 + 1;
+
+			testSub.AddSpaceToRoom (belowTower_X,belowTower_Y+1,RoomType.Conn); // not connected to the Tower
+			int roomID = testSub.GetSpaceAt(belowTower_X,belowTower_Y+1).roomID;
+			Assert.isFalse(testSub.GetRoom(roomID).IsLayoutValid);				// layout not valid : to small & not connected
+
+			testSub.AddSpaceToRoom (belowTower_X+1,belowTower_Y+1,RoomType.Conn); // not connected to the Tower
+			Assert.IsFalse(testSub.GetRoom(roomID).IsLayoutValid);				// layout not valid : to small & not connected
+
+			testSub.AddSpaceToRoom (belowTower_X,belowTower_Y,RoomType.Conn); //  connected to the Tower
+			Assert.IsFalse(testSub.GetRoom(roomID).IsLayoutValid);				// layout not valid : to small
+
+			testSub.AddSpaceToRoom (belowTower_X+1,belowTower_Y,RoomType.Conn); //  connected to the Tower
+			Assert.IsTrue(testSub.GetRoom(roomID).IsLayoutValid);				// layout  valid : correct size & connected
             }
 
         // add spaces until room size is valid (will fail if there are extra requirements)
         private void CreateValidSizedRoom(RoomType testRoomType) {
             Sub testSub = new Sub();
-            int x = 10, y = 1;
+			int x = testSub.lengthOfSub / 2;
+			int y = testSub.heightOfSub / 2;
       
             testSub.AddSpaceToRoom(x, y, testRoomType);
-            Room testRoom = testSub.GetRoom(1);
+			int roomID = testSub.GetSpaceAt(x, y).roomID;
+				
+			Room testRoom = testSub.GetRoom(roomID);
             Assert.IsNotNull(testRoom);
 
             // add spaces unit there are enough

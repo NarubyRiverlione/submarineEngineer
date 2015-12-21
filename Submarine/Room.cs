@@ -28,6 +28,7 @@ namespace Submarine {
     //    }
 
     abstract public class Room  {
+		Sub _inThusSub;	// to get info of the sub (dimensions)
         public RoomType TypeOfRoom { get;  }
 
         public int Size { get { return spacesInRoom.Count(); } }
@@ -43,9 +44,10 @@ namespace Submarine {
         abstract public bool IsLayoutValid { get; }
 
         #region CONSTRUCTOR
-        public Room(RoomType setType) {
-            TypeOfRoom = setType;
+		public Room(RoomType ofThisRoomType, Sub sub) {
+			TypeOfRoom = ofThisRoomType;
             spacesInRoom = new List<Space>();
+			_inThusSub = sub;
             }
         #endregion
 
@@ -57,18 +59,18 @@ namespace Submarine {
             spacesInRoom.Remove(removeSpace);
             }
 
-        public static Room CreateRoomOfType(RoomType type) {
+		public static Room CreateRoomOfType(RoomType type,  Sub inThisSub ) {
             switch(type) {
                 case RoomType.FuelTank:
-                    return new FuelTank(type);
-                case RoomType.Conn:
-                    return new Conn(type);
+                    return new FuelTank(type,inThisSub);
+				case RoomType.Conn:
+					return new Conn (type,inThisSub);
                 case RoomType.Cabin:
-                    return new Cabin(type);
+                    return new Cabin(type,inThisSub);
                 case RoomType.Bunks:
-                    return new Bunks(type);
+                    return new Bunks(type,inThisSub);
                 case RoomType.Bridge:
-                    return new Bridge(type);
+                    return new Bridge(type,inThisSub);
                 default:
                     throw new NotImplementedException("ERROR: Room type "+ type +" isn't implemented yet.");
                     //return null;
@@ -90,7 +92,7 @@ namespace Submarine {
                 }
             }
 
-            public FuelTank(RoomType typeOfRoom):base(typeOfRoom) {
+		public FuelTank(RoomType typeOfRoom,Sub sub):base(typeOfRoom,sub) {
                 IsAccessable = false;
                 }
         }
@@ -110,12 +112,12 @@ namespace Submarine {
                 }
             }
 
-        public Cabin(RoomType typeOfRoom) : base(typeOfRoom) {   }
+		public Cabin(RoomType typeOfRoom,Sub sub) : base(typeOfRoom,sub) {   }
         }
 
     public class Bunks : Room {
         // public override RoomType TypeOfRoom { get { return RoomType.Bridge; } }
-        public override double CapacityPerSpace { get { return 1000.0; } }
+        public override double CapacityPerSpace { get { return 12.0; } }
         public override string UnitName { get { return "crew"; } }
         public override int MinimimValidSize { get { return 6; } }
 
@@ -127,7 +129,7 @@ namespace Submarine {
                 }
             }
 
-        public Bunks(RoomType typeOfRoom) : base(typeOfRoom) { }
+		public Bunks(RoomType typeOfRoom,Sub sub) : base(typeOfRoom,sub) { }
         }
 
     public class Conn : Room {
@@ -136,21 +138,35 @@ namespace Submarine {
         public override string UnitName { get { return "crew"; } }
         public override int MinimimValidSize { get { return 6; } }
 
+		int shouldContain_X;
+		int shouldContain_Y;
+
         public override bool IsLayoutValid
             {
             get
-                {
-                return Size >= MinimimValidSize ? true : false;
+                {// check size req.
+				bool sizeOk = Size >= MinimimValidSize;
+
+				// should be connected  to the Bride tower
+				bool X_Ok = false, Y_Ok = false;
+				foreach (Space checkSpace in spacesInRoom) {
+					if (checkSpace.X == shouldContain_X) X_Ok = true;
+					if (checkSpace.Y == shouldContain_Y) Y_Ok = true;
+				}
+				return sizeOk && X_Ok && Y_Ok; // all 3 req needs true
                 }
             }
 
-        public Conn(RoomType typeOfRoom) : base(typeOfRoom) {   }
+		public Conn(RoomType typeOfRoom, Sub sub) : base(typeOfRoom,sub) {  
+			shouldContain_X = sub.lengthOfSub /3+2;
+			shouldContain_Y = sub.heightOfBridgeTower + 1;;
+		}
 
         }
 
     public class Bridge : Room {
         // public override RoomType TypeOfRoom { get { return RoomType.Bridge; } }
-        public override double CapacityPerSpace { get { return 1000.0; } }
+        public override double CapacityPerSpace { get { return 3.0; } }
         public override string UnitName { get { return "crew"; } }
         public override int MinimimValidSize { get { return 4; } }
 
@@ -162,7 +178,7 @@ namespace Submarine {
                 }
             }
 
-        public Bridge(RoomType typeOfRoom) : base(typeOfRoom) { }
+		public Bridge(RoomType typeOfRoom,Sub sub) : base(typeOfRoom,sub ) { }
 
         }
     }
