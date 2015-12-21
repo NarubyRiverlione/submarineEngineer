@@ -111,6 +111,11 @@ namespace Console_App {
 		// show room type of each space
 		static void ShowSubmarine(Sub subToShow) {
 			for (int y = 0; y < subToShow.heightOfSub; y++) {
+				
+				for (int x = 0; x < subToShow.lengthOfSub; x++) {
+					Console.Write(x.ToString().PadLeft(2)+","+y+" ");
+				}
+				Console.WriteLine ("");
 				for (int x = 0; x < subToShow.lengthOfSub; x++) {
 					Space showSpace = subToShow.GetSpaceAt(x, y);
 					if (!showSpace.canContainRoom) Console.Write("XXX");
@@ -120,7 +125,7 @@ namespace Console_App {
 						if (showSpace.roomID!=0) { Console.Write("R" + showSpace.roomID); } // show roomID
 						else { Console.Write("  "); }
 						}
-					Console.Write(" ");
+					Console.Write("  ");
 					}
 				Console.WriteLine("");
 				}
