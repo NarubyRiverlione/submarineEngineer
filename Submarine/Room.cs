@@ -138,8 +138,8 @@ namespace Submarine {
         public override string UnitName { get { return "crew"; } }
         public override int MinimimValidSize { get { return 6; } }
 
-		int shouldContain_X;
-		int shouldContain_Y;
+		int startValid_X, stopValid_X;
+		int valid_Y;
 
         public override bool IsLayoutValid
             {
@@ -148,18 +148,19 @@ namespace Submarine {
 				bool sizeOk = Size >= MinimimValidSize;
 
 				// should be connected  to the Bride tower
-				bool X_Ok = false, Y_Ok = false;
+				bool locationValid=false;
 				foreach (Space checkSpace in spacesInRoom) {
-					if (checkSpace.X == shouldContain_X) X_Ok = true;
-					if (checkSpace.Y == shouldContain_Y) Y_Ok = true;
+					if (checkSpace.X > startValid_X && checkSpace.X <= stopValid_X && checkSpace.Y == valid_Y)
+						locationValid = true;
 				}
-				return sizeOk && X_Ok && Y_Ok; // all 3 req needs true
+				return sizeOk && locationValid; // all req needs true
                 }
             }
 
 		public Conn(RoomType typeOfRoom, Sub sub) : base(typeOfRoom,sub) {  
-			shouldContain_X = sub.lengthOfSub /3+2;
-			shouldContain_Y = sub.heightOfBridgeTower + 1;;
+			startValid_X = sub.lengthOfSub /3+2;
+			stopValid_X = startValid_X + sub.lenghtOfBridgeTower;
+			valid_Y = sub.heightOfBridgeTower + 1;
 		}
 
         }

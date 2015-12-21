@@ -95,7 +95,13 @@ namespace Submarine
 		public Room GetRoom(int roomID) {
 			return rooms.ContainsKey(roomID) ? rooms[roomID] : null;
 			}
-
+		public bool IsRoomValid(int roomID) {
+			Room checkRoom = GetRoom (roomID);
+			if (checkRoom != null)
+				return checkRoom.IsLayoutValid;
+			else
+				return false;
+			}
 		public void MergeRooms(int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom(oldRoomID);
 			if (oldRoom == null) { Debug.WriteLine("ERROR: cannot change room because old room (ID:" + oldRoomID + ") doesn't exist"); }

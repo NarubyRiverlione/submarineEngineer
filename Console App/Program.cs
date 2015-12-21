@@ -110,19 +110,35 @@ namespace Console_App {
 		
 		// show room type of each space
 		static void ShowSubmarine(Sub subToShow) {
+			Console.Write ("   ");
+			for (int x = 0; x < subToShow.lengthOfSub; x++) {
+				Console.ForegroundColor = ConsoleColor.Black;
+				Console.Write(x.ToString().PadLeft(4));
+				Console.Write (" ");
+			}
+			Console.WriteLine ("");
+
 			for (int y = 0; y < subToShow.heightOfSub; y++) {
-				
-				for (int x = 0; x < subToShow.lengthOfSub; x++) {
-					Console.Write(x.ToString().PadLeft(2)+","+y+" ");
-				}
-				Console.WriteLine ("");
+				Console.ForegroundColor = ConsoleColor.Black;
+				Console.Write(y.ToString().PadLeft(4));
+		
 				for (int x = 0; x < subToShow.lengthOfSub; x++) {
 					Space showSpace = subToShow.GetSpaceAt(x, y);
-					if (!showSpace.canContainRoom) Console.Write("XXX");
+
+					if (!showSpace.canContainRoom) {
+						Console.ForegroundColor = ConsoleColor.Blue;
+						Console.Write ("~~~");
+					}
 					else {
-						RoomType showRoomType = subToShow.GetRoomTypeOfSpace(showSpace);
-						Console.Write((int)showRoomType); // show int value for room type to limited to 1 char
-						if (showSpace.roomID!=0) { Console.Write("R" + showSpace.roomID); } // show roomID
+						if (showSpace.roomID!=0) { 
+							RoomType showRoomType = subToShow.GetRoomTypeOfSpace(showSpace);
+
+							bool roomIsValid = subToShow.IsRoomValid (showSpace.roomID);
+							Console.ForegroundColor = roomIsValid==true ? ConsoleColor.DarkGreen : ConsoleColor.Red;
+						
+							Console.Write((int)showRoomType); // show int value for room type to limited to 1 char
+							Console.Write("-" + showSpace.roomID);  // show roomID
+							}
 						else { Console.Write("  "); }
 						}
 					Console.Write("  ");
