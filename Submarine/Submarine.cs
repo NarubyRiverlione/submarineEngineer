@@ -58,7 +58,7 @@ namespace Submarine
 		   // instantiate spaces
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
-					_space[x, y] = new Space();
+					_space[x, y] = new Space(x,y);
 					}
 				}
 
@@ -112,6 +112,9 @@ namespace Submarine
 					}
 				}
 			}
+
+
+
 		#endregion
 
 
@@ -130,7 +133,8 @@ namespace Submarine
 			if (newRoomSpace == null) 
 				{ Debug.WriteLine("ERROR: cannot create/expand a room outside the submarine"); }
 			else {if (!newRoomSpace.canContainRoom) { Debug.WriteLine("ERROR: cannot create/expand a room at unavailable space (" + x + "," + y + ")"); }
-			else {if (newRoomSpace.roomID != 0) {Debug.WriteLine ("ERROR: already in the " + newRoomSpace.GetType + " room ("+newRoomSpace.roomID+"), remove me first");}
+			else {if (newRoomSpace.roomID != 0) 
+				{Debug.WriteLine ("ERROR: already in the " + GetRoomTypeOfSpace(newRoomSpace) + " room (" + newRoomSpace.roomID + "), remove me first");}
 					else {
 					Space checkSpace;
 					// get info of space North
