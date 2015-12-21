@@ -14,12 +14,25 @@ namespace Submarine
 		[JsonProperty]
 		public int heightOfSub { get; private set; }
 		[JsonProperty]
+		public int sizeOfBridgeTower { get; private set; }
+
+		[JsonProperty]
 		Space[,] _space;
 		[JsonProperty]
 		Dictionary<int, Room> rooms;
+		public int AmountOfRooms {
+			get {
+				if (rooms != null) return rooms.Count;
+				else return 0;
+				}
+			}
 
-		public void Save(string fileName)
-			{
+		[JsonProperty]
+		int _nextRoomID = 1;
+
+
+		#region SAVE / LOAD
+		public void Save(string fileName) {
 			string jsonString = JsonConvert.SerializeObject(this);
 			//Console.WriteLine("");Console.WriteLine(jsonString);
 			// save to file
@@ -30,13 +43,19 @@ namespace Submarine
 			string jsonString = System.IO.File.ReadAllText(fileName);
 			Sub loadedSub = JsonConvert.DeserializeObject<Sub>(jsonString);
 			return loadedSub;
-			}
+			} 
+		#endregion
 
 		#region CONSTRUCTOR
 		public Sub() {
-			lengthOfSub = 40; heightOfSub = 5;
-			_space = new Space[lengthOfSub, heightOfSub]; // initialize 2D array, still doesn't contain anything
-			// instantiate spaces
+			lengthOfSub = 20; heightOfSub = 6; sizeOfBridgeTower = 4;
+
+		   // initialize 2D array, still doesn't contain anything
+			_space = new Space[lengthOfSub, heightOfSub]; 
+		   // instantiate rooms
+			rooms = new Dictionary<int, Room>();
+
+		   // instantiate spaces
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
 					_space[x, y] = new Space();
@@ -45,24 +64,30 @@ namespace Submarine
 
 			// set space's outside sub outlines as unavailable
 			// upper engine room
-			for (int x = 0; x <= 3; x++) { _space[x, 1].canContainRoom = false; }
+			for (int x = 0; x <= lengthOfSub/10; x++) { for (int y = 0; y <= 2; y++) { _space[x, y].canContainRoom = false; } }
 			// lower engine room
-			for (int x = 0; x <= 3; x++) { _space[x, heightOfSub - 1].canContainRoom = false; }
-			// left of Conn tower
-			for (int x = 0; x < lengthOfSub / 3 * 2; x++) { _space[x, 0].canContainRoom = false; }
-			//right of Conn tower
-			for (int x = lengthOfSub / 3 * 2 + 5; x < lengthOfSub; x++) { _space[x, 0].canContainRoom = false; }
+			for (int x = 0; x <= lengthOfSub/10; x++) { _space[x, heightOfSub - 1].canContainRoom = false; }
+			// left of Bridge tower
+			for (int x = 0; x < lengthOfSub / 3 * 2; x++) { for (int y = 0; y <= 1; y++) { _space[x, y].canContainRoom = false; } }
+			//right of Bridge tower
+			for (int x = lengthOfSub / 3 * 2 + sizeOfBridgeTower; x < lengthOfSub; x++) { for (int y = 0; y <= 1; y++) { _space[x, y].canContainRoom = false; } }
 
-			// instantiate rooms
-			rooms = new Dictionary<int, Room>();
+			// add Bridge
+			for (int x = lengthOfSub / 3 * 2 ; x < lengthOfSub / 3 * 2 +sizeOfBridgeTower; x++) {
+				for (int y = 0; y <= 1; y++) {
+					AddSpaceToRoom(x, y, RoomType.Bridge);
+					}
+				}
+
 			}
 		#endregion
 
 		#region Rooms
-		private void AddRoom(Room addThisRoom, int roomID) {
-			rooms.Add(roomID, addThisRoom);
+		private void AddRoomToSubmarine(Room addThisRoom) {
+			rooms.Add(_nextRoomID, addThisRoom);
+			_nextRoomID++;
 			}
-		private void RemoveRoom(int roomID) {
+		private void RemoveRoomFromSubmarine(int roomID) {
 			rooms.Remove(roomID);
 			}
 		public Room GetRoom(int roomID) {
@@ -83,23 +108,27 @@ namespace Submarine
 						newRoom.AddSpace(oldRoomSpace);
 						}
 					// remove old room form sub
-					RemoveRoom(oldRoomID);
+					RemoveRoomFromSubmarine(oldRoomID);
 					}
 				}
 			}
 		#endregion
 
+
 		#region Spaces
 		public Space GetSpaceAt(int x, int y) {
-			if (x > lengthOfSub-1 || x < 0) { Debug.WriteLine("ERROR: get space x (" + x + ")is outside length (" + lengthOfSub + ") of submarine"); return null; }
-			if (y > heightOfSub-1 || y < 0) { Debug.WriteLine("ERROR: get space x (" + y + ")is outside height (" + heightOfSub + ") of submarine"); return null; }
+			if (x > lengthOfSub-1 || x < 0) 
+				{ Debug.WriteLine("ERROR: get space x (" + x + ")is outside length (" + (lengthOfSub-1) + ") of submarine"); return null; }
+			if (y > heightOfSub-1 || y < 0)
+				{ Debug.WriteLine("ERROR: get space x (" + y + ")is outside height (" +( heightOfSub-1 )+ ") of submarine"); return null; }
 			return _space[x, y];
 			}
 
 		// add a space to a existing room, or start a new room
 		public void AddSpaceToRoom(int x, int y, RoomType type) {
 			Space newRoomSpace = GetSpaceAt(x, y);
-			if (newRoomSpace == null) { Debug.WriteLine("ERROR: cannot create/expand a room outside the submarine"); }
+			if (newRoomSpace == null) 
+				{ Debug.WriteLine("ERROR: cannot create/expand a room outside the submarine"); }
 			else {if (!newRoomSpace.canContainRoom) { Debug.WriteLine("ERROR: cannot create/expand a room at unavailable space (" + x + "," + y + ")"); }
 				else {
 					Space checkSpace;
@@ -119,11 +148,11 @@ namespace Submarine
 					if (newRoomSpace.roomID == 0) {
 						// if no neighbor space is part of same room type then start a new room with this space
 						Debug.WriteLine("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
-						int newRoomID = GetNewRoomID();
-						newRoomSpace.roomID = newRoomID;        // set roomID in space
-						Room newRoom = new Room(type);          // create new room of this room type
-						AddRoom(newRoom, newRoomID);            // add new room to submarine
-						rooms[newRoomID].AddSpace(newRoomSpace);// add space to room
+
+						Room newRoom = Room.CreateRoomOfType(type);     // create new room of this room type
+						AddRoomToSubmarine(newRoom);                    // add new room to submarine
+						newRoom.AddSpace(newRoomSpace);                 // add space to room
+						newRoomSpace.roomID = _nextRoomID-1;            // set roomID in space
 						}
 					}
 				}
@@ -139,9 +168,9 @@ namespace Submarine
 				else {
 					ofRoom.RemoveSpace(spaceToBeRemoved);
 					// check if it was the last space of the room
-					if (ofRoom.size == 0) {
+					if (ofRoom.Size == 0) {
 						// destroy room
-						RemoveRoom(spaceToBeRemoved.roomID);
+						RemoveRoomFromSubmarine(spaceToBeRemoved.roomID);
 						}
 					// set roomID of space to 0
 					spaceToBeRemoved.roomID = 0;
@@ -149,9 +178,7 @@ namespace Submarine
 				}
 			}
 
-		private int GetNewRoomID() {
-			return rooms.Keys.Count()+1;
-			}
+
 
 		// check is neighbor space is in a room
 		private void CheckSameRoomType(int x, int y, RoomType wantedRoomType, Space newRoomSpace, Space checkSpace) {
@@ -184,25 +211,14 @@ namespace Submarine
 				return RoomType.Empty;
 				}
 			else {
-				return rooms[ofThisSpace.roomID].type;
+				return rooms[ofThisSpace.roomID].TypeOfRoom;
 				}
 			}
 		#endregion
 	}
 
-	public class Space {
-	 //   public int x { get; private set; }
-	 //   public int y { get; private set; }
-
-		public int roomID { get;  set; } = 0;
-	   // public RoomType roomType { get; private set; } 
-
-		public bool canContainRoom { get; set; } = true;    // used to exclude spaces that are outside the outline of the sub
-
-		//public Space() {
-		//    roomType = RoomType.Empty;
-		//    }
+	
 
 		
-		}
+
 }

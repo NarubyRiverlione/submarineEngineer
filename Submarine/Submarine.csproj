@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Room.cs" />
+    <Compile Include="Space.cs" />
     <Compile Include="Submarine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
