@@ -130,20 +130,21 @@ namespace Submarine
 			if (newRoomSpace == null) 
 				{ Debug.WriteLine("ERROR: cannot create/expand a room outside the submarine"); }
 			else {if (!newRoomSpace.canContainRoom) { Debug.WriteLine("ERROR: cannot create/expand a room at unavailable space (" + x + "," + y + ")"); }
-				else {
+			else {if (newRoomSpace.roomID != 0) {Debug.WriteLine ("ERROR: already in the " + newRoomSpace.GetType + " room ("+newRoomSpace.roomID+"), remove me first");}
+					else {
 					Space checkSpace;
 					// get info of space North
 					checkSpace = GetSpaceAt(x, y - 1);
-					if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+					CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
 					// get info of space East
 					checkSpace = GetSpaceAt(x + 1, y);
-					if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+					CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
 					// get info of space South
 					checkSpace = GetSpaceAt(x, y + 1);
-					if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+					CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
 					// get info of space West
 					checkSpace = GetSpaceAt(x - 1, y);
-					if (checkSpace != null) CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
+					CheckSameRoomType(x, y, type, newRoomSpace, checkSpace);
 
 					if (newRoomSpace.roomID == 0) {
 						// if no neighbor space is part of same room type then start a new room with this space
@@ -157,6 +158,7 @@ namespace Submarine
 					}
 				}
 			}
+		}
 		// remove space of room (remove room is it's last space)
 		public void RemoveSpaceOfRoom(int x, int y) {
 			Space spaceToBeRemoved = GetSpaceAt(x, y);
