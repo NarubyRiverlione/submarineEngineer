@@ -12,20 +12,24 @@ using System.Diagnostics;
 namespace Submarine.Model {
 	/// [JsonObject]
 	public class Sub {
-		//[JsonProperty]
+			
 		public int lengthOfSub { get; private set; }
-		//[JsonProperty]
 		public int heightOfSub { get; private set; }
-		//[JsonProperty]
+		
+
+		public int startOfBridgeTower { get; private set; }
+		
 		public int lenghtOfBridgeTower { get; private set; }
-		//[JsonProperty]
+		
 		public int heightOfBridgeTower { get; private set; }
 
-		public int smallerTail { get; private set; }
+		public int smallerTailUpper { get; private set; }
+		public int smallerTailLower { get; private set; }
+        public int smallerTailLenght { get; private set; }
 
-		//[JsonProperty]
-		Tile[,] _space;
-		//[JsonProperty]
+
+        Tile[,] _space;
+		
 		Dictionary<int, Room> rooms;
 
 		public int AmountOfRooms {
@@ -37,7 +41,7 @@ namespace Submarine.Model {
 			}
 		}
 
-		//[JsonProperty]
+		
 		int _nextRoomID = 1;
 		// ID 0 = no room assigned to space
 
@@ -63,12 +67,17 @@ namespace Submarine.Model {
 		public Sub () {
 			lengthOfSub = 20;
 			heightOfSub = 6;
-			lenghtOfBridgeTower = 4;
-			heightOfBridgeTower = 2;
-			smallerTail = 1;
 
-			// initialize 2D array, still doesn't contain anything
-			_space = new Tile[lengthOfSub, heightOfSub]; 
+			lenghtOfBridgeTower = 2;
+			heightOfBridgeTower = 2;
+			startOfBridgeTower = lengthOfSub / 3 * 2-1;
+
+            smallerTailUpper = 2;
+            smallerTailLower = 1;
+            smallerTailLenght = lengthOfSub/5;
+
+            // initialize 2D array, still doesn't contain anything
+            _space = new Tile[lengthOfSub, heightOfSub]; 
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
@@ -81,33 +90,35 @@ namespace Submarine.Model {
 
 			// set space's outside sub outlines as unavailable
 			// upper smaller tail section
-			for (int x = 0; x <= lengthOfSub / 10; x++) {
-				for (int y = heightOfSub - heightOfBridgeTower - smallerTail; y < heightOfSub - heightOfBridgeTower; y++) {
+			for (int x = 0; x <= smallerTailLenght; x++) {
+				for (int y = heightOfSub - heightOfBridgeTower - smallerTailUpper; y < heightOfSub - heightOfBridgeTower; y++) {
 					_space [x, y].canContainRoom = false;
 				}
 			}
 			// lower  smaller tail section 
-			for (int x = 0; x <= lengthOfSub / 10; x++) {
-				for (int y = 0; y < smallerTail; y++) {
+			for (int x = 0; x <= smallerTailLenght; x++) {
+				for (int y = 0; y < smallerTailLower; y++) {
 					_space [x, y].canContainRoom = false;
 				}
 			}
 
+			
+
 			// left of Bridge tower
-			for (int x = 0; x < lengthOfSub / 3 * 2; x++) {
+			for (int x = 0; x < startOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
 					_space [x, y].canContainRoom = false;
 				}
 			}
 			//right of Bridge tower
-			for (int x = lengthOfSub / 3 * 2 + lenghtOfBridgeTower; x < lengthOfSub; x++) {
+			for (int x = startOfBridgeTower + lenghtOfBridgeTower; x < lengthOfSub; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
 					_space [x, y].canContainRoom = false;
 				}
 			}
 
 			// add Bridge Tower
-			for (int x = lengthOfSub / 3 * 2; x < lengthOfSub / 3 * 2 + lenghtOfBridgeTower; x++) {
+			for (int x = startOfBridgeTower; x < startOfBridgeTower + lenghtOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
 					AddSpaceToRoom (x, y, RoomType.Bridge);
 				}
