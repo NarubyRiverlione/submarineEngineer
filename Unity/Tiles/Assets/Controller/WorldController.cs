@@ -15,7 +15,7 @@ namespace Submarine.Controller {
 		// Use this for initialization
 		void Start () {
 			mySub = new Sub ();
-			Debug.Log ("Sub created with lenght:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
+			Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
 
 
 
@@ -24,19 +24,21 @@ namespace Submarine.Controller {
 				for (int y = 0; y < mySub.heightOfSub; y++) {
 					Tile showThisSpace = mySub.GetSpaceAt (x, y);
 					GameObject newSpace = new GameObject ();
-					newSpace.name = "Space_" + x + "/" + y;													// set name of game object to see in Hierarchy
-					newSpace.transform.position = new Vector2 (showThisSpace.X, showThisSpace.Y);				// set X, Y of game object
-                    
+					newSpace.name = "Space_" + x + "/" + y;                                                 // set name of game object to see in Hierarchy
+                    newSpace.transform.SetParent(this.transform);
+                    newSpace.transform.position = new Vector2 (showThisSpace.X, showThisSpace.Y);				// set X, Y of game object
+                   
+
 					SpriteRenderer newSpace_Renderer = newSpace.AddComponent<SpriteRenderer> ();			// add Sprite Renderer component
 					switch (mySub.GetRoomTypeOfSpace (showThisSpace)) {
 						case RoomType.Empty:
 							newSpace_Renderer.sprite = Space_Empty;
 							break;
 						case RoomType.Bridge:
-							//newSpace_Renderer.sprite = Space_Bridge;
+							newSpace_Renderer.sprite = Space_Bridge;
 							break;
 						default:
-						//	newSpace_Renderer.sprite = Space_Unknown;
+							newSpace_Renderer.sprite = Space_Unknown;
 							break;
 					}
 
