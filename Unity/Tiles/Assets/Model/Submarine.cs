@@ -14,21 +14,24 @@ namespace Submarine.Model {
 	public class Sub {
 			
 		public int lengthOfSub { get; private set; }
+
 		public int heightOfSub { get; private set; }
-		
+
 
 		public int startOfBridgeTower { get; private set; }
-		
+
 		public int lenghtOfBridgeTower { get; private set; }
-		
+
 		public int heightOfBridgeTower { get; private set; }
 
 		public int smallerTailUpper { get; private set; }
+
 		public int smallerTailLower { get; private set; }
-        public int smallerTailLenght { get; private set; }
+
+		public int smallerTailLenght { get; private set; }
 
 
-        Tile[,] _space;
+		Tile[,] _space;
 		
 		Dictionary<int, Room> rooms;
 
@@ -65,19 +68,19 @@ namespace Submarine.Model {
 		#region CONSTRUCTOR
 
 		public Sub () {
-			lengthOfSub = 37;
+			lengthOfSub = 39;
 			heightOfSub = 6;
 
-			lenghtOfBridgeTower = 4;
+			lenghtOfBridgeTower = 3;
 			heightOfBridgeTower = 2;
-			startOfBridgeTower = 20;
+			startOfBridgeTower = 21;
 
-            smallerTailUpper = 1;
-            smallerTailLower = 1;
-            smallerTailLenght = 3;
+			smallerTailUpper = 1;
+			smallerTailLower = 1;
+			smallerTailLenght = 4;
 
-            // initialize 2D array, still doesn't contain anything
-            _space = new Tile[lengthOfSub, heightOfSub]; 
+			// initialize 2D array, still doesn't contain anything
+			_space = new Tile[lengthOfSub, heightOfSub]; 
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
