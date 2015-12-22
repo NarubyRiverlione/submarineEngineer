@@ -45,9 +45,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Controller\WorldController.cs" />
      <Compile Include="Assets\Model\Room.cs" />
-     <Compile Include="Assets\Model\Space.cs" />
      <Compile Include="Assets\Model\Submarine.cs" />
+     <Compile Include="Assets\Model\Tile.cs" />
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
