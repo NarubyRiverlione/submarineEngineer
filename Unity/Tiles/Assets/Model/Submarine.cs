@@ -65,16 +65,16 @@ namespace Submarine.Model {
 		#region CONSTRUCTOR
 
 		public Sub () {
-			lengthOfSub = 20;
+			lengthOfSub = 37;
 			heightOfSub = 6;
 
-			lenghtOfBridgeTower = 2;
+			lenghtOfBridgeTower = 4;
 			heightOfBridgeTower = 2;
-			startOfBridgeTower = lengthOfSub / 3 * 2-1;
+			startOfBridgeTower = 20;
 
-            smallerTailUpper = 2;
+            smallerTailUpper = 1;
             smallerTailLower = 1;
-            smallerTailLenght = lengthOfSub/5;
+            smallerTailLenght = 3;
 
             // initialize 2D array, still doesn't contain anything
             _space = new Tile[lengthOfSub, heightOfSub]; 
