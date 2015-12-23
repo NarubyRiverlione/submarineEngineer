@@ -1,0 +1,6 @@
+/Users/Renaat/Downloads/submarineEngineer/Submarine/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/Renaat/Downloads/submarineEngineer/Submarine/bin/Debug/Newtonsoft.Json.dll
+/Users/Renaat/Downloads/submarineEngineer/Submarine/bin/Debug/Submarine.dll.mdb
+/Users/Renaat/Downloads/submarineEngineer/Submarine/bin/Debug/Submarine.dll
+/Users/Renaat/Downloads/submarineEngineer/Submarine/obj/Debug/Submarine.dll
+/Users/Renaat/Downloads/submarineEngineer/Submarine/obj/Debug/Submarine.dll.mdb
