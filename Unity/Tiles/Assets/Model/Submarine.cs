@@ -12,7 +12,8 @@ using System.Diagnostics;
 namespace Submarine.Model {
 	/// [JsonObject]
 	public class Sub {
-			
+
+
 		public int lengthOfSub { get; private set; }
 
 		public int heightOfSub { get; private set; }
@@ -31,7 +32,7 @@ namespace Submarine.Model {
 		public int smallerTailLenght { get; private set; }
 
 
-		Tile[,] _space;
+		Tile[,] _Tile;
 		
 		Dictionary<int, Room> rooms;
 
@@ -46,7 +47,7 @@ namespace Submarine.Model {
 
 		
 		int _nextRoomID = 1;
-		// ID 0 = no room assigned to space
+		// ID 0 = no room assigned to Tile
 
 
 		//		#region SAVE / LOAD
@@ -80,28 +81,28 @@ namespace Submarine.Model {
 			smallerTailLenght = 4;
 
 			// initialize 2D array, still doesn't contain anything
-			_space = new Tile[lengthOfSub, heightOfSub]; 
+			_Tile = new Tile[lengthOfSub, heightOfSub]; 
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
-			// instantiate spaces
+			// instantiate Tiles
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
-					_space [x, y] = new Tile (x, y);
+					_Tile [x, y] = new Tile (x, y);
 				}
 			}
 
-			// set space's outside sub outlines as unavailable
+			// set Tile's outside sub outlines as unavailable
 			// upper smaller tail section
 			for (int x = 0; x <= smallerTailLenght; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower - smallerTailUpper; y < heightOfSub - heightOfBridgeTower; y++) {
-					_space [x, y].canContainRoom = false;
+					_Tile [x, y].canContainRoom = false;
 				}
 			}
 			// lower  smaller tail section 
 			for (int x = 0; x <= smallerTailLenght; x++) {
 				for (int y = 0; y < smallerTailLower; y++) {
-					_space [x, y].canContainRoom = false;
+					_Tile [x, y].canContainRoom = false;
 				}
 			}
 
@@ -110,20 +111,20 @@ namespace Submarine.Model {
 			// left of Bridge tower
 			for (int x = 0; x < startOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
-					_space [x, y].canContainRoom = false;
+					_Tile [x, y].canContainRoom = false;
 				}
 			}
 			//right of Bridge tower
 			for (int x = startOfBridgeTower + lenghtOfBridgeTower; x < lengthOfSub; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
-					_space [x, y].canContainRoom = false;
+					_Tile [x, y].canContainRoom = false;
 				}
 			}
 
 			// add Bridge Tower
 			for (int x = startOfBridgeTower; x < startOfBridgeTower + lenghtOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
-					AddSpaceToRoom (x, y, RoomType.Bridge);
+					AddTileToRoom (x, y, RoomType.Bridge);
 				}
 			}
 		}
@@ -137,16 +138,16 @@ namespace Submarine.Model {
 			_nextRoomID++;
 		}
 
-		private void RemoveRoomFromSubmarine (int roomID) {
-			rooms.Remove (roomID);
+		private void RemoveRoomFromSubmarine (int RoomID) {
+			rooms.Remove (RoomID);
 		}
 
-		public Room GetRoom (int roomID) {
-			return rooms.ContainsKey (roomID) ? rooms [roomID] : null;
+		public Room GetRoom (int RoomID) {
+			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
 
-		public bool IsRoomValid (int roomID) {
-			Room checkRoom = GetRoom (roomID);
+		public bool IsRoomValid (int RoomID) {
+			Room checkRoom = GetRoom (RoomID);
 			if (checkRoom != null)
 				return checkRoom.IsLayoutValid;
 			else
@@ -164,11 +165,11 @@ namespace Submarine.Model {
 					Debug.WriteLine ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
-					foreach (Tile oldRoomSpace in oldRoom.spacesInRoom) {
-						// change roomID of each space in old room
-						oldRoomSpace.roomID = newRoomID;
-						// add spaces to new room (no need to removed them form old room as old room will be destroyed)
-						newRoom.AddSpace (oldRoomSpace);
+					foreach (Tile oldRoomTile in oldRoom.TilesInRoom) {
+						// change RoomID of each Tile in old room
+						oldRoomTile.RoomID = newRoomID;
+						// add Tiles to new room (no need to removed them form old room as old room will be destroyed)
+						newRoom.AddTile (oldRoomTile);
 					}
 					// remove old room form sub
 					RemoveRoomFromSubmarine (oldRoomID);
@@ -181,121 +182,121 @@ namespace Submarine.Model {
 		#endregion
 
 
-		#region Spaces
+		#region Tiles
 
-		public Tile GetSpaceAt (int x, int y) {
+		public Tile GetTileAt (int x, int y) {
 			if (x > lengthOfSub - 1 || x < 0) {
-				Debug.WriteLine ("ERROR: get space x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
+				Debug.WriteLine ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
 				return null;
 			}
 			if (y > heightOfSub - 1 || y < 0) {
-				Debug.WriteLine ("ERROR: get space x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
+				Debug.WriteLine ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
 				return null;
 			}
-			return _space [x, y];
+			return _Tile [x, y];
 		}
 
-		// add a space to a existing room, or start a new room
-		public void AddSpaceToRoom (int x, int y, RoomType type) {
-			Tile newRoomSpace = GetSpaceAt (x, y);
-			if (newRoomSpace == null) {
+		// add a Tile to a existing room, or start a new room
+		public void AddTileToRoom (int x, int y, RoomType type) {
+			Tile newRoomTile = GetTileAt (x, y);
+			if (newRoomTile == null) {
 				Debug.WriteLine ("ERROR: cannot create/expand a room outside the submarine");
 			}
 			else {
-				if (!newRoomSpace.canContainRoom) {
-					Debug.WriteLine ("ERROR: cannot create/expand a room at unavailable space (" + x + "," + y + ")");
+				if (!newRoomTile.canContainRoom) {
+					Debug.WriteLine ("ERROR: cannot create/expand a room at unavailable Tile (" + x + "," + y + ")");
 				}
 				else {
-					if (newRoomSpace.roomID != 0) {
-						Debug.WriteLine ("ERROR: already in the " + GetRoomTypeOfSpace (newRoomSpace) + " room (" + newRoomSpace.roomID + "), remove me first");
+					if (newRoomTile.RoomID != 0) {
+						Debug.WriteLine ("ERROR: already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
 					}
 					else {
-						Tile checkSpace;
-						// get info of space North
-						checkSpace = GetSpaceAt (x, y - 1);
-						CheckSameRoomType (x, y, type, newRoomSpace, checkSpace);
-						// get info of space East
-						checkSpace = GetSpaceAt (x + 1, y);
-						CheckSameRoomType (x, y, type, newRoomSpace, checkSpace);
-						// get info of space South
-						checkSpace = GetSpaceAt (x, y + 1);
-						CheckSameRoomType (x, y, type, newRoomSpace, checkSpace);
-						// get info of space West
-						checkSpace = GetSpaceAt (x - 1, y);
-						CheckSameRoomType (x, y, type, newRoomSpace, checkSpace);
+						Tile checkTile;
+						// get info of Tile North
+						checkTile = GetTileAt (x, y - 1);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						// get info of Tile East
+						checkTile = GetTileAt (x + 1, y);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						// get info of Tile South
+						checkTile = GetTileAt (x, y + 1);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						// get info of Tile West
+						checkTile = GetTileAt (x - 1, y);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
 
-						if (newRoomSpace.roomID == 0) {
-							// if no neighbor space is part of same room type then start a new room with this space
-							Debug.WriteLine ("Add space (" + x + "," + y + ") no neighbor space is part of a room, then start a new room with this space");
+						if (newRoomTile.RoomID == 0) {
+							// if no neighbor Tile is part of same room type then start a new room with this Tile
+							Debug.WriteLine ("Add Tile (" + x + "," + y + ") no neighbor Tile is part of a room, then start a new room with this Tile");
 
 							Room newRoom = Room.CreateRoomOfType (type, inThisSub: this);     // create new room of this room type
 							AddRoomToSubmarine (newRoom);                    // add new room to submarine
-							newRoom.AddSpace (newRoomSpace);                 // add space to room
-							newRoomSpace.roomID = _nextRoomID - 1;            // set roomID in space
+							newRoom.AddTile (newRoomTile);                 // add Tile to room
+							newRoomTile.RoomID = _nextRoomID - 1;            // set RoomID in Tile
 						}
 					}
 				}
 			}
 		}
-		// remove space of room (remove room is it's last space)
-		public void RemoveSpaceOfRoom (int x, int y) {
-			Tile spaceToBeRemoved = GetSpaceAt (x, y);
-			if (spaceToBeRemoved == null) {
-				Debug.WriteLine ("ERROR cannot remove space that doesn't exists");
+		// remove Tile of room (remove room is it's last Tile)
+		public void RemoveTileOfRoom (int x, int y) {
+			Tile TileToBeRemoved = GetTileAt (x, y);
+			if (TileToBeRemoved == null) {
+				Debug.WriteLine ("ERROR cannot remove Tile that doesn't exists");
 			}
 			else {
-				// remove space of room
-				Room ofRoom = GetRoom (spaceToBeRemoved.roomID);
+				// remove Tile of room
+				Room ofRoom = GetRoom (TileToBeRemoved.RoomID);
 				if (ofRoom == null) {
-					Debug.WriteLine ("ERROR space doesn't belong to a room");
+					Debug.WriteLine ("ERROR Tile doesn't belong to a room");
 				}
 				else {
-					ofRoom.RemoveSpace (spaceToBeRemoved);
-					// check if it was the last space of the room
+					ofRoom.RemoveTile (TileToBeRemoved);
+					// check if it was the last Tile of the room
 					if (ofRoom.Size == 0) {
 						// destroy room
-						RemoveRoomFromSubmarine (spaceToBeRemoved.roomID);
+						RemoveRoomFromSubmarine (TileToBeRemoved.RoomID);
 					}
-					// set roomID of space to 0
-					spaceToBeRemoved.roomID = 0;
+					// set RoomID of Tile to 0
+					TileToBeRemoved.RoomID = 0;
 				}
 			}
 		}
 
 
 
-		// check is neighbor space is in a room
-		private void CheckSameRoomType (int x, int y, RoomType wantedRoomType, Tile newRoomSpace, Tile checkSpace) {
-			if (checkSpace != null) {
-				RoomType roomTypeOfNeighbor = GetRoomTypeOfSpace (checkSpace);
-				// neighbor space exists
+		// check is neighbor Tile is in a room
+		private void CheckSameRoomType (int x, int y, RoomType wantedRoomType, Tile newRoomTile, Tile checkTile) {
+			if (checkTile != null) {
+				RoomType roomTypeOfNeighbor = GetRoomTypeOfTile (checkTile);
+				// neighbor Tile exists
 				if (wantedRoomType == roomTypeOfNeighbor && roomTypeOfNeighbor != RoomType.Empty) {
-					// if neighborer space has same room type as this space
-					if (newRoomSpace.roomID == 0) {
-						// space is not assigned to a room yet, add it tot neighbor room now
-						Debug.WriteLine ("Add space (" + x + "," + y + ") to existing room ID:" + checkSpace.roomID);
-						newRoomSpace.roomID = checkSpace.roomID;            // store existing roomID in newRoomSpace
-						rooms [newRoomSpace.roomID].AddSpace (newRoomSpace);  // add space to room
+					// if neighborer Tile has same room type as this Tile
+					if (newRoomTile.RoomID == 0) {
+						// Tile is not assigned to a room yet, add it tot neighbor room now
+						Debug.WriteLine ("Add Tile (" + x + "," + y + ") to existing room ID:" + checkTile.RoomID);
+						newRoomTile.RoomID = checkTile.RoomID;            // store existing RoomID in newRoomTile
+						rooms [newRoomTile.RoomID].AddTile (newRoomTile);  // add Tile to room
 					}
-					else {// space is already in a room: check if neighborer is in same room
-						if (newRoomSpace.roomID != checkSpace.roomID) {
-							// neighbor space is same room type but another room (id) = merge rooms now
-							Debug.WriteLine ("space (" + x + "," + y + ") has roomID " + newRoomSpace.roomID + " neighbor has roomID " + checkSpace.roomID);
+					else {// Tile is already in a room: check if neighborer is in same room
+						if (newRoomTile.RoomID != checkTile.RoomID) {
+							// neighbor Tile is same room type but another room (id) = merge rooms now
+							Debug.WriteLine ("Tile (" + x + "," + y + ") has RoomID " + newRoomTile.RoomID + " neighbor has RoomID " + checkTile.RoomID);
 							Debug.WriteLine ("Merge rooms now");
-							MergeRooms (newRoomSpace.roomID, checkSpace.roomID);
+							MergeRooms (newRoomTile.RoomID, checkTile.RoomID);
 						}
 					}
 				}
 			}
 		}
 
-		public RoomType GetRoomTypeOfSpace (Tile ofThisSpace) {
-			if (ofThisSpace.roomID == 0) {
-				// Debug.WriteLine("Room at (" + ofThisSpace.x + "," + ofThisSpace.y + ") is not part of a room");
+		public RoomType GetRoomTypeOfTile (Tile ofThisTile) {
+			if (ofThisTile.RoomID == 0) {
+				// Debug.WriteLine("Room at (" + ofThisTile.x + "," + ofThisTile.y + ") is not part of a room");
 				return RoomType.Empty;
 			}
 			else {
-				return rooms [ofThisSpace.roomID].TypeOfRoom;
+				return rooms [ofThisTile.RoomID].TypeOfRoom;
 			}
 		}
 

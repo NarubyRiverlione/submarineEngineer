@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+
+
 namespace Submarine.Model {
 	public class Tile {
 		public int X { get; private set; }

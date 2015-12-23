@@ -33,15 +33,15 @@ namespace Submarine.Model {
 		// to get info of the sub (dimensions)
 		public RoomType TypeOfRoom { get; protected set; }
 
-		public int Size { get { return spacesInRoom.Count (); } }
+		public int Size { get { return TilesInRoom.Count (); } }
 
 		abstract public int MinimimValidSize { get; }
 
-		public List<Tile> spacesInRoom { get; protected  set; }
+		public List<Tile> TilesInRoom { get; protected  set; }
 
-		abstract public double CapacityPerSpace { get; }
+		abstract public double CapacityPerTile { get; }
 
-		public int Capacity { get { return (int)(Size * CapacityPerSpace); } }
+		public int Capacity { get { return (int)(Size * CapacityPerTile); } }
 
 		public int Output { get; protected set; }
 		// current produced or available cargo
@@ -56,7 +56,7 @@ namespace Submarine.Model {
 
 		public Room (RoomType ofThisRoomType, Sub sub) {
 			TypeOfRoom = ofThisRoomType;
-			spacesInRoom = new List<Tile> ();
+			TilesInRoom = new List<Tile> ();
 			_inThusSub = sub;
 			IsAccessable = true;
 		}
@@ -64,12 +64,12 @@ namespace Submarine.Model {
 		#endregion
 
 
-		public void AddSpace (Tile addSpace) {
-			spacesInRoom.Add (addSpace);
+		public void AddTile (Tile addTile) {
+			TilesInRoom.Add (addTile);
 		}
 
-		public void RemoveSpace (Tile removeSpace) {
-			spacesInRoom.Remove (removeSpace);
+		public void RemoveTile (Tile removeTile) {
+			TilesInRoom.Remove (removeTile);
 		}
 
 		public static Room CreateRoomOfType (RoomType type, Sub inThisSub) {
@@ -96,7 +96,7 @@ namespace Submarine.Model {
 
 	public class FuelTank:Room {
 		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
-		public override double CapacityPerSpace{ get { return 1000.0; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
 
 		public override string UnitName { get { return "liter"; } }
 
@@ -112,7 +112,7 @@ namespace Submarine.Model {
 
 	public class Cabin : Room {
 		//  public override RoomType TypeOfRoom { get { return RoomType.Cabin; } }
-		public override double CapacityPerSpace { get { return 2; } }
+		public override double CapacityPerTile { get { return 2; } }
 
 		public override string UnitName { get { return "officers"; } }
 
@@ -130,7 +130,7 @@ namespace Submarine.Model {
 
 	public class Bunks : Room {
 		// public override RoomType TypeOfRoom { get { return RoomType.Bridge; } }
-		public override double CapacityPerSpace { get { return 12.0; } }
+		public override double CapacityPerTile { get { return 12.0; } }
 
 		public override string UnitName { get { return "crew"; } }
 
@@ -148,7 +148,7 @@ namespace Submarine.Model {
 
 	public class Conn : Room {
 		// public override RoomType TypeOfRoom { get { return RoomType.Bridge; } }
-		public override double CapacityPerSpace { get { return 6; } }
+		public override double CapacityPerTile { get { return 6; } }
 
 		public override string UnitName { get { return "crew"; } }
 
@@ -163,8 +163,8 @@ namespace Submarine.Model {
 
 				// should be connected  to the Bride tower
 				bool locationValid = false;
-				foreach (Tile checkSpace in spacesInRoom) {
-					if (checkSpace.X > startValid_X && checkSpace.X <= stopValid_X && checkSpace.Y == valid_Y)
+				foreach (Tile checkTile in TilesInRoom) {
+					if (checkTile.X > startValid_X && checkTile.X <= stopValid_X && checkTile.Y == valid_Y)
 						locationValid = true;
 				}
 				return sizeOk && locationValid; // all req needs true
@@ -181,7 +181,7 @@ namespace Submarine.Model {
 
 	public class Bridge : Room {
 		// public override RoomType TypeOfRoom { get { return RoomType.Bridge; } }
-		public override double CapacityPerSpace { get { return 3.0; } }
+		public override double CapacityPerTile { get { return 3.0; } }
 
 		public override string UnitName { get { return "crew"; } }
 
