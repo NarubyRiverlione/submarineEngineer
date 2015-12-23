@@ -11,11 +11,14 @@ namespace Submarine.Controller {
 		// Model
 		public Sub mySub { get; private set; }
 
-		// Sprites
+		// Tile Sprites
 		public Sprite Tile_Empty;
 		public Sprite Tile_Transparent;
 		public Sprite Tile_Bridge;
 		public Sprite Tile_Unknown;
+
+		// Warning Sprites
+		public Sprite Tile_Warning;
 
 		// Use this for initialization
 		void Start () {
@@ -35,10 +38,11 @@ namespace Submarine.Controller {
 					newTileSprite.AddComponent<SpriteRenderer> ();												// add Sprite Renderer component
 					UpdateTileSprite (newTile, newTileSprite);													// set sprite
 
-					newTile.RoomIDchangedActions += ((tile) => { // when the roomID of the title changes, update the sprite
+					newTile.TileChangedActions += ((tile) => { // when the roomID of the title changes, update the sprite
 						UpdateTileSprite (tile, newTileSprite);
 					});
                     
+
 				}
 			}
 		}
@@ -66,6 +70,26 @@ namespace Submarine.Controller {
 				renderer.sprite = Tile_Transparent;
 			}
 
+
+			if (showTile.RoomID != 0) {
+				GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y);
+				var layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
+				if (!layoutValid && checkIfWarningAlreadyOnScreen == null) {
+					// add warning now		
+					GameObject newTileWarningSprite = new GameObject ();
+					newTileWarningSprite.name = "Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;                                                 // set name of game object to see in Hierarchy
+					newTileWarningSprite.transform.SetParent (this.transform);
+					newTileWarningSprite.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);						// set X, Y of game object
+					newTileWarningSprite.layer = SortingLayer.GetLayerValueFromName ("Tile_Warning");
+					SpriteRenderer render = newTileWarningSprite.AddComponent<SpriteRenderer> ();	
+					render.sprite = Tile_Warning;
+				}
+				if (layoutValid && checkIfWarningAlreadyOnScreen != null) {
+					// remove warning
+					Destroy (checkIfWarningAlreadyOnScreen);
+				}
+			}
+
 		}
 
 		// get Tile at x,y in World
@@ -73,7 +97,7 @@ namespace Submarine.Controller {
 			int x = Mathf.FloorToInt (coord.x);
 			int y = Mathf.FloorToInt (coord.y);
 
-			return mySub.GetTileAt (x, y);
+			return mySub != null ? mySub.GetTileAt (x, y) : null;
 		}
 
 	}

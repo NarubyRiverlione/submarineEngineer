@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Submarine.Model {
 	public enum RoomType {
@@ -29,7 +30,7 @@ namespace Submarine.Model {
 	//    }
 
 	abstract public class Room {
-		Sub _inThusSub;
+		//Sub _inThusSub;
 		// to get info of the sub (dimensions)
 		public RoomType TypeOfRoom { get; protected set; }
 
@@ -48,6 +49,7 @@ namespace Submarine.Model {
 		abstract public string UnitName { get; }
 		// unit (liter,..) of output and Capacity
 
+
 		public bool IsAccessable { get; protected set; }
 
 		abstract public bool IsLayoutValid { get; }
@@ -57,7 +59,7 @@ namespace Submarine.Model {
 		public Room (RoomType ofThisRoomType, Sub sub) {
 			TypeOfRoom = ofThisRoomType;
 			TilesInRoom = new List<Tile> ();
-			_inThusSub = sub;
+			//_inThusSub = sub;
 			IsAccessable = true;
 		}
 
@@ -90,7 +92,15 @@ namespace Submarine.Model {
 			}
 		}
 
-        
+		public void WarnTilesInRoomIfLayoutChanged (bool oldRoomLayoutValid) {
+			if (oldRoomLayoutValid != IsLayoutValid) {
+				Debug.WriteLine ("Validation of room layout has changed, warn title of room");
+				foreach (Tile warnTile in TilesInRoom) {
+					if (warnTile.TileChangedActions != null)
+						warnTile.TileChangedActions (warnTile);
+				}
+			}
+		}
 
 	};
 

@@ -13,12 +13,12 @@ namespace Submarine.Model {
 			get{ return _roomID; }
 			set {
 				_roomID = value;
-				if (RoomIDchangedActions != null) // call all the registrated callbacks
-					RoomIDchangedActions (this);
+				if (TileChangedActions != null) // call all the registrated callbacks
+					TileChangedActions (this);
 			}
 		}
 
-		public Action<Tile> RoomIDchangedActions { get; set; }
+		public Action<Tile> TileChangedActions { get; set; }
 		// functions can registrated via this Action to changes of roomID
 
 		public bool canContainRoom { get; set; }

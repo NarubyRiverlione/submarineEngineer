@@ -32,7 +32,7 @@ namespace Submarine.Model {
 		public int smallerTailLenght { get; private set; }
 
 
-		Tile[,] _Tile;
+		Tile[,] _tile;
 		
 		Dictionary<int, Room> rooms;
 
@@ -74,21 +74,21 @@ namespace Submarine.Model {
 
 			lenghtOfBridgeTower = 3;
 			heightOfBridgeTower = 2;
-			startOfBridgeTower = 21;
+			startOfBridgeTower = 22;
 
 			smallerTailUpper = 1;
 			smallerTailLower = 1;
 			smallerTailLenght = 4;
 
 			// initialize 2D array, still doesn't contain anything
-			_Tile = new Tile[lengthOfSub, heightOfSub]; 
+			_tile = new Tile[lengthOfSub, heightOfSub]; 
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
 			// instantiate Tiles
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
-					_Tile [x, y] = new Tile (x, y);
+					_tile [x, y] = new Tile (x, y);
 				}
 			}
 
@@ -96,13 +96,13 @@ namespace Submarine.Model {
 			// upper smaller tail section
 			for (int x = 0; x <= smallerTailLenght; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower - smallerTailUpper; y < heightOfSub - heightOfBridgeTower; y++) {
-					_Tile [x, y].canContainRoom = false;
+					_tile [x, y].canContainRoom = false;
 				}
 			}
 			// lower  smaller tail section 
 			for (int x = 0; x <= smallerTailLenght; x++) {
 				for (int y = 0; y < smallerTailLower; y++) {
-					_Tile [x, y].canContainRoom = false;
+					_tile [x, y].canContainRoom = false;
 				}
 			}
 
@@ -111,13 +111,13 @@ namespace Submarine.Model {
 			// left of Bridge tower
 			for (int x = 0; x < startOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
-					_Tile [x, y].canContainRoom = false;
+					_tile [x, y].canContainRoom = false;
 				}
 			}
 			//right of Bridge tower
 			for (int x = startOfBridgeTower + lenghtOfBridgeTower; x < lengthOfSub; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
-					_Tile [x, y].canContainRoom = false;
+					_tile [x, y].canContainRoom = false;
 				}
 			}
 
@@ -146,15 +146,15 @@ namespace Submarine.Model {
 			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
 
-		public bool IsRoomValid (int RoomID) {
-			Room checkRoom = GetRoom (RoomID);
-			if (checkRoom != null)
-				return checkRoom.IsLayoutValid;
-			else
-				return false;
-		}
+		//		public bool IsRoomValid (int RoomID) {
+		//			Room checkRoom = GetRoom (RoomID);
+		//			if (checkRoom != null)
+		//				return checkRoom.IsLayoutValid;
+		//			else
+		//				return false;
+		//		}
 
-		public void MergeRooms (int newRoomID, int oldRoomID) {
+		private void MergeRooms (int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom (oldRoomID);
 			if (oldRoom == null) {
 				Debug.WriteLine ("ERROR: cannot change room because old room (ID:" + oldRoomID + ") doesn't exist");
@@ -165,12 +165,14 @@ namespace Submarine.Model {
 					Debug.WriteLine ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
+					bool oldRoomValid = oldRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
 					foreach (Tile oldRoomTile in oldRoom.TilesInRoom) {
 						// change RoomID of each Tile in old room
 						oldRoomTile.RoomID = newRoomID;
 						// add Tiles to new room (no need to removed them form old room as old room will be destroyed)
 						newRoom.AddTile (oldRoomTile);
 					}
+
 					// remove old room form sub
 					RemoveRoomFromSubmarine (oldRoomID);
 				}
@@ -193,7 +195,11 @@ namespace Submarine.Model {
 				Debug.WriteLine ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
 				return null;
 			}
-			return _Tile [x, y];
+
+			if (_tile [x, y] == null) {
+				throw new Exception ("cannot be null");
+			}
+			return _tile [x, y];
 		}
 
 		// add a Tile to a existing room, or start a new room
@@ -227,7 +233,7 @@ namespace Submarine.Model {
 
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
-							Debug.WriteLine ("Add Tile (" + x + "," + y + ") no neighbor Tile is part of a room, then start a new room with this Tile");
+							Debug.WriteLine ("Adding Tile (" + x + "," + y + "): no neighbor Tile is part of a room, then start a new room with this Tile");
 
 							Room newRoom = Room.CreateRoomOfType (type, inThisSub: this);     // create new room of this room type
 							AddRoomToSubmarine (newRoom);                    // add new room to submarine
@@ -238,6 +244,7 @@ namespace Submarine.Model {
 				}
 			}
 		}
+
 		// remove Tile of room (remove room is it's last Tile)
 		public void RemoveTileOfRoom (int x, int y) {
 			Tile TileToBeRemoved = GetTileAt (x, y);
@@ -246,19 +253,22 @@ namespace Submarine.Model {
 			}
 			else {
 				// remove Tile of room
-				Room ofRoom = GetRoom (TileToBeRemoved.RoomID);
-				if (ofRoom == null) {
+				Room removeFromThisRoom = GetRoom (TileToBeRemoved.RoomID);
+				if (removeFromThisRoom == null) {
 					Debug.WriteLine ("ERROR Tile doesn't belong to a room");
 				}
 				else {
-					ofRoom.RemoveTile (TileToBeRemoved);
+					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;	// remember layout validation before removing tile
+					removeFromThisRoom.RemoveTile (TileToBeRemoved);
+					removeFromThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
 					// check if it was the last Tile of the room
-					if (ofRoom.Size == 0) {
+					if (removeFromThisRoom.Size == 0) {
 						// destroy room
 						RemoveRoomFromSubmarine (TileToBeRemoved.RoomID);
 					}
 					// set RoomID of Tile to 0
 					TileToBeRemoved.RoomID = 0;
+			
 				}
 			}
 		}
@@ -274,9 +284,13 @@ namespace Submarine.Model {
 					// if neighborer Tile has same room type as this Tile
 					if (newRoomTile.RoomID == 0) {
 						// Tile is not assigned to a room yet, add it tot neighbor room now
+						Room addToThisRoom = rooms [checkTile.RoomID];	// room to add this tile too
+
 						Debug.WriteLine ("Add Tile (" + x + "," + y + ") to existing room ID:" + checkTile.RoomID);
+						bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;	// remember layout validation before removing tile
 						newRoomTile.RoomID = checkTile.RoomID;            // store existing RoomID in newRoomTile
-						rooms [newRoomTile.RoomID].AddTile (newRoomTile);  // add Tile to room
+						addToThisRoom.AddTile (newRoomTile);  // add Tile to room
+						addToThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
 					}
 					else {// Tile is already in a room: check if neighborer is in same room
 						if (newRoomTile.RoomID != checkTile.RoomID) {
@@ -299,6 +313,18 @@ namespace Submarine.Model {
 				return rooms [ofThisTile.RoomID].TypeOfRoom;
 			}
 		}
+
+		public bool IsTilePartOfValidRoomLayout (Tile checkTile) {
+			if (checkTile.RoomID == 0) {
+				Debug.WriteLine ("Title isn't part of a room, so it cannot check if it's layout is valid");
+				return false;
+			}
+			else {
+				return rooms [checkTile.RoomID].IsLayoutValid;
+			}
+		}
+
+
 
 		#endregion
 	}
