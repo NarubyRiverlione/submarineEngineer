@@ -32,7 +32,7 @@ namespace Submarine.Controller {
 					newTileSprite.transform.SetParent (this.transform);
 					newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);						// set X, Y of game object
                    
-					SpriteRenderer newTile_Renderer = newTileSprite.AddComponent<SpriteRenderer> ();			// add Sprite Renderer component
+					newTileSprite.AddComponent<SpriteRenderer> ();												// add Sprite Renderer component
 					UpdateTileSprite (newTile, newTileSprite);													// set sprite
 
 					newTile.RoomIDchangedActions += ((tile) => { // when the roomID of the title changes, update the sprite
