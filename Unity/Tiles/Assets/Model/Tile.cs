@@ -7,15 +7,27 @@ namespace Submarine.Model {
 
 		public int Y { get; private set; }
 
-		public int roomID { get; set; }
+		int _roomID;
+
+		public int RoomID {
+			get{ return _roomID; }
+			set {
+				_roomID = value;
+				if (RoomIDchangedActions != null) // call all the registrated callbacks
+					RoomIDchangedActions (this);
+			}
+		}
+
+		public Action<Tile> RoomIDchangedActions { get; set; }
+		// functions can registrated via this Action to changes of roomID
 
 		public bool canContainRoom { get; set; }
-		// used to exclude spaces that are outside the outline of the sub
+		// used to exclude Tiles that are outside the outline of the sub
 
 		public Tile (int x, int y) {
 			X = x;
 			Y = y;
-			roomID = 0;
+			_roomID = 0;
 			canContainRoom = true;
 		}
 	}
