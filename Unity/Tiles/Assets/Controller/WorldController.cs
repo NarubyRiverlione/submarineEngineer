@@ -5,46 +5,39 @@ using Submarine.Model;
 namespace Submarine.Controller {
 	public class WorldController : MonoBehaviour {
 
-		Sub mySub;
+		// instance to become a singleton
+		public static WorldController instance { get; private set; }
+
+		// Model
+		public Sub mySub { get; private set; }
+
 		// Sprites
-		public Sprite Space_Empty;
-		public Sprite Space_Water;
-		public Sprite Space_Bridge;
-		public Sprite Space_Unknown;
+		public Sprite Tile_Empty;
+		public Sprite Tile_Transparent;
+		public Sprite Tile_Bridge;
+		public Sprite Tile_Unknown;
 
 		// Use this for initialization
 		void Start () {
+			instance = this;
 			mySub = new Sub ();
 			Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
 
-
-
-			// Create GameObject for each Space
+			// Create GameObject for each Tile
 			for (int x = 0; x < mySub.lengthOfSub; x++) {
 				for (int y = 0; y < mySub.heightOfSub; y++) {
-					Tile showThisSpace = mySub.GetSpaceAt (x, y);
-					GameObject newSpace = new GameObject ();
-					newSpace.name = "Space_" + x + "/" + y;                                                 // set name of game object to see in Hierarchy
-                    newSpace.transform.SetParent(this.transform);
-                    newSpace.transform.position = new Vector2 (showThisSpace.X, showThisSpace.Y);				// set X, Y of game object
+					Tile newTile = mySub.GetTileAt (x, y);
+					GameObject newTileSprite = new GameObject ();
+					newTileSprite.name = "Tile_" + x + "/" + y;                                                 // set name of game object to see in Hierarchy
+					newTileSprite.transform.SetParent (this.transform);
+					newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);						// set X, Y of game object
                    
+					SpriteRenderer newTile_Renderer = newTileSprite.AddComponent<SpriteRenderer> ();			// add Sprite Renderer component
+					UpdateTileSprite (newTile, newTileSprite);													// set sprite
 
-					SpriteRenderer newSpace_Renderer = newSpace.AddComponent<SpriteRenderer> ();			// add Sprite Renderer component
-					switch (mySub.GetRoomTypeOfSpace (showThisSpace)) {
-						case RoomType.Empty:
-							newSpace_Renderer.sprite = Space_Empty;
-							break;
-						case RoomType.Bridge:
-							newSpace_Renderer.sprite = Space_Bridge;
-							break;
-						default:
-							newSpace_Renderer.sprite = Space_Unknown;
-							break;
-					}
-
-					if (!showThisSpace.canContainRoom) {// cannot be build on = outside sub = show water
-						newSpace_Renderer.sprite = Space_Water;
-					}
+					newTile.RoomIDchangedActions += ((tile) => { // when the roomID of the title changes, update the sprite
+						UpdateTileSprite (tile, newTileSprite);
+					});
                     
 				}
 			}
@@ -54,5 +47,34 @@ namespace Submarine.Controller {
 		void Update () {
 	
 		}
+
+		void UpdateTileSprite (Tile showTile, GameObject spriteOfTile) {
+			SpriteRenderer renderer = spriteOfTile.GetComponent<SpriteRenderer> ();
+			switch (mySub.GetRoomTypeOfTile (showTile)) {
+				case RoomType.Empty:
+					renderer.sprite = Tile_Empty;
+					break;
+				case RoomType.Bridge:
+					renderer.sprite = Tile_Bridge;
+					break;
+				default:
+					renderer.sprite = Tile_Unknown;
+					break;
+			}
+
+			if (showTile != null && !showTile.canContainRoom) {// cannot be build on = outside sub = show transparant
+				renderer.sprite = Tile_Transparent;
+			}
+
+		}
+
+		// get Tile at x,y in World
+		public Tile GetTileAtWorldCoordinates (Vector3 coord) {
+			int x = Mathf.FloorToInt (coord.x);
+			int y = Mathf.FloorToInt (coord.y);
+
+			return mySub.GetTileAt (x, y);
+		}
+
 	}
 }
