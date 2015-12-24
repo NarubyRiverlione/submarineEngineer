@@ -28,8 +28,7 @@ namespace Submarine.Model
     ;
     abstract public class Room
     {
-        //Sub _inThusSub;
-        // to get info of the sub (dimensions)
+       
         public RoomType TypeOfRoom
         {
             get;
@@ -93,11 +92,10 @@ namespace Submarine.Model
         }
 
 #region CONSTRUCTOR
-        public Room(RoomType ofThisRoomType, Sub sub)
+        public Room(RoomType ofThisRoomType, Sub sub)    // sub: to get info of the sub (dimensions)
         {
             TypeOfRoom = ofThisRoomType;
             TilesInRoom = new List<Tile>();
-            //_inThusSub = sub;
             IsAccessable = true;
         }
 

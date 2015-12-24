@@ -27,8 +27,8 @@
             }
         }
 
-        int startValid_X, stopValid_X;
-        int valid_Y;
+        int start_X_BridgeTower, stop_X_BridgeTower;
+        int below_Y_BridgeTower;
         public override bool IsLayoutValid
         {
             get
@@ -38,7 +38,7 @@
                 bool locationValid = false;
                 foreach (Tile checkTile in TilesInRoom)
                 {
-                    if (checkTile.X > startValid_X && checkTile.X <= stopValid_X && checkTile.Y == valid_Y)
+                    if (checkTile.X > start_X_BridgeTower && checkTile.X <= stop_X_BridgeTower && checkTile.Y == below_Y_BridgeTower)
                         locationValid = true;
                 }
 
@@ -48,9 +48,9 @@
 
         public Conn(RoomType typeOfRoom, Sub sub): base (typeOfRoom, sub)
         {
-            startValid_X = sub.lengthOfSub / 3 + 2;
-            stopValid_X = startValid_X + sub.lenghtOfBridgeTower;
-            valid_Y = sub.heightOfBridgeTower + 1;
+            start_X_BridgeTower = sub.startOfBridgeTower;
+            stop_X_BridgeTower = sub.startOfBridgeTower+sub.lenghtOfBridgeTower;
+            below_Y_BridgeTower = sub.heightOfSub-sub.heightOfBridgeTower-1;
         }
     }
 }
