@@ -26,70 +26,36 @@ namespace Submarine.Model
     }
 
     ;
+
+
     abstract public class Room
     {
        
-        public RoomType TypeOfRoom
-        {
-            get;
-            protected set;
+        public RoomType TypeOfRoom{get;protected set;}
+
+        public int Size{get{return TilesInRoom.Count();}
         }
 
-        public int Size
-        {
-            get
-            {
-                return TilesInRoom.Count();
-            }
+        abstract public int MinimimValidSize{get;}
+
+        public List<Tile> TilesInRoom{get;protected set;}
+
+        abstract public double CapacityPerTile{get;}
+
+        public int Capacity{
+            get{return (int)(Size * CapacityPerTile);}
         }
 
-        abstract public int MinimimValidSize
-        {
-            get;
-        }
-
-        public List<Tile> TilesInRoom
-        {
-            get;
-            protected set;
-        }
-
-        abstract public double CapacityPerTile
-        {
-            get;
-        }
-
-        public int Capacity
-        {
-            get
-            {
-                return (int)(Size * CapacityPerTile);
-            }
-        }
-
-        public int Output
-        {
-            get;
-            protected set;
-        }
+        public int Output{get;protected set;}
 
         // current produced or available cargo
-        abstract public string UnitName
-        {
-            get;
-        }
+        abstract public string UnitName{get;}
 
         // unit (liter,..) of output and Capacity
-        public bool IsAccessable
-        {
-            get;
-            protected set;
+        public bool IsAccessable{get;protected set;
         }
 
-        abstract public bool IsLayoutValid
-        {
-            get;
-        }
+        abstract public bool IsLayoutValid{get;}
 
 #region CONSTRUCTOR
         public Room(RoomType ofThisRoomType, Sub sub)    // sub: to get info of the sub (dimensions)
@@ -98,8 +64,8 @@ namespace Submarine.Model
             TilesInRoom = new List<Tile>();
             IsAccessable = true;
         }
-
 #endregion
+
         public static Room CreateRoomOfType(RoomType ofThisRoomType, Sub inThisSub)
         {
             // let factory create the correct concrete class

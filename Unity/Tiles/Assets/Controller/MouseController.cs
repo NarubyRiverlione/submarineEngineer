@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class MouseController : MonoBehaviour {
 
 	public GameObject cursorBuilder;
+    public Text UI_Builder_text;
 
 	RoomType RoomTypeToBeBuild=RoomType.Empty;
 
@@ -52,9 +53,11 @@ public class MouseController : MonoBehaviour {
 			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
 			if (activeRoomToggle != null) {
 				string nameOfRoomType = activeRoomToggle.name;
-				string typeOfRoom = nameOfRoomType.Split ('_') [2];
-				RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
-			
+				string typeOfRoom = nameOfRoomType.Split ('_') [2]; // Toggle_Room_xxxx
+                // set room type to be build
+                RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
+                // show building rules
+                UI_Builder_text.text = "";
 				Debug.Log ("Toggle " + nameOfRoomType + " is active: " + typeOfRoom + " = Enum " + RoomTypeToBeBuild);
 
 			}

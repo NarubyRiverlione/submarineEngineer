@@ -36,6 +36,9 @@ public class WorldController : MonoBehaviour {
 	// Warning Sprites
 	public Sprite Tile_Warning;
 
+	// Wall sprite (sheet)
+	public Sprite WallSpriteSheet;
+
 	// Use this for initialization
 	void Start () {
 		instance = this;
@@ -72,58 +75,63 @@ public class WorldController : MonoBehaviour {
 		SpriteRenderer renderer = spriteOfTile.GetComponent<SpriteRenderer> ();
 		switch (mySub.GetRoomTypeOfTile (showTile)) {
 			case RoomType.Empty:
-				renderer.sprite = Tile_Empty;			break;
+				renderer.sprite = Tile_Empty;break;
 			case RoomType.Bridge:
 				renderer.sprite = Tile_Bridge; break;
 			case RoomType.EngineRoom:
-			 	renderer.sprite = Tile_EngineRoom;				break;
+				renderer.sprite = Tile_EngineRoom;break;
 			case RoomType.Generator:
-				renderer.sprite = Tile_Generator;				break;
+				renderer.sprite = Tile_Generator;break;
 			case RoomType.Battery:
-				renderer.sprite = Tile_Battery;				break;
+				renderer.sprite = Tile_Battery;break;
 			case RoomType.Gallery:
-				renderer.sprite = Tile_Gallery;				break;
+				renderer.sprite = Tile_Gallery;break;
 			case RoomType.Mess:
-				renderer.sprite = Tile_Mess;				break;
+				renderer.sprite = Tile_Mess;break;
 			case RoomType.Cabin:
-				renderer.sprite = Tile_Cabin;				break;
+				renderer.sprite = Tile_Cabin;break;
 			case RoomType.Bunks:
-				renderer.sprite = Tile_Bunks;				break;
+				renderer.sprite = Tile_Bunks;break;
 			case RoomType.Conn:
-				renderer.sprite = Tile_Conn;				break;
+				renderer.sprite = Tile_Conn;break;
 			case RoomType.Sonar:
-				renderer.sprite = Tile_Sonar;				break;
+				renderer.sprite = Tile_Sonar;break;
 			case RoomType.RadioRoom:
-				renderer.sprite = Tile_RadioRoom;				break;
+				renderer.sprite = Tile_RadioRoom;break;
 			case RoomType.FuelTank:
-				renderer.sprite = Tile_FuelTank;				break;
+				renderer.sprite = Tile_FuelTank;break;
 			case RoomType.BalastTank:
-				renderer.sprite = Tile_BalastTank;				break;
+				renderer.sprite = Tile_BalastTank;break;
 			case RoomType.StorageRoom:
-				renderer.sprite = Tile_StorageRoom;				break;
+				renderer.sprite = Tile_StorageRoom;break;
 			case RoomType.EscapeHatch:
-				renderer.sprite = Tile_EscapeHatch;				break;
+				renderer.sprite = Tile_EscapeHatch;break;
 			case RoomType.TorpedoRoom:
-				renderer.sprite = Tile_TorpedoRoom;				break;
+				renderer.sprite = Tile_TorpedoRoom;break;
 			default:
-				renderer.sprite = Tile_Unknown;				break;
+				renderer.sprite = Tile_Unknown;break;
 		}
-
-		if (showTile != null && !showTile.canContainRoom) {// cannot be build on = outside sub = show transparent
+		// cannot be build on = outside sub = show transparent
+		if (showTile != null && !showTile.canContainRoom) {
 			renderer.sprite = Tile_Transparent;
 		}
 
-
+		// check for warnings (valid layout)
 		if (showTile.RoomID != 0) {
 			GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y);
 			var layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
 			if (!layoutValid && checkIfWarningAlreadyOnScreen == null) {
 				// add warning now		
 				GameObject newTileWarningSprite = new GameObject ();
-				newTileWarningSprite.name = "Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;                                                 // set name of game object to see in Hierarchy
+				// set name of game object to see in Hierarchy
+				newTileWarningSprite.name = "Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;
+				// set parent of warning GameObject
 				newTileWarningSprite.transform.SetParent (this.transform);
-				newTileWarningSprite.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);						// set X, Y of game object
+				// set X, Y of game object
+				newTileWarningSprite.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);
+				// show above Title = on the Tile_Warning sorting layer  						
 				newTileWarningSprite.layer = SortingLayer.GetLayerValueFromName ("Tile_Warning");
+				// set Sprite
 				SpriteRenderer render = newTileWarningSprite.AddComponent<SpriteRenderer> ();	
 				render.sprite = Tile_Warning;
 			}
@@ -132,6 +140,29 @@ public class WorldController : MonoBehaviour {
 				Destroy (checkIfWarningAlreadyOnScreen);
 			}
 		}
+
+		// add wall type
+		if (showTile.RoomID != 0 ) {
+			GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find("Wall_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y);
+
+			if (checkIfWallIsAlreadyOnScreen == null) {
+				// add Wall now		
+				//GameObject newWall = new GameObject();
+				// set name of game object to see in Hierarchy
+				checkIfWallIsAlreadyOnScreen.name = "Wall" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;
+				// set parent of warning GameObject
+				checkIfWallIsAlreadyOnScreen.transform.SetParent(this.transform);
+				// set X, Y of game object
+				checkIfWallIsAlreadyOnScreen.transform.position = new Vector2(spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);
+				// show above Title = on the Tile_Warning sorting layer  						
+				checkIfWallIsAlreadyOnScreen.layer = SortingLayer.GetLayerValueFromName("Walls");
+				// add Sprite
+				checkIfWallIsAlreadyOnScreen.AddComponent<SpriteRenderer>();
+				}
+			// now it's sure the Wall gameobject exist, update (or set) it's sprite
+			SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer>();
+			render.sprite = WallSpriteSheet;
+			}
 
 	}
 

@@ -52,5 +52,9 @@
             stop_X_BridgeTower = sub.startOfBridgeTower+sub.lenghtOfBridgeTower;
             below_Y_BridgeTower = sub.heightOfSub-sub.heightOfBridgeTower-1;
         }
+
+        //public override string ShowValidationRules() {
+        //    return "Size of room must be more then " + MinimimValidSize + " tiles and must be connected to the Bridge.";
+        //    }
     }
 }
