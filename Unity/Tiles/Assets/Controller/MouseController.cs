@@ -1,16 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
-using Submarine.Model;
+﻿using System;
 using System.Linq;
+using Submarine.Model;
+using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 
 public class MouseController : MonoBehaviour {
 
 	public GameObject cursorBuilder;
 
-	RoomType RoomTypeToBeBuild;
+	RoomType RoomTypeToBeBuild=RoomType.Empty;
 
 	// Use this for initialization
 	void Start () {
@@ -25,11 +24,11 @@ public class MouseController : MonoBehaviour {
 		// move builder icon to tile below mouse
 		WorldController world = WorldController.instance; //GameObject.FindObjectOfType<WorldController> ();
 		Tile tileBelowMouse = world.GetTileAtWorldCoordinates (currentMousePosition);
-		// reset title if title isn't buildable 
+		// reset title if title isn't build able 
 		if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
 			tileBelowMouse = null;
 				
-		if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
+		if (tileBelowMouse != null && RoomTypeToBeBuild != RoomType.Empty) { // only show builder icon if mouse is above a tile
 			Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
 			cursorBuilder.transform.position = spaceBelowMouseCoordinates;
 			cursorBuilder.SetActive (true);

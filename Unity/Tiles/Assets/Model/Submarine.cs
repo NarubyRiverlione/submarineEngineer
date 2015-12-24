@@ -1,8 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
 //using System.Threading.Tasks;
@@ -10,8 +8,8 @@ using System.Diagnostics;
 
 
 namespace Submarine.Model {
-	/// [JsonObject]
-	public class Sub {
+    /// [JsonObject]
+    public class Sub {
 
 
 		public int lengthOfSub { get; private set; }

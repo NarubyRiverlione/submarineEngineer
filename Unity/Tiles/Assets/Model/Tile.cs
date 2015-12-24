@@ -2,7 +2,7 @@
 
 
 namespace Submarine.Model {
-	public class Tile {
+    public class Tile {
 		public int X { get; private set; }
 
 		public int Y { get; private set; }

@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using Submarine.Model;
+﻿using Submarine.Model;
+using UnityEngine;
 
 
 public class WorldController : MonoBehaviour {
@@ -51,14 +50,14 @@ public class WorldController : MonoBehaviour {
 				newTileSprite.name = "Tile_" + x + "/" + y;                                                 // set name of game object to see in Hierarchy
 				newTileSprite.transform.SetParent (this.transform);
 				newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);						// set X, Y of game object
-                   
+				   
 				newTileSprite.AddComponent<SpriteRenderer> ();												// add Sprite Renderer component
 				UpdateTileSprite (newTile, newTileSprite);													// set sprite
 
 				newTile.TileChangedActions += ((tile) => { // when the roomID of the title changes, update the sprite
 					UpdateTileSprite (tile, newTileSprite);
 				});
-                    
+					
 
 			}
 		}
@@ -73,61 +72,44 @@ public class WorldController : MonoBehaviour {
 		SpriteRenderer renderer = spriteOfTile.GetComponent<SpriteRenderer> ();
 		switch (mySub.GetRoomTypeOfTile (showTile)) {
 			case RoomType.Empty:
-				renderer.sprite = Tile_Empty;
-				break;
+				renderer.sprite = Tile_Empty;			break;
 			case RoomType.Bridge:
-				renderer.sprite = Tile_Bridge;
-				break;
-				renderer.sprite = Tile_EngineRoom;
-				break;
+				renderer.sprite = Tile_Bridge; break;
+			case RoomType.EngineRoom:
+			 	renderer.sprite = Tile_EngineRoom;				break;
 			case RoomType.Generator:
-				renderer.sprite = Tile_Generator;
-				break;
+				renderer.sprite = Tile_Generator;				break;
 			case RoomType.Battery:
-				renderer.sprite = Tile_Battery;
-				break;
+				renderer.sprite = Tile_Battery;				break;
 			case RoomType.Gallery:
-				renderer.sprite = Tile_Gallery;
-				break;
+				renderer.sprite = Tile_Gallery;				break;
 			case RoomType.Mess:
-				renderer.sprite = Tile_Mess;
-				break;
+				renderer.sprite = Tile_Mess;				break;
 			case RoomType.Cabin:
-				renderer.sprite = Tile_Cabin;
-				break;
+				renderer.sprite = Tile_Cabin;				break;
 			case RoomType.Bunks:
-				renderer.sprite = Tile_Bunks;
-				break;
+				renderer.sprite = Tile_Bunks;				break;
 			case RoomType.Conn:
-				renderer.sprite = Tile_Conn;
-				break;
+				renderer.sprite = Tile_Conn;				break;
 			case RoomType.Sonar:
-				renderer.sprite = Tile_Sonar;
-				break;
+				renderer.sprite = Tile_Sonar;				break;
 			case RoomType.RadioRoom:
-				renderer.sprite = Tile_RadioRoom;
-				break;
+				renderer.sprite = Tile_RadioRoom;				break;
 			case RoomType.FuelTank:
-				renderer.sprite = Tile_FuelTank;
-				break;
+				renderer.sprite = Tile_FuelTank;				break;
 			case RoomType.BalastTank:
-				renderer.sprite = Tile_BalastTank;
-				break;
+				renderer.sprite = Tile_BalastTank;				break;
 			case RoomType.StorageRoom:
-				renderer.sprite = Tile_StorageRoom;
-				break;
+				renderer.sprite = Tile_StorageRoom;				break;
 			case RoomType.EscapeHatch:
-				renderer.sprite = Tile_EscapeHatch;
-				break;
+				renderer.sprite = Tile_EscapeHatch;				break;
 			case RoomType.TorpedoRoom:
-				renderer.sprite = Tile_TorpedoRoom;
-				break;
+				renderer.sprite = Tile_TorpedoRoom;				break;
 			default:
-				renderer.sprite = Tile_Unknown;
-				break;
+				renderer.sprite = Tile_Unknown;				break;
 		}
 
-		if (showTile != null && !showTile.canContainRoom) {// cannot be build on = outside sub = show transparant
+		if (showTile != null && !showTile.canContainRoom) {// cannot be build on = outside sub = show transparent
 			renderer.sprite = Tile_Transparent;
 		}
 
