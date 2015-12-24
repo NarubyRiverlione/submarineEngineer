@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Submarine.Model {
 	public enum RoomType {
 		Empty = 0,
-		Engine = 1,
+		EngineRoom = 1,
 		Generator = 2,
 		Battery = 3,
 		Bridge = 4,
@@ -16,10 +16,10 @@ namespace Submarine.Model {
 		Bunks = 8,
 		Conn = 9,
 		Sonar = 10,
-		Radio = 11,
+		RadioRoom = 11,
 		FuelTank = 12,
 		BalastTank = 13,
-		FoodStorage = 14,
+		StorageRoom = 14,
 		EscapeHatch = 15,
 		TorpedoRoom = 16}
 
