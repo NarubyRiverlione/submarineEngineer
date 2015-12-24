@@ -78,6 +78,50 @@ public class WorldController : MonoBehaviour {
 			case RoomType.Bridge:
 				renderer.sprite = Tile_Bridge;
 				break;
+				renderer.sprite = Tile_EngineRoom;
+				break;
+			case RoomType.Generator:
+				renderer.sprite = Tile_Generator;
+				break;
+			case RoomType.Battery:
+				renderer.sprite = Tile_Battery;
+				break;
+			case RoomType.Gallery:
+				renderer.sprite = Tile_Gallery;
+				break;
+			case RoomType.Mess:
+				renderer.sprite = Tile_Mess;
+				break;
+			case RoomType.Cabin:
+				renderer.sprite = Tile_Cabin;
+				break;
+			case RoomType.Bunks:
+				renderer.sprite = Tile_Bunks;
+				break;
+			case RoomType.Conn:
+				renderer.sprite = Tile_Conn;
+				break;
+			case RoomType.Sonar:
+				renderer.sprite = Tile_Sonar;
+				break;
+			case RoomType.RadioRoom:
+				renderer.sprite = Tile_RadioRoom;
+				break;
+			case RoomType.FuelTank:
+				renderer.sprite = Tile_FuelTank;
+				break;
+			case RoomType.BalastTank:
+				renderer.sprite = Tile_BalastTank;
+				break;
+			case RoomType.StorageRoom:
+				renderer.sprite = Tile_StorageRoom;
+				break;
+			case RoomType.EscapeHatch:
+				renderer.sprite = Tile_EscapeHatch;
+				break;
+			case RoomType.TorpedoRoom:
+				renderer.sprite = Tile_TorpedoRoom;
+				break;
 			default:
 				renderer.sprite = Tile_Unknown;
 				break;

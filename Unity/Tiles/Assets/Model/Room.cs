@@ -76,16 +76,41 @@ namespace Submarine.Model {
 
 		public static Room CreateRoomOfType (RoomType type, Sub inThisSub) {
 			switch (type) {
-				case RoomType.FuelTank:
-					return new FuelTank (type, inThisSub);
-				case RoomType.Conn:
-					return new Conn (type, inThisSub);
+
+
+				case RoomType.EngineRoom:
+					return new EngineRoom (type, inThisSub);
+				case RoomType.Generator:
+					return new Generator (type, inThisSub);
+				case RoomType.Battery:
+					return new Battery (type, inThisSub);
+				case RoomType.Bridge:
+					return new Bridge (type, inThisSub);
+				case RoomType.Gallery:
+					return new Gallery (type, inThisSub);
+				case RoomType.Mess:
+					return new Mess (type, inThisSub);
 				case RoomType.Cabin:
 					return new Cabin (type, inThisSub);
 				case RoomType.Bunks:
 					return new Bunks (type, inThisSub);
-				case RoomType.Bridge:
-					return new Bridge (type, inThisSub);
+				case RoomType.Conn:
+					return new Conn (type, inThisSub);
+				case RoomType.Sonar:
+					return new Sonar (type, inThisSub);
+				case RoomType.RadioRoom:
+					return new RadioRoom (type, inThisSub);
+				case RoomType.FuelTank:
+					return new FuelTank (type, inThisSub);
+				case RoomType.BalastTank:
+					return new BalastTank (type, inThisSub);
+				case RoomType.StorageRoom:
+					return new StorageRoom (type, inThisSub);
+				case RoomType.EscapeHatch:
+					return new EscapeHatch (type, inThisSub);
+				case RoomType.TorpedoRoom:
+					return new TorpedoRoom (type, inThisSub);
+						
 				default:
 					throw new NotImplementedException ("ERROR: Room type " + type + " isn't implemented yet.");
 			//return null;
@@ -104,6 +129,158 @@ namespace Submarine.Model {
 
 	};
 
+
+	public class EngineRoom:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public EngineRoom (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class Generator:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public Generator (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class Battery:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public Battery (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class Gallery:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public Gallery (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class Mess:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public Mess (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+
+	}
+
+	public class Sonar:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public Sonar (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class RadioRoom:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public RadioRoom (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class StorageRoom:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public StorageRoom (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class BalastTank:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public BalastTank (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
+	public class EscapeHatch:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public EscapeHatch (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
+	}
+
 	public class FuelTank:Room {
 		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
 		public override double CapacityPerTile{ get { return 1000.0; } }
@@ -118,7 +295,6 @@ namespace Submarine.Model {
 			IsAccessable = false;
 		}
 	}
-
 
 	public class Cabin : Room {
 		//  public override RoomType TypeOfRoom { get { return RoomType.Cabin; } }
@@ -206,5 +382,20 @@ namespace Submarine.Model {
 		public Bridge (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
 		}
 
+	}
+
+	public class TorpedoRoom:Room {
+		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		public override double CapacityPerTile{ get { return 1000.0; } }
+
+		public override string UnitName { get { return "liter"; } }
+
+		public override int MinimimValidSize { get { return 4; } }
+
+		public override bool IsLayoutValid { get { return Size >= MinimimValidSize ? true : false; } }
+
+		public TorpedoRoom (RoomType typeOfRoom, Sub sub) : base (typeOfRoom, sub) {
+			IsAccessable = false;
+		}
 	}
 }
