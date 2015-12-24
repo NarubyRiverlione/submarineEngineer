@@ -144,13 +144,7 @@ namespace Submarine.Model {
 			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
 
-		//		public bool IsRoomValid (int RoomID) {
-		//			Room checkRoom = GetRoom (RoomID);
-		//			if (checkRoom != null)
-		//				return checkRoom.IsLayoutValid;
-		//			else
-		//				return false;
-		//		}
+
 
 		private void MergeRooms (int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom (oldRoomID);
@@ -163,24 +157,24 @@ namespace Submarine.Model {
 					Debug.WriteLine ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
-					bool oldRoomValid = oldRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
+					bool newRoomValid = newRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
 					foreach (Tile oldRoomTile in oldRoom.TilesInRoom) {
 						// change RoomID of each Tile in old room
 						oldRoomTile.RoomID = newRoomID;
 						// add Tiles to new room (no need to removed them form old room as old room will be destroyed)
 						newRoom.AddTile (oldRoomTile);
 					}
+                    newRoom.WarnTilesInRoomIfLayoutChanged(newRoomValid);  // compare new valid layout
+                                                                                                 
+                    RemoveRoomFromSubmarine (oldRoomID);   // remove old room form sub
 
-					// remove old room form sub
-					RemoveRoomFromSubmarine (oldRoomID);
-				}
+                    }
 			}
 		}
 
 
 
 		#endregion
-
 
 		#region Tiles
 
