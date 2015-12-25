@@ -191,11 +191,11 @@ namespace Submarine.Model {
 
 		public Tile GetTileAt (int x, int y) {
 			if (x > lengthOfSub - 1 || x < 0) {
-				UnityEngine.Debug.Log ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
+				Debug.WriteLine ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
 				return null;
 			}
 			if (y > heightOfSub - 1 || y < 0) {
-				UnityEngine.Debug.Log ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
+				Debug.WriteLine ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
 				return null;
 			}
 

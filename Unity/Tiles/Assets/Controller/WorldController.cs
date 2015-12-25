@@ -37,12 +37,15 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_Warning;
 
 	// Wall sprite (sheet)
-	public Sprite WallSpriteSheet;
+	Sprite[] WallSpriteSheet;
 
 	// Use this for initialization
 	void Start () {
 		instance = this;
 		mySub = new Sub ();
+		// loading Wall sprites from sheet
+		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
+
 		Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
 
 		// Create GameObject for each Tile
@@ -129,6 +132,7 @@ public class WorldController : MonoBehaviour {
 				renderer.sprite = Tile_Unknown;
 				break;
 		}
+
 		// cannot be build on = outside sub = show transparent
 		if (showTile != null && !showTile.canContainRoom) {
 			renderer.sprite = Tile_Transparent;
@@ -147,11 +151,12 @@ public class WorldController : MonoBehaviour {
 				newTileWarningSprite.transform.SetParent (this.transform);
 				// set X, Y of game object
 				newTileWarningSprite.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);
-				// show above Title = on the Tile_Warning sorting layer  						
-				newTileWarningSprite.layer = SortingLayer.GetLayerValueFromName ("Tile_Warning");
 				// set Sprite
 				SpriteRenderer render = newTileWarningSprite.AddComponent<SpriteRenderer> ();	
 				render.sprite = Tile_Warning;
+				// show above Title = on the Tile_Warning sorting layer  						
+				render.sortingLayerName = "Tile_Warning";
+
 			}
 			if (layoutValid && checkIfWarningAlreadyOnScreen != null) {
 				// remove warning
@@ -162,25 +167,27 @@ public class WorldController : MonoBehaviour {
 		// add wall type
 		if (showTile.RoomID != 0) {
 			GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find ("Wall_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y);
-
-			if (checkIfWallIsAlreadyOnScreen == null) { // only create GameObject when need to show a wall
+			// only create GameObject when need to show a wall
+			if (checkIfWallIsAlreadyOnScreen == null) { 
 				// add Wall now		
 				checkIfWallIsAlreadyOnScreen = new GameObject ();
 				// set name of game object to see in Hierarchy
-				checkIfWallIsAlreadyOnScreen.name = "Wall" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;
+				checkIfWallIsAlreadyOnScreen.name = "Wall_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;
 				// set parent of warning GameObject
 				checkIfWallIsAlreadyOnScreen.transform.SetParent (this.transform);
 				// set X, Y of game object
 				checkIfWallIsAlreadyOnScreen.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);
-				// show above Title = on the Tile_Warning sorting layer  						
-				checkIfWallIsAlreadyOnScreen.layer = SortingLayer.GetLayerValueFromName ("Walls");
-				// add Sprite
+				// add Sprite Renderer
 				checkIfWallIsAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+
 			}
 			// now it's sure the Wall gameobject exist, update (or set) it's sprite
 			SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
-			//TODO: set sprite form wall sprite sheet
-			//render.sprite = WallSpriteSheet;
+			//set sprite from wall sprite sheet
+			Debug.Log ("Try showing wall type " + showTile.WallType);
+			render.sprite = WallSpriteSheet [showTile.WallType];
+			// show above Title = on the Tile_Warning sorting layer  						
+			render.sortingLayerName = "Walls";
 		}
 
 	}
