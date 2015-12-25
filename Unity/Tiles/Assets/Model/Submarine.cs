@@ -224,7 +224,7 @@ namespace Submarine.Model {
 						bool foundSameRoomType;
 
 						// get info of Tile North
-						checkTile = GetTileAt (x, y - 1);
+						checkTile = GetTileAt (x, y + 1);
 						foundSameRoomType = CheckNeigborSameRoomType (x, y, buildRoomOfType, newRoomTile, checkTile);
 						if (foundSameRoomType) {
 							AddToOrMergeRooms (newRoomTile, checkTile);
@@ -240,7 +240,7 @@ namespace Submarine.Model {
 							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
 						}
 						// get info of Tile South
-						checkTile = GetTileAt (x, y + 1);
+						checkTile = GetTileAt (x, y - 1);
 						foundSameRoomType = CheckNeigborSameRoomType (x, y, buildRoomOfType, newRoomTile, checkTile);
 						if (foundSameRoomType) {
 							AddToOrMergeRooms (newRoomTile, checkTile);
@@ -255,6 +255,9 @@ namespace Submarine.Model {
 							newRoomTile.WallType += 8; // add wall type for West
 							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
 						}
+
+						UnityEngine.Debug.Log ("New tile has wall type: " + newRoomTile.WallType);
+
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
 							Room newRoom = Room.CreateRoomOfType (buildRoomOfType, inThisSub: this);     // create new room of this room type
@@ -310,7 +313,7 @@ namespace Submarine.Model {
 			RoomType checkRoomType = GetRoomTypeOfTile (checkAroundThisTile);
 
 			// get info of Tile North
-			checkTile = GetTileAt (x, y - 1);
+			checkTile = GetTileAt (x, y + 1);
 			foundSameRoomType = CheckNeigborSameRoomType (x, y, checkRoomType, checkAroundThisTile, checkTile);
 			if (foundSameRoomType)
 				checkAroundThisTile.WallType += 1;	// add wall type for North
@@ -322,7 +325,7 @@ namespace Submarine.Model {
 				checkAroundThisTile.WallType += 2; // add wall type for East
 
 			// get info of Tile South
-			checkTile = GetTileAt (x, y + 1);
+			checkTile = GetTileAt (x, y - 1);
 			foundSameRoomType = CheckNeigborSameRoomType (x, y, checkRoomType, checkAroundThisTile, checkTile);
 			if (foundSameRoomType)
 				checkAroundThisTile.WallType += 4; // add wall type for South
@@ -359,7 +362,7 @@ namespace Submarine.Model {
 				newRoomTile.RoomID = neigboreTile.RoomID;                              // store existing RoomID in newRoomTile
 				addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
 				addToThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
-		
+				
 			}
 			else {// Tile is already in a room: check if neighborer is in same room
 				if (newRoomTile.RoomID != neigboreTile.RoomID) {

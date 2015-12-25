@@ -184,7 +184,7 @@ public class WorldController : MonoBehaviour {
 			// now it's sure the Wall gameobject exist, update (or set) it's sprite
 			SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
 			//set sprite from wall sprite sheet
-			Debug.Log ("Try showing wall type " + showTile.WallType);
+			//Debug.Log ("Try showing wall type " + showTile.WallType);
 			render.sprite = WallSpriteSheet [showTile.WallType];
 			// show above Title = on the Tile_Warning sorting layer  						
 			render.sortingLayerName = "Walls";
