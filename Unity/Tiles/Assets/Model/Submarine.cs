@@ -220,7 +220,9 @@ namespace Submarine.Model {
 						Debug.WriteLine ("ERROR: already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
 					}
 					else {
-						newRoomTile = CheckNeigboreTiles (newRoomTile, buildRoomOfType);
+
+						//newRoomTile = 
+						CheckNeigborTilesForSameRoomType (newRoomTile, buildRoomOfType);
 
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
@@ -298,6 +300,25 @@ namespace Submarine.Model {
 			}
 		}
 
+		private void CheckNeigborTilesForSameRoomType (Tile aroundThisTile, RoomType buildRoomOfType) {
+			Tile checkTile;
+			int x = aroundThisTile.X, y = aroundThisTile.Y;
+			// get info of Tile North
+			checkTile = GetTileAt (x, y - 1);
+			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
+			// get info of Tile East
+			checkTile = GetTileAt (x + 1, y);
+			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
+			// get info of Tile South
+			checkTile = GetTileAt (x, y + 1);
+			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
+			// get info of Tile West
+			checkTile = GetTileAt (x - 1, y);
+			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
+			
+			//return aroundThisTile;
+		}
+
 		public RoomType GetRoomTypeOfTile (Tile ofThisTile) {
 			if (ofThisTile.RoomID == 0) {
 				// Debug.WriteLine("Room at (" + ofThisTile.x + "," + ofThisTile.y + ") is not part of a room");
@@ -318,24 +339,7 @@ namespace Submarine.Model {
 			}
 		}
 
-		private Tile CheckNeigboreTiles (Tile aroundThisTile, RoomType buildRoomOfType) {
-			Tile checkTile;
-			int x = aroundThisTile.X, y = aroundThisTile.Y;
-			// get info of Tile North
-			checkTile = GetTileAt (x, y - 1);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			// get info of Tile East
-			checkTile = GetTileAt (x + 1, y);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			// get info of Tile South
-			checkTile = GetTileAt (x, y + 1);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			// get info of Tile West
-			checkTile = GetTileAt (x - 1, y);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
 
-			return aroundThisTile;
-		}
 
 		#endregion
 	}
