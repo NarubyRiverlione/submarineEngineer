@@ -283,7 +283,7 @@ namespace Submarine.Model {
 				}
 				else {
 					if (newRoomTile.RoomID != 0) {
-						UnityEngine.Debug.LogError ("ERROR: already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
+						UnityEngine.Debug.Log ("Already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
 					}
 					else {
 						Tile checkTile;
@@ -353,7 +353,8 @@ namespace Submarine.Model {
 				else {
 					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;	            // remember layout validation before removing tile
 					removeFromThisRoom.RemoveTile (TileToBeRemoved);
-					RebuildRoom (TileToBeRemoved.RoomID);    // rebuild room to be sure the wall type and layout is still ok
+					//TODO: check this
+					//RebuildRoom (TileToBeRemoved.RoomID);    // rebuild room to be sure the wall type and layout is still ok
 					removeFromThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
 					
 					// check if it was the last Tile of the room

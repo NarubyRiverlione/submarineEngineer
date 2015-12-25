@@ -55,6 +55,7 @@
      <Compile Include="Assets\Model\Rooms\Bunks.cs" />
      <Compile Include="Assets\Model\Rooms\Cabin.cs" />
      <Compile Include="Assets\Model\Rooms\Conn.cs" />
+     <Compile Include="Assets\Model\Rooms\EmptyRoom.cs" />
      <Compile Include="Assets\Model\Rooms\EngineRoom.cs" />
      <Compile Include="Assets\Model\Rooms\EscapeHatch.cs" />
      <Compile Include="Assets\Model\Rooms\FuelTank.cs" />

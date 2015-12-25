@@ -74,8 +74,8 @@ public class WorldController : MonoBehaviour {
 	
 	}
 
-	void UpdateTileSprite (Tile showTile, GameObject spriteOfTile) {
-		SpriteRenderer renderer = spriteOfTile.GetComponent<SpriteRenderer> ();
+	void UpdateTileSprite (Tile showTile, GameObject gameObjectOfTitle) {
+		SpriteRenderer renderer = gameObjectOfTitle.GetComponent<SpriteRenderer> ();
 		switch (mySub.GetRoomTypeOfTile (showTile)) {
 			case RoomType.Empty:
 				renderer.sprite = Tile_Empty;
@@ -136,18 +136,18 @@ public class WorldController : MonoBehaviour {
 		}
 
 		// check for warnings (valid layout)
+		GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
 		if (showTile.RoomID != 0) {
-			GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y);
 			var layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
 			if (!layoutValid && checkIfWarningAlreadyOnScreen == null) {
 				// add warning now		
 				GameObject newTileWarningSprite = new GameObject ();
 				// set name of game object to see in Hierarchy
-				newTileWarningSprite.name = "Tile_Warning_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;
-				// set parent of warning GameObject
-				newTileWarningSprite.transform.SetParent (this.transform);
+				newTileWarningSprite.name = "Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				// set parent of warning GameObject to the Title gameobject
+				newTileWarningSprite.transform.SetParent (gameObjectOfTitle.transform);
 				// set X, Y of game object
-				newTileWarningSprite.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);
+				newTileWarningSprite.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
 				// set Sprite
 				SpriteRenderer render = newTileWarningSprite.AddComponent<SpriteRenderer> ();	
 				render.sprite = Tile_Warning;
@@ -160,20 +160,25 @@ public class WorldController : MonoBehaviour {
 				Destroy (checkIfWarningAlreadyOnScreen);
 			}
 		}
-
+		else { // roomID = 0, check if warning GameObject still exists, remove it now because room doesn't exist any more on this tile
+			if (checkIfWarningAlreadyOnScreen != null) {
+				Destroy (checkIfWarningAlreadyOnScreen);
+			}
+		}
 		// add wall type
+		GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find ("Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+
 		if (showTile.RoomID != 0) {
-			GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find ("Wall_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y);
 			// only create GameObject when need to show a wall
 			if (checkIfWallIsAlreadyOnScreen == null) { 
 				// add Wall now		
 				checkIfWallIsAlreadyOnScreen = new GameObject ();
 				// set name of game object to see in Hierarchy
-				checkIfWallIsAlreadyOnScreen.name = "Wall_" + spriteOfTile.transform.position.x + "/" + spriteOfTile.transform.position.y;
-				// set parent of warning GameObject
-				checkIfWallIsAlreadyOnScreen.transform.SetParent (this.transform);
+				checkIfWallIsAlreadyOnScreen.name = "Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				// set parent of warning GameObject to the Title gameobject
+				checkIfWallIsAlreadyOnScreen.transform.SetParent (gameObjectOfTitle.transform);
 				// set X, Y of game object
-				checkIfWallIsAlreadyOnScreen.transform.position = new Vector2 (spriteOfTile.transform.position.x, spriteOfTile.transform.position.y);
+				checkIfWallIsAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
 				// add Sprite Renderer
 				checkIfWallIsAlreadyOnScreen.AddComponent<SpriteRenderer> ();
 
@@ -185,6 +190,12 @@ public class WorldController : MonoBehaviour {
 			render.sprite = WallSpriteSheet [showTile.WallType];
 			// show above Title = on the Tile_Warning sorting layer  						
 			render.sortingLayerName = "Walls";
+		}
+		else { // roomID = 0, check if Wall GameObject still exists, remove it now because room doesn't exist any more on this tile
+			if (checkIfWallIsAlreadyOnScreen != null) {
+				Destroy (checkIfWallIsAlreadyOnScreen);
+			}
+			
 		}
 
 	}

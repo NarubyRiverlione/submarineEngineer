@@ -87,6 +87,9 @@ namespace Submarine.Model {
 				case RoomType.TorpedoRoom:
 					return new TorpedoRoom (type, inThisSub, TorpedoRoom_Min, TorpedoRoom_CapPerTile, TorpedoRoom_unitOfCap);
 
+				case RoomType.Empty:
+					return new EmptyRoom (type, inThisSub, 0, 0, "");
+
 				default:
 					throw new NotImplementedException ("ERROR: Room type " + type + " isn't implemented yet.");
 			//return null;

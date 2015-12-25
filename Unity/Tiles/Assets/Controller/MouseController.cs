@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class MouseController : MonoBehaviour {
 
 	public GameObject cursorBuilder;
+	public GameObject cursorDestroyer;
+
 	public Text UI_Builder_text;
 
 	WorldController world;
@@ -16,6 +18,9 @@ public class MouseController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		// hide cusors
+		cursorBuilder.SetActive (false);
+		cursorDestroyer.SetActive (false);
 		
 	}
 	
@@ -28,26 +33,39 @@ public class MouseController : MonoBehaviour {
 			Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			currentMousePosition.z = 0; // set Z to zero so mouse position isn't on the camera (and be clipped so it isn't visible)
 
-			// move builder icon to tile below mouse
+			// move mouse icon to tile below mouse
 
 			Tile tileBelowMouse = world.GetTileAtWorldCoordinates (currentMousePosition);
 			// reset title if title isn't build able 
 			if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
 				tileBelowMouse = null;
 				
-			if (tileBelowMouse != null && RoomTypeToBeBuild != RoomType.Empty) { // only show builder icon if mouse is above a tile
+			if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
 				Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
-				cursorBuilder.transform.position = spaceBelowMouseCoordinates;
-				cursorBuilder.SetActive (true);
+				if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
+					cursorBuilder.transform.position = spaceBelowMouseCoordinates;
+					cursorBuilder.SetActive (true);
+					cursorDestroyer.SetActive (false);
+				}
+				else { // selected Empty room = show destroyer icon
+					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
+					cursorBuilder.SetActive (false);
+					cursorDestroyer.SetActive (true);
+				}
 			}
 			else {
-				cursorBuilder.SetActive (false); // hide if cursor isn"t on a tile
+				// hide if cursor isn"t on a tile
+				cursorBuilder.SetActive (false);
+				cursorDestroyer.SetActive (false);
 			}	
 
 			// change title type if clicked on (release left mouse)
 			if (Input.GetMouseButtonUp (0)) {
 				if (tileBelowMouse != null) {//check were above a tile
-					world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);
+					if (RoomTypeToBeBuild != RoomType.Empty)
+						world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);	// add
+					else
+						world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);					// remove
 				
 				}
 			}

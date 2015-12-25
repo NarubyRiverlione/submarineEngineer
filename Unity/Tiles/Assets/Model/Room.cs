@@ -62,7 +62,8 @@ namespace Submarine.Model {
 			MinimimValidSize = minSize;
 			CapacityPerTile = capPerTile;
 			UnitName = unitOfCap;
-			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces.";
+			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
+			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces";
 		}
 
 		#endregion
