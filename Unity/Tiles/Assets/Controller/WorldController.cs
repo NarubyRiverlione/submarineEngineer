@@ -95,9 +95,6 @@ public class WorldController : MonoBehaviour {
 			case RoomType.Gallery:
 				renderer.sprite = Tile_Gallery;
 				break;
-			case RoomType.Mess:
-				renderer.sprite = Tile_Mess;
-				break;
 			case RoomType.Cabin:
 				renderer.sprite = Tile_Cabin;
 				break;

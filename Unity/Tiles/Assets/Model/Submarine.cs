@@ -82,14 +82,20 @@ namespace Submarine.Model {
 			_tile = new Tile[lengthOfSub, heightOfSub]; 
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
+			// set tiles around tail and tower as unavailibe for building, create Tower
+			CreateSub ();
 
+			SetRoomProperties ();
+
+		}
+		// set tiles around tail and tower as unavailibe for building, create Tower
+		private void CreateSub () {
 			// instantiate Tiles
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
 					_tile [x, y] = new Tile (x, y);
 				}
 			}
-
 			// set Tile's outside sub outlines as unavailable
 			// upper smaller tail section
 			for (int x = 0; x <= smallerTailLenght; x++) {
@@ -103,9 +109,6 @@ namespace Submarine.Model {
 					_tile [x, y].canContainRoom = false;
 				}
 			}
-
-			
-
 			// left of Bridge tower
 			for (int x = 0; x < startOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
@@ -118,13 +121,76 @@ namespace Submarine.Model {
 					_tile [x, y].canContainRoom = false;
 				}
 			}
-
 			// add Bridge Tower
 			for (int x = startOfBridgeTower; x < startOfBridgeTower + lenghtOfBridgeTower; x++) {
 				for (int y = heightOfSub - heightOfBridgeTower; y < heightOfSub; y++) {
 					AddTileToRoom (x, y, RoomType.Bridge);
 				}
 			}
+		}
+		// set min tile size, capacity per tile and unit of capacity for each Room Type
+		private void SetRoomProperties () {
+			RoomFactory.EngineRoom_Min = 9;
+			RoomFactory.EngineRoom_CapPerTile = 1000;
+			RoomFactory.EngineRoom_unitOfCap = "pk'";
+
+			RoomFactory.Generator_Min = 6;
+			RoomFactory.Generator_CapPerTile = 500;
+			RoomFactory.Generator_unitOfCap = "MW";
+
+			RoomFactory.Battery_Min = 8;
+			RoomFactory.Battery_CapPerTile = 500;
+			RoomFactory.Battery_unitOfCap = "AH";
+
+			RoomFactory.Bridge_Min = 4;
+			RoomFactory.Bridge_CapPerTile = 2;
+			RoomFactory.Bridge_unitOfCap = "crew";
+
+			RoomFactory.Gallery_Min = 2;
+			RoomFactory.Gallery_CapPerTile = 1;
+			RoomFactory.Gallery_unitOfCap = "crew";
+
+			RoomFactory.Cabin_Min = 2;
+			RoomFactory.Cabin_CapPerTile = 1;
+			RoomFactory.Cabin_unitOfCap = "crew";
+
+			RoomFactory.Bunks_Min = 6;
+			RoomFactory.Bunks_CapPerTile = 2;
+			RoomFactory.Bunks_unitOfCap = "crew";
+
+			RoomFactory.Conn_Min = 6;
+			RoomFactory.Conn_CapPerTile = 1;
+			RoomFactory.Conn_unitOfCap = "crew";
+
+			RoomFactory.Sonar_Min = 2;
+			RoomFactory.Sonar_CapPerTile = 1;
+			RoomFactory.Sonar_unitOfCap = "crew";
+
+			RoomFactory.RadioRoom_Min = 2;
+			RoomFactory.RadioRoom_CapPerTile = 1;
+			RoomFactory.RadioRoom_unitOfCap = "crew";
+
+			RoomFactory.FuelTank_Min = 6;
+			RoomFactory.FuelTank_CapPerTile = 1000;
+			RoomFactory.FuelTank_unitOfCap = "liters";
+
+			RoomFactory.BalastTank_Min = 4;
+			RoomFactory.BalastTank_CapPerTile = 1000;
+			RoomFactory.BalastTank_unitOfCap = "liters";
+
+			RoomFactory.StorageRoom_Min = 4;
+			RoomFactory.StorageRoom_CapPerTile = 500;
+			RoomFactory.StorageRoom_unitOfCap = "food";
+
+			RoomFactory.EscapeHatch_Min = 2;
+			RoomFactory.EscapeHatch_CapPerTile = 1;
+			RoomFactory.EscapeHatch_unitOfCap = "";
+
+			RoomFactory.TorpedoRoom_Min = 6;
+			RoomFactory.TorpedoRoom_CapPerTile = 1;
+			RoomFactory.TorpedoRoom_unitOfCap = "torpedos";
+
+
 		}
 
 		#endregion

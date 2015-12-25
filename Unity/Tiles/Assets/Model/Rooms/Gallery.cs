@@ -2,30 +2,7 @@
 {
     public class Gallery : Room
     {
-        // public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
-        public override double CapacityPerTile
-        {
-            get
-            {
-                return 1000.0;
-            }
-        }
 
-        public override string UnitName
-        {
-            get
-            {
-                return "liter";
-            }
-        }
-
-        public override int MinimimValidSize
-        {
-            get
-            {
-                return 4;
-            }
-        }
 
         public override bool IsLayoutValid
         {
@@ -35,7 +12,7 @@
             }
         }
 
-        public Gallery(RoomType typeOfRoom, Sub sub): base (typeOfRoom, sub)
+        public Gallery(RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap): base ( ofThisRoomType,  sub,  minSize, capPerTile,  unitOfCap)
         {
             IsAccessable = false;
         }

@@ -1,43 +1,15 @@
-﻿namespace Submarine.Model
-{
-    public class EscapeHatch : Room
-    {
-        // public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
-        public override double CapacityPerTile
-        {
-            get
-            {
-                return 1000.0;
-            }
-        }
+﻿namespace Submarine.Model {
+	public class EscapeHatch : Room {
 
-        public override string UnitName
-        {
-            get
-            {
-                return "liter";
-            }
-        }
 
-        public override int MinimimValidSize
-        {
-            get
-            {
-                return 4;
-            }
-        }
+		public override bool IsLayoutValid {
+			get {
+				return Size >= MinimimValidSize ? true : false;
+			}
+		}
 
-        public override bool IsLayoutValid
-        {
-            get
-            {
-                return Size >= MinimimValidSize ? true : false;
-            }
-        }
-
-        public EscapeHatch(RoomType typeOfRoom, Sub sub): base (typeOfRoom, sub)
-        {
-            IsAccessable = false;
-        }
-    }
+		public EscapeHatch (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) : base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap) {
+			IsAccessable = false;
+		}
+	}
 }
