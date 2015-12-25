@@ -31,9 +31,9 @@ namespace Submarine.Model {
 
 		public int Size{ get { return TilesInRoom.Count (); } }
 
-		static public int MinimimValidSize { get; protected set; }
+		public int MinimimValidSize { get; protected set; }
 
-		static public string ValidationText { get; protected set; }
+		public string ValidationText { get; protected set; }
 
 		public List<Tile> TilesInRoom { get; protected set; }
 
