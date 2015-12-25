@@ -1,8 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 
 //using System.Threading.Tasks;
@@ -146,13 +144,6 @@ namespace Submarine.Model {
 			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
 
-		//		public bool IsRoomValid (int RoomID) {
-		//			Room checkRoom = GetRoom (RoomID);
-		//			if (checkRoom != null)
-		//				return checkRoom.IsLayoutValid;
-		//			else
-		//				return false;
-		//		}
 
 		private void MergeRooms (int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom (oldRoomID);
@@ -165,24 +156,34 @@ namespace Submarine.Model {
 					Debug.WriteLine ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
-					bool oldRoomValid = oldRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
+					bool newRoomValid = newRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
 					foreach (Tile oldRoomTile in oldRoom.TilesInRoom) {
 						// change RoomID of each Tile in old room
 						oldRoomTile.RoomID = newRoomID;
 						// add Tiles to new room (no need to removed them form old room as old room will be destroyed)
 						newRoom.AddTile (oldRoomTile);
 					}
+					newRoom.WarnTilesInRoomIfLayoutChanged(newRoomValid);  // compare new valid layout
+																								 
+					RemoveRoomFromSubmarine (oldRoomID);   // remove old room form sub
 
-					// remove old room form sub
-					RemoveRoomFromSubmarine (oldRoomID);
-				}
+					}
 			}
 		}
 
-
+        private void RebuildRoom(int roomID) {
+            if (rooms[roomID] == null) { Debug.WriteLine("ERROR: cannot rebuild a room that doesn't exist, roomID:" + roomID); }
+            else {
+                RoomType rebuildRoomType = rooms[roomID].TypeOfRoom;
+                foreach (Tile checkTile in rooms[roomID].TilesInRoom) {
+                    checkTile.WallType = 0; // reset wall type
+                    checkTile.RoomID = 0;   // reset roomID
+                    AddTileToRoom(checkTile.X, checkTile.Y, rebuildRoomType);
+                    }
+                }
+            }
 
 		#endregion
-
 
 		#region Tiles
 
@@ -220,25 +221,25 @@ namespace Submarine.Model {
 						Tile checkTile;
 						// get info of Tile North
 						checkTile = GetTileAt (x, y - 1);
-						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile,1);
 						// get info of Tile East
 						checkTile = GetTileAt (x + 1, y);
-						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile,2);
 						// get info of Tile South
 						checkTile = GetTileAt (x, y + 1);
-						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile,4);
 						// get info of Tile West
 						checkTile = GetTileAt (x - 1, y);
-						CheckSameRoomType (x, y, type, newRoomTile, checkTile);
+						CheckSameRoomType (x, y, type, newRoomTile, checkTile,8);
 
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
 							Debug.WriteLine ("Adding Tile (" + x + "," + y + "): no neighbor Tile is part of a room, then start a new room with this Tile");
 
 							Room newRoom = Room.CreateRoomOfType (type, inThisSub: this);     // create new room of this room type
-							AddRoomToSubmarine (newRoom);                    // add new room to submarine
-							newRoom.AddTile (newRoomTile);                 // add Tile to room
-							newRoomTile.RoomID = _nextRoomID - 1;            // set RoomID in Tile
+							AddRoomToSubmarine (newRoom);                   // add new room to submarine
+							newRoom.AddTile (newRoomTile);                  // add Tile to room
+							newRoomTile.RoomID = _nextRoomID - 1;           // set RoomID in Tile
 						}
 					}
 				}
@@ -258,10 +259,12 @@ namespace Submarine.Model {
 					Debug.WriteLine ("ERROR Tile doesn't belong to a room");
 				}
 				else {
-					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;	// remember layout validation before removing tile
+					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;	            // remember layout validation before removing tile
 					removeFromThisRoom.RemoveTile (TileToBeRemoved);
+                    RebuildRoom(TileToBeRemoved.RoomID);    // rebuild room to be sure the wall type and layout is still ok
 					removeFromThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
-					// check if it was the last Tile of the room
+					
+                    // check if it was the last Tile of the room
 					if (removeFromThisRoom.Size == 0) {
 						// destroy room
 						RemoveRoomFromSubmarine (TileToBeRemoved.RoomID);
@@ -275,8 +278,8 @@ namespace Submarine.Model {
 
 
 
-		// check is neighbor Tile is in a room
-		private void CheckSameRoomType (int x, int y, RoomType wantedRoomType, Tile newRoomTile, Tile checkTile) {
+		// check is neighbor Tile is same room type, add or merge. Add wallType
+		private void CheckSameRoomType (int x, int y, RoomType wantedRoomType, Tile newRoomTile, Tile checkTile,int addWallType) {
 			if (checkTile != null) {
 				RoomType roomTypeOfNeighbor = GetRoomTypeOfTile (checkTile);
 				// neighbor Tile exists
@@ -287,10 +290,11 @@ namespace Submarine.Model {
 						Room addToThisRoom = rooms [checkTile.RoomID];	// room to add this tile too
 
 						Debug.WriteLine ("Add Tile (" + x + "," + y + ") to existing room ID:" + checkTile.RoomID);
-						bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;	// remember layout validation before removing tile
-						newRoomTile.RoomID = checkTile.RoomID;            // store existing RoomID in newRoomTile
-						addToThisRoom.AddTile (newRoomTile);  // add Tile to room
+						bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
+						newRoomTile.RoomID = checkTile.RoomID;                              // store existing RoomID in newRoomTile
+						addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
 						addToThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
+						newRoomTile.WallType += addWallType;
 					}
 					else {// Tile is already in a room: check if neighborer is in same room
 						if (newRoomTile.RoomID != checkTile.RoomID) {

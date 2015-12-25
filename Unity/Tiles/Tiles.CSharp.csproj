@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,10 +70,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Controller\MouseController.cs" />
     <Compile Include="Assets\Controller\WorldController.cs" />
+    <Compile Include="Assets\Model\Rooms\BalastTank.cs" />
+    <Compile Include="Assets\Model\Rooms\Battery.cs" />
+    <Compile Include="Assets\Model\Rooms\Bridge.cs" />
+    <Compile Include="Assets\Model\Rooms\Bunks.cs" />
+    <Compile Include="Assets\Model\Rooms\Cabin.cs" />
+    <Compile Include="Assets\Model\Rooms\Conn.cs" />
+    <Compile Include="Assets\Model\Rooms\EngineRoom.cs" />
+    <Compile Include="Assets\Model\Rooms\EscapeHatch.cs" />
+    <Compile Include="Assets\Model\Rooms\FuelTank.cs" />
+    <Compile Include="Assets\Model\Rooms\Gallery.cs" />
+    <Compile Include="Assets\Model\Rooms\Generator.cs" />
+    <Compile Include="Assets\Model\Rooms\Mess.cs" />
+    <Compile Include="Assets\Model\Rooms\RadioRoom.cs" />
     <Compile Include="Assets\Model\Room.cs" />
+    <Compile Include="Assets\Model\RoomFactory.cs" />
+    <Compile Include="Assets\Model\Rooms\Sonar.cs" />
+    <Compile Include="Assets\Model\Rooms\StorageRoom.cs" />
     <Compile Include="Assets\Model\Submarine.cs" />
     <Compile Include="Assets\Model\Tile.cs" />
+    <Compile Include="Assets\Model\Rooms\TorpedoRoom.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

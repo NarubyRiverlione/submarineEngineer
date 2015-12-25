@@ -13,18 +13,21 @@ namespace Submarine.Model {
 			get{ return _roomID; }
 			set {
 				_roomID = value;
-				if (TileChangedActions != null) // call all the registrated callbacks
+				if (TileChangedActions != null) // call all the registered callbacks
 					TileChangedActions (this);
 			}
 		}
 
 		public Action<Tile> TileChangedActions { get; set; }
-		// functions can registrated via this Action to changes of roomID
+		// functions can registered via this Action to changes of roomID
 
 		public bool canContainRoom { get; set; }
-		// used to exclude Tiles that are outside the outline of the sub
+        // used to exclude Tiles that are outside the outline of the sub
 
-		public Tile (int x, int y) {
+        public int WallType { get; set; }
+
+
+        public Tile (int x, int y) {
 			X = x;
 			Y = y;
 			_roomID = 0;

@@ -1,16 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
-using Submarine.Model;
+﻿using System;
 using System.Linq;
+using Submarine.Model;
+using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 
 public class MouseController : MonoBehaviour {
 
 	public GameObject cursorBuilder;
+    public Text UI_Builder_text;
 
-	RoomType RoomTypeToBeBuild;
+	RoomType RoomTypeToBeBuild=RoomType.Empty;
 
 	// Use this for initialization
 	void Start () {
@@ -25,11 +25,11 @@ public class MouseController : MonoBehaviour {
 		// move builder icon to tile below mouse
 		WorldController world = WorldController.instance; //GameObject.FindObjectOfType<WorldController> ();
 		Tile tileBelowMouse = world.GetTileAtWorldCoordinates (currentMousePosition);
-		// reset title if title isn't buildable 
+		// reset title if title isn't build able 
 		if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
 			tileBelowMouse = null;
 				
-		if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
+		if (tileBelowMouse != null && RoomTypeToBeBuild != RoomType.Empty) { // only show builder icon if mouse is above a tile
 			Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
 			cursorBuilder.transform.position = spaceBelowMouseCoordinates;
 			cursorBuilder.SetActive (true);
@@ -53,9 +53,11 @@ public class MouseController : MonoBehaviour {
 			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
 			if (activeRoomToggle != null) {
 				string nameOfRoomType = activeRoomToggle.name;
-				string typeOfRoom = nameOfRoomType.Split ('_') [2];
-				RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
-			
+				string typeOfRoom = nameOfRoomType.Split ('_') [2]; // Toggle_Room_xxxx
+                // set room type to be build
+                RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
+                // show building rules
+                UI_Builder_text.text = "";
 				Debug.Log ("Toggle " + nameOfRoomType + " is active: " + typeOfRoom + " = Enum " + RoomTypeToBeBuild);
 
 			}
