@@ -148,12 +148,12 @@ namespace Submarine.Model {
 		private void MergeRooms (int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom (oldRoomID);
 			if (oldRoom == null) {
-				Debug.WriteLine ("ERROR: cannot change room because old room (ID:" + oldRoomID + ") doesn't exist");
+				UnityEngine.Debug.LogError ("ERROR: cannot change room because old room (ID:" + oldRoomID + ") doesn't exist");
 			}
 			else {
 				Room newRoom = GetRoom (newRoomID);
 				if (newRoom == null) {
-					Debug.WriteLine ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
+					UnityEngine.Debug.LogError ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
 					bool newRoomValid = newRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
@@ -173,7 +173,7 @@ namespace Submarine.Model {
 
 		private void RebuildRoom (int roomID) {
 			if (rooms [roomID] == null) {
-				Debug.WriteLine ("ERROR: cannot rebuild a room that doesn't exist, roomID:" + roomID);
+				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a room that doesn't exist, roomID:" + roomID);
 			}
 			else {
 				RoomType rebuildRoomType = rooms [roomID].TypeOfRoom;
@@ -191,11 +191,11 @@ namespace Submarine.Model {
 
 		public Tile GetTileAt (int x, int y) {
 			if (x > lengthOfSub - 1 || x < 0) {
-				Debug.WriteLine ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
+				UnityEngine.Debug.Log ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
 				return null;
 			}
 			if (y > heightOfSub - 1 || y < 0) {
-				Debug.WriteLine ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
+				UnityEngine.Debug.Log ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
 				return null;
 			}
 
@@ -209,29 +209,60 @@ namespace Submarine.Model {
 		public void AddTileToRoom (int x, int y, RoomType buildRoomOfType) {
 			Tile newRoomTile = GetTileAt (x, y);
 			if (newRoomTile == null) {
-				Debug.WriteLine ("ERROR: cannot create/expand a room outside the submarine");
+				UnityEngine.Debug.LogError ("ERROR: cannot create/expand a room outside the submarine");
 			}
 			else {
 				if (!newRoomTile.canContainRoom) {
-					Debug.WriteLine ("ERROR: cannot create/expand a room at unavailable Tile (" + x + "," + y + ")");
+					UnityEngine.Debug.LogError ("ERROR: cannot create/expand a room at unavailable Tile (" + x + "," + y + ")");
 				}
 				else {
 					if (newRoomTile.RoomID != 0) {
-						Debug.WriteLine ("ERROR: already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
+						UnityEngine.Debug.LogError ("ERROR: already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
 					}
 					else {
+						Tile checkTile;
+						bool foundSameRoomType;
 
-						//newRoomTile = 
-						CheckNeigborTilesForSameRoomType (newRoomTile, buildRoomOfType);
-
+						// get info of Tile North
+						checkTile = GetTileAt (x, y - 1);
+						foundSameRoomType = CheckNeigborSameRoomType (x, y, buildRoomOfType, newRoomTile, checkTile);
+						if (foundSameRoomType) {
+							AddToOrMergeRooms (newRoomTile, checkTile);
+							newRoomTile.WallType += 1;		// add wall type for North
+							BuildWallsAroundTile (checkTile);	// rebuild wall of neigbore
+						}
+						// get info of Tile East
+						checkTile = GetTileAt (x + 1, y);
+						foundSameRoomType = CheckNeigborSameRoomType (x, y, buildRoomOfType, newRoomTile, checkTile);
+						if (foundSameRoomType) {
+							AddToOrMergeRooms (newRoomTile, checkTile);
+							newRoomTile.WallType += 2; // add wall type for East
+							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
+						}
+						// get info of Tile South
+						checkTile = GetTileAt (x, y + 1);
+						foundSameRoomType = CheckNeigborSameRoomType (x, y, buildRoomOfType, newRoomTile, checkTile);
+						if (foundSameRoomType) {
+							AddToOrMergeRooms (newRoomTile, checkTile);
+							newRoomTile.WallType += 4; // add wall type for South
+							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
+						}
+						// get info of Tile West
+						checkTile = GetTileAt (x - 1, y);
+						foundSameRoomType = CheckNeigborSameRoomType (x, y, buildRoomOfType, newRoomTile, checkTile);
+						if (foundSameRoomType) {
+							AddToOrMergeRooms (newRoomTile, checkTile);
+							newRoomTile.WallType += 8; // add wall type for West
+							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
+						}
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
-							Debug.WriteLine ("Adding Tile (" + x + "," + y + "): no neighbor Tile is part of a room, then start a new room with this Tile");
-
 							Room newRoom = Room.CreateRoomOfType (buildRoomOfType, inThisSub: this);     // create new room of this room type
 							AddRoomToSubmarine (newRoom);                   // add new room to submarine
 							newRoom.AddTile (newRoomTile);                  // add Tile to room
 							newRoomTile.RoomID = _nextRoomID - 1;           // set RoomID in Tile
+							UnityEngine.Debug.Log ("Added tile (" + x + "," + y + "): no neighbor Tile is part of a " + buildRoomOfType + ", so started a new room " + newRoomTile.RoomID + ", wall type is " + newRoomTile.WallType);
+
 						}
 					}
 				}
@@ -242,13 +273,13 @@ namespace Submarine.Model {
 		public void RemoveTileOfRoom (int x, int y) {
 			Tile TileToBeRemoved = GetTileAt (x, y);
 			if (TileToBeRemoved == null) {
-				Debug.WriteLine ("ERROR cannot remove Tile that doesn't exists");
+				UnityEngine.Debug.Log ("ERROR cannot remove Tile that doesn't exists");
 			}
 			else {
 				// remove Tile of room
 				Room removeFromThisRoom = GetRoom (TileToBeRemoved.RoomID);
 				if (removeFromThisRoom == null) {
-					Debug.WriteLine ("ERROR Tile doesn't belong to a room");
+					UnityEngine.Debug.Log ("ERROR Tile doesn't belong to a room");
 				}
 				else {
 					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;	            // remember layout validation before removing tile
@@ -269,59 +300,82 @@ namespace Submarine.Model {
 		}
 
 
+		private void BuildWallsAroundTile (Tile checkAroundThisTile) {
 
-		// check is neighbor Tile is same room type, add or merge. Add wallType
-		private void CheckSameRoomType (int x, int y, RoomType wantedRoomType, Tile newRoomTile, Tile checkTile) {
+			checkAroundThisTile.WallType = 0; // reset already found walls
+
+			int x = checkAroundThisTile.X, y = checkAroundThisTile.Y;
+			bool foundSameRoomType;
+			Tile checkTile;
+			RoomType checkRoomType = GetRoomTypeOfTile (checkAroundThisTile);
+
+			// get info of Tile North
+			checkTile = GetTileAt (x, y - 1);
+			foundSameRoomType = CheckNeigborSameRoomType (x, y, checkRoomType, checkAroundThisTile, checkTile);
+			if (foundSameRoomType)
+				checkAroundThisTile.WallType += 1;	// add wall type for North
+		
+			// get info of Tile East
+			checkTile = GetTileAt (x + 1, y);
+			foundSameRoomType = CheckNeigborSameRoomType (x, y, checkRoomType, checkAroundThisTile, checkTile);
+			if (foundSameRoomType)
+				checkAroundThisTile.WallType += 2; // add wall type for East
+
+			// get info of Tile South
+			checkTile = GetTileAt (x, y + 1);
+			foundSameRoomType = CheckNeigborSameRoomType (x, y, checkRoomType, checkAroundThisTile, checkTile);
+			if (foundSameRoomType)
+				checkAroundThisTile.WallType += 4; // add wall type for South
+
+			// get info of Tile West
+			checkTile = GetTileAt (x - 1, y);
+			foundSameRoomType = CheckNeigborSameRoomType (x, y, checkRoomType, checkAroundThisTile, checkTile);
+			if (foundSameRoomType)
+				checkAroundThisTile.WallType += 8; // add wall type for West
+
+			UnityEngine.Debug.Log ("(re)builded walls around (" + x + "," + y + ") wall type is now" + checkAroundThisTile.WallType);
+
+		}
+
+		// check is neighbor Tile is same room type, add or merge. Return if same room type is found
+		private bool CheckNeigborSameRoomType (int x, int y, RoomType wantedRoomType, Tile newRoomTile, Tile checkTile) {
 			if (checkTile != null) {
 				RoomType roomTypeOfNeighbor = GetRoomTypeOfTile (checkTile);
 				// neighbor Tile exists
-				if (wantedRoomType == roomTypeOfNeighbor && roomTypeOfNeighbor != RoomType.Empty) {
-					// if neighborer Tile has same room type as this Tile
-					if (newRoomTile.RoomID == 0) {
-						// Tile is not assigned to a room yet, add it tot neighbor room now
-						Room addToThisRoom = rooms [checkTile.RoomID];	// room to add this tile too
+				if (wantedRoomType == roomTypeOfNeighbor && roomTypeOfNeighbor != RoomType.Empty)
+					return true;
+			}
+			return false; // all other cases return not same roomtype was found
+		}
 
-						Debug.WriteLine ("Add Tile (" + x + "," + y + ") to existing room ID:" + checkTile.RoomID);
-						bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
-						newRoomTile.RoomID = checkTile.RoomID;                              // store existing RoomID in newRoomTile
-						addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
-						addToThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
-					
-					}
-					else {// Tile is already in a room: check if neighborer is in same room
-						if (newRoomTile.RoomID != checkTile.RoomID) {
-							// neighbor Tile is same room type but another room (id) = merge rooms now
-							Debug.WriteLine ("Tile (" + x + "," + y + ") has RoomID " + newRoomTile.RoomID + " neighbor has RoomID " + checkTile.RoomID);
-							Debug.WriteLine ("Merge rooms now");
-							MergeRooms (newRoomTile.RoomID, checkTile.RoomID);
-						}
-					}
+		private void AddToOrMergeRooms (Tile newRoomTile, Tile neigboreTile) {
+			// if neighborer Tile has same room type as this Tile
+			if (newRoomTile.RoomID == 0) {
+				// Tile is not assigned to a room yet, add it tot neighbor room now
+				Room addToThisRoom = rooms [neigboreTile.RoomID];	// room to add this tile too
+
+				UnityEngine.Debug.Log ("Add Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") to existing room ID:" + neigboreTile.RoomID);
+				bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
+				newRoomTile.RoomID = neigboreTile.RoomID;                              // store existing RoomID in newRoomTile
+				addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
+				addToThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
+		
+			}
+			else {// Tile is already in a room: check if neighborer is in same room
+				if (newRoomTile.RoomID != neigboreTile.RoomID) {
+					// neighbor Tile is same room type but another room (id) = merge rooms now
+					UnityEngine.Debug.Log ("Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") has RoomID " + newRoomTile.RoomID + " neighbor has RoomID " + neigboreTile.RoomID);
+					UnityEngine.Debug.Log ("Merge rooms now");
+					MergeRooms (newRoomTile.RoomID, neigboreTile.RoomID);
+	
 				}
 			}
 		}
 
-		private void CheckNeigborTilesForSameRoomType (Tile aroundThisTile, RoomType buildRoomOfType) {
-			Tile checkTile;
-			int x = aroundThisTile.X, y = aroundThisTile.Y;
-			// get info of Tile North
-			checkTile = GetTileAt (x, y - 1);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			// get info of Tile East
-			checkTile = GetTileAt (x + 1, y);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			// get info of Tile South
-			checkTile = GetTileAt (x, y + 1);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			// get info of Tile West
-			checkTile = GetTileAt (x - 1, y);
-			CheckSameRoomType (x, y, buildRoomOfType, aroundThisTile, checkTile);
-			
-			//return aroundThisTile;
-		}
 
 		public RoomType GetRoomTypeOfTile (Tile ofThisTile) {
 			if (ofThisTile.RoomID == 0) {
-				// Debug.WriteLine("Room at (" + ofThisTile.x + "," + ofThisTile.y + ") is not part of a room");
+				// UnityEngine.Debug.WriteLine("Room at (" + ofThisTile.x + "," + ofThisTile.y + ") is not part of a room");
 				return RoomType.Empty;
 			}
 			else {
@@ -331,7 +385,7 @@ namespace Submarine.Model {
 
 		public bool IsTilePartOfValidRoomLayout (Tile checkTile) {
 			if (checkTile.RoomID == 0) {
-				Debug.WriteLine ("Title isn't part of a room, so it cannot check if it's layout is valid");
+				UnityEngine.Debug.Log ("Title isn't part of a room, so it cannot check if it's layout is valid");
 				return false;
 			}
 			else {
