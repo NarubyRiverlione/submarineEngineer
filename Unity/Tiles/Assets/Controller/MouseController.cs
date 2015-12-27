@@ -73,7 +73,7 @@ public class MouseController : MonoBehaviour {
 
 	// Room buttons use this to set the room type that will be build
 	public void SetRoomTypeToBeBuild () {
-		ToggleGroup toggleGroup_Rooms = GameObject.Find ("ToggleGroup_Rooms").GetComponent<ToggleGroup> ();
+		ToggleGroup toggleGroup_Rooms = GameObject.FindWithTag ("ToggleGroup_Rooms").GetComponent<ToggleGroup> ();
 		if (toggleGroup_Rooms != null) {
 			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
 			if (activeRoomToggle != null) {
