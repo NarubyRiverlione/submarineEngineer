@@ -144,7 +144,7 @@ public class WorldController : MonoBehaviour {
 				GameObject newTileWarningSprite = new GameObject ();
 				// set name of game object to see in Hierarchy
 				newTileWarningSprite.name = "Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
-				// set parent of warning GameObject to the Title gameobject
+				// set parent of warning GameObject to the Title game object
 				newTileWarningSprite.transform.SetParent (gameObjectOfTitle.transform);
 				// set X, Y of game object
 				newTileWarningSprite.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
@@ -175,7 +175,7 @@ public class WorldController : MonoBehaviour {
 				checkIfWallIsAlreadyOnScreen = new GameObject ();
 				// set name of game object to see in Hierarchy
 				checkIfWallIsAlreadyOnScreen.name = "Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
-				// set parent of warning GameObject to the Title gameobject
+				// set parent of warning GameObject to the Title game object
 				checkIfWallIsAlreadyOnScreen.transform.SetParent (gameObjectOfTitle.transform);
 				// set X, Y of game object
 				checkIfWallIsAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
@@ -183,7 +183,7 @@ public class WorldController : MonoBehaviour {
 				checkIfWallIsAlreadyOnScreen.AddComponent<SpriteRenderer> ();
 
 			}
-			// now it's sure the Wall gameobject exist, update (or set) it's sprite
+			// now it's sure the Wall game object exist, update (or set) it's sprite
 			SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
 			//set sprite from wall sprite sheet
 			//Debug.Log ("Try showing wall type " + showTile.WallType);

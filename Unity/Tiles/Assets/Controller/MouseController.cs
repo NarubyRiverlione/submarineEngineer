@@ -18,12 +18,11 @@ public class MouseController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// hide cusors
+		// hide cursors
 		cursorBuilder.SetActive (false);
 		cursorDestroyer.SetActive (false);
 		
 	}
-	
 	// Update is called once per frame
 	void Update () {
 		if (world == null) { // sometimes the MouseController does an update before de World is created on start of the game
@@ -54,7 +53,7 @@ public class MouseController : MonoBehaviour {
 				}
 			}
 			else {
-				// hide if cursor isn"t on a tile
+				// hide if cursor isn't on a tile
 				cursorBuilder.SetActive (false);
 				cursorDestroyer.SetActive (false);
 			}	
@@ -72,6 +71,7 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
+	// Room buttons use this to set the room type that will be build
 	public void SetRoomTypeToBeBuild () {
 		ToggleGroup toggleGroup_Rooms = GameObject.Find ("ToggleGroup_Rooms").GetComponent<ToggleGroup> ();
 		if (toggleGroup_Rooms != null) {
@@ -93,6 +93,20 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
-}
+	// Save sub
+	public void SaveSub() {
+		UI_Builder_text.text = "Saving submarine....";
+		string filename = UnityEditor.EditorUtility.SaveFilePanel("Saving submarine", "", "My Submarine", "json");
+		world.mySub.Save(filename);
+		UI_Builder_text.text = "Submarine saved.";
+		}
+	// Load sub
+	public void LoadSub() {
+		UI_Builder_text.text = "Loading submarine....";
+		string filename = UnityEditor.EditorUtility.OpenFilePanel("Saving submarine", "", "json");
+		world.mySub.Load(filename);
+		UI_Builder_text.text = "Submarine loading.";
+		}
+	}
 	
 

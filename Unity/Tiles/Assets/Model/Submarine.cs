@@ -2,38 +2,38 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 //using System.Threading.Tasks;
-//using Newtonsoft.Json;
+using FullSerializer;
 
 
 namespace Submarine.Model {
-	/// [JsonObject]
+	
 	public class Sub {
 
 
 		public int lengthOfSub { get; private set; }
-
 		public int heightOfSub { get; private set; }
 
 
 		public int startOfBridgeTower { get; private set; }
-
 		public int lenghtOfBridgeTower { get; private set; }
-
 		public int heightOfBridgeTower { get; private set; }
 
 		public int smallerTailUpper { get; private set; }
-
 		public int smallerTailLower { get; private set; }
-
 		public int smallerTailLenght { get; private set; }
 
-
+		// tiles inside the sub
 		Tile[,] _tile;
-		
-		Dictionary<int, Room> rooms;
 
+		// rooms inside the sub
+		[UnityEngine.SerializeField]
+		Dictionary<int, Room> rooms;
+		// count of rooms
+		[fsIgnore]
 		public int AmountOfRooms {
 			get {
 				if (rooms != null)
@@ -42,26 +42,83 @@ namespace Submarine.Model {
 					return 0;
 			}
 		}
+		// next roomID
+		[UnityEngine.SerializeField]
+		int _nextRoomID = 1;		// ID 0 = no room assigned to Tile
 
-		
-		int _nextRoomID = 1;
-		// ID 0 = no room assigned to Tile
+
+		#region SAVE / LOAD
+		private static readonly fsSerializer _serializer = new fsSerializer();
+
+		private static string Serialize(Type type, object value) {
+			// serialize the data
+			fsData data;
+			_serializer.TrySerialize(type, value, out data).AssertSuccessWithoutWarnings();
+
+			// emit the data via JSON
+			return fsJsonPrinter.CompressedJson(data);
+			}
+
+		private static object Deserialize(Type type, string serializedState) {
+			// step 1: parse the JSON data
+			fsData data = fsJsonParser.Parse(serializedState);
+
+			// step 2: de serialize the data
+			object deserialized = null;
+			_serializer.TryDeserialize(data, type, ref deserialized).AssertSuccessWithoutWarnings();
+
+			return deserialized;
+			}
+
+		public void Save(string fileName) {
+			// save submarine
+			string jsonStringOfSub = Serialize(typeof(Sub), this);
+			// save tiles
+			List<Tile> allTiles = new List<Tile>();         // convert 2D array to List
+			for (int x = 0; x < lengthOfSub - 1; x++) {
+				for (int y = 0; y < heightOfSub - 1; y++) {
+					allTiles.Add(GetTileAt(x, y));
+					}
+				}
+			string jsonStringOfAllTitles = Serialize(typeof(List<Tile>), allTiles);
 
 
-		//		#region SAVE / LOAD
-		//		public void Save(string fileName) {
-		//			string jsonString = JsonConvert.SerializeObject(this);
-		//			//Console.WriteLine("");Console.WriteLine(jsonString);
-		//			// save to file
-		//			System.IO.File.WriteAllText(fileName, jsonString);
-		//			}
-		//
-		//		public static Sub Load(string fileName) {
-		//			string jsonString = System.IO.File.ReadAllText(fileName);
-		//			Sub loadedSub = JsonConvert.DeserializeObject<Sub>(jsonString);
-		//			return loadedSub;
-		//			}
-		//		#endregion
+			File.WriteAllText(fileName, jsonStringOfSub);
+			File.WriteAllText(fileName.Substring(0,fileName.Length-5) + "_Tiles.json", jsonStringOfAllTitles); // add _Tiles, remain .json
+			}
+
+		public void Load(string fileName) {
+			string jsonStringOfSub = File.ReadAllText(fileName);
+			Sub loadedSub =(Sub) Deserialize(typeof(Sub), jsonStringOfSub);
+
+			heightOfSub = loadedSub.heightOfSub;
+			lengthOfSub = loadedSub.lengthOfSub;
+
+			heightOfBridgeTower = loadedSub.heightOfBridgeTower;
+			lenghtOfBridgeTower = loadedSub.lenghtOfBridgeTower;
+			startOfBridgeTower = loadedSub.startOfBridgeTower;
+
+			smallerTailLenght = loadedSub.smallerTailLenght;
+			smallerTailLower = loadedSub.smallerTailLower;
+			smallerTailUpper = loadedSub.smallerTailUpper;
+			
+
+			rooms = loadedSub.rooms;
+			_nextRoomID = loadedSub._nextRoomID;
+
+			// load all tiles (2D array not supported,,needs conversion)
+			_tile = null; // reset all old tiles
+			string jsonStringOfAllTitles = File.ReadAllText(fileName.Substring(0, fileName.Length - 5) + "_Tiles.json");
+			List<Tile> allTiles= (List < Tile > )Deserialize(typeof(List<Tile>), jsonStringOfAllTitles);
+			foreach (Tile addTile in allTiles) {
+				_tile[addTile.X, addTile.Y] = addTile;
+				//TODO: attach UpdateTileSprite to TileChangedActions
+		   
+				}
+
+			}
+
+		#endregion
 
 
 		#region CONSTRUCTOR
@@ -79,16 +136,18 @@ namespace Submarine.Model {
 			smallerTailLenght = 4;
 
 			// initialize 2D array, still doesn't contain anything
-			_tile = new Tile[lengthOfSub, heightOfSub]; 
+			_tile = new Tile[lengthOfSub, heightOfSub];
 			// instantiate rooms
-			rooms = new Dictionary<int, Room> ();
-			// set tiles around tail and tower as unavailibe for building, create Tower
-			CreateSub ();
+			rooms = new Dictionary<int, Room>();
+			// set tiles around tail and tower as unavailable for building, create Tower
+			CreateSub();
+			// set room consumables 
+			SetRoomProperties();
+			}
 
-			SetRoomProperties ();
 
-		}
-		// set tiles around tail and tower as unavailibe for building, create Tower
+
+		// set tiles around tail and tower as unavailable for building, create Tower
 		private void CreateSub () {
 			// instantiate Tiles
 			for (int x = 0; x < lengthOfSub; x++) {
@@ -188,7 +247,7 @@ namespace Submarine.Model {
 
 			RoomFactory.TorpedoRoom_Min = 6;
 			RoomFactory.TorpedoRoom_CapPerTile = 1;
-			RoomFactory.TorpedoRoom_unitOfCap = "torpedos";
+			RoomFactory.TorpedoRoom_unitOfCap = "torpedoes";
 
 
 		}
@@ -300,7 +359,7 @@ namespace Submarine.Model {
 						if (foundSameRoomType) {
 							AddToOrMergeRooms (newRoomTile, checkTile);
 							newRoomTile.WallType += 1;		// add wall type for North
-							BuildWallsAroundTile (checkTile);	// rebuild wall of neigbore
+							BuildWallsAroundTile (checkTile);	// rebuild wall of neighborer
 						}
 						// get info of Tile East
 						checkTile = GetTileAt (x + 1, y);
@@ -308,7 +367,7 @@ namespace Submarine.Model {
 						if (foundSameRoomType) {
 							AddToOrMergeRooms (newRoomTile, checkTile);
 							newRoomTile.WallType += 2; // add wall type for East
-							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
+							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 						}
 						// get info of Tile South
 						checkTile = GetTileAt (x, y - 1);
@@ -316,7 +375,7 @@ namespace Submarine.Model {
 						if (foundSameRoomType) {
 							AddToOrMergeRooms (newRoomTile, checkTile);
 							newRoomTile.WallType += 4; // add wall type for South
-							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
+							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 						}
 						// get info of Tile West
 						checkTile = GetTileAt (x - 1, y);
@@ -324,7 +383,7 @@ namespace Submarine.Model {
 						if (foundSameRoomType) {
 							AddToOrMergeRooms (newRoomTile, checkTile);
 							newRoomTile.WallType += 8; // add wall type for West
-							BuildWallsAroundTile (checkTile);// rebuild wall of neigbore
+							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 						}
 
 						UnityEngine.Debug.Log ("New tile has wall type: " + newRoomTile.WallType);
@@ -363,7 +422,7 @@ namespace Submarine.Model {
 					removeFromThisRoom.RemoveTile (TileToBeRemoved);
   
 					//TODO: check this
-					RebuildRoom (roomID);    // rebuild room to be sure the wall type and layout is still ok
+					RebuildRoom (roomID);    // rebuild room to be sure the wall type and layout is still OK
 
 					removeFromThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
 					
@@ -412,7 +471,7 @@ namespace Submarine.Model {
 			if (foundSameRoomType)
 				checkAroundThisTile.WallType += 8; // add wall type for West
 
-			UnityEngine.Debug.Log ("(re)builded walls around (" + x + "," + y + ") wall type is now" + checkAroundThisTile.WallType);
+			UnityEngine.Debug.Log ("(re)build walls around (" + x + "," + y + ") wall type is now" + checkAroundThisTile.WallType);
 
 		}
 
@@ -424,7 +483,7 @@ namespace Submarine.Model {
 				if (wantedRoomType == roomTypeOfNeighbor && roomTypeOfNeighbor != RoomType.Empty)
 					return true;
 			}
-			return false; // all other cases return not same roomtype was found
+			return false; // all other cases return not same room type was found
 		}
 
 		private void AddToOrMergeRooms (Tile newRoomTile, Tile neigboreTile) {

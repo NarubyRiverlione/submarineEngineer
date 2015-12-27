@@ -57,12 +57,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -91,6 +85,54 @@
     <Compile Include="Assets\Model\Rooms\TorpedoRoom.cs" />
     <Compile Include="Assets\Model\Submarine.cs" />
     <Compile Include="Assets\Model\Tile.cs" />
+    <Compile Include="Assets\Source\Converters\Unity\AnimationCurve_DirectConverter.cs" />
+    <Compile Include="Assets\Source\Converters\Unity\Bounds_DirectConverter.cs" />
+    <Compile Include="Assets\Source\Converters\Unity\Gradient_DirectConverter.cs" />
+    <Compile Include="Assets\Source\Converters\Unity\Keyframe_DirectConverter.cs" />
+    <Compile Include="Assets\Source\Converters\Unity\LayerMask_DirectConverter.cs" />
+    <Compile Include="Assets\Source\Converters\Unity\Rect_DirectConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsArrayConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsDateConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsDictionaryConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsEnumConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsForwardConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsGuidConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsIEnumerableConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsKeyValuePairConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsNullableConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsPrimitiveConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsReflectedConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsTypeConverter.cs" />
+    <Compile Include="Assets\Source\Converters\fsWeakReferenceConverter.cs" />
+    <Compile Include="Assets\Source\Internal\fsCyclicReferenceManager.cs" />
+    <Compile Include="Assets\Source\Internal\fsOption.cs" />
+    <Compile Include="Assets\Source\Internal\fsPortableReflection.cs" />
+    <Compile Include="Assets\Source\Internal\fsTypeExtensions.cs" />
+    <Compile Include="Assets\Source\Internal\fsVersionManager.cs" />
+    <Compile Include="Assets\Source\Internal\fsVersionedType.cs" />
+    <Compile Include="Assets\Source\Reflection\fsMetaProperty.cs" />
+    <Compile Include="Assets\Source\Reflection\fsMetaType.cs" />
+    <Compile Include="Assets\Source\Reflection\fsReflectionUtility.cs" />
+    <Compile Include="Assets\Source\Reflection\fsTypeLookup.cs" />
+    <Compile Include="Assets\Source\fsAotCompilationManager.cs" />
+    <Compile Include="Assets\Source\fsBaseConverter.cs" />
+    <Compile Include="Assets\Source\fsConfig.cs" />
+    <Compile Include="Assets\Source\fsContext.cs" />
+    <Compile Include="Assets\Source\fsConverter.cs" />
+    <Compile Include="Assets\Source\fsConverterRegistrar.cs" />
+    <Compile Include="Assets\Source\fsData.cs" />
+    <Compile Include="Assets\Source\fsDirectConverter.cs" />
+    <Compile Include="Assets\Source\fsExceptions.cs" />
+    <Compile Include="Assets\Source\fsISerializationCallbacks.cs" />
+    <Compile Include="Assets\Source\fsIgnoreAttribute.cs" />
+    <Compile Include="Assets\Source\fsJsonParser.cs" />
+    <Compile Include="Assets\Source\fsJsonPrinter.cs" />
+    <Compile Include="Assets\Source\fsMemberSerialization.cs" />
+    <Compile Include="Assets\Source\fsObjectAttribute.cs" />
+    <Compile Include="Assets\Source\fsObjectProcessor.cs" />
+    <Compile Include="Assets\Source\fsPropertyAttribute.cs" />
+    <Compile Include="Assets\Source\fsResult.cs" />
+    <Compile Include="Assets\Source\fsSerializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
