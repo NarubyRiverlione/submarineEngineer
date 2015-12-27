@@ -95,6 +95,4 @@ namespace Submarine.Model {
 
 
 	}
-
-    ;
 }
