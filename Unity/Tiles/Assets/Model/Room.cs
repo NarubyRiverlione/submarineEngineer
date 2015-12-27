@@ -79,7 +79,9 @@ namespace Submarine.Model {
 
 		public void RemoveTile (Tile removeTile) {
 			TilesInRoom.Remove (removeTile);
-		}
+            // reset Tile (roomId, waalType,...)
+            removeTile.Reset();
+            }
 
 		public void WarnTilesInRoomIfLayoutChanged (bool oldRoomLayoutValid) {
 			if (oldRoomLayoutValid != IsLayoutValid) {

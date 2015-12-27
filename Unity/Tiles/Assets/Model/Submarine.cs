@@ -238,17 +238,22 @@ namespace Submarine.Model {
 		}
 
 		private void RebuildRoom (int roomID) {
-			if (rooms [roomID] == null) {
+			if (rooms.ContainsKey(roomID) == false) {
 				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a room that doesn't exist, roomID:" + roomID);
 			}
 			else {
-				RoomType rebuildRoomType = rooms [roomID].TypeOfRoom;
-				foreach (Tile checkTile in rooms[roomID].TilesInRoom) {
-					checkTile.WallType = 0; // reset wall type
-					checkTile.RoomID = 0;   // reset roomID
-					AddTileToRoom (checkTile.X, checkTile.Y, rebuildRoomType);
+				RoomType rebuildRoomType        = rooms [roomID].TypeOfRoom;
+				List<Tile> remeberTilesOfTheRoom = rooms[roomID].TilesInRoom;
+				// reset tiles in the room
+				foreach (Tile rebuildTitle in remeberTilesOfTheRoom) rebuildTitle.Reset();
+				// remove the room so it can be rebuild
+				RemoveRoomFromSubmarine(roomID);
+				// rebuild room
+				foreach (Tile rebuildTitle in remeberTilesOfTheRoom) {
+					AddTileToRoom(rebuildTitle.X, rebuildTitle.Y, rebuildRoomType);
+					}
+			   
 				}
-			}
 		}
 
 		#endregion
@@ -342,19 +347,24 @@ namespace Submarine.Model {
 		public void RemoveTileOfRoom (int x, int y) {
 			Tile TileToBeRemoved = GetTileAt (x, y);
 			if (TileToBeRemoved == null) {
-				UnityEngine.Debug.Log ("ERROR cannot remove Tile that doesn't exists");
+				UnityEngine.Debug.LogError("ERROR cannot remove Tile that doesn't exists");
 			}
 			else {
 				// remove Tile of room
-				Room removeFromThisRoom = GetRoom (TileToBeRemoved.RoomID);
+				int roomID = TileToBeRemoved.RoomID;
+				Room removeFromThisRoom = GetRoom (roomID);
+				
 				if (removeFromThisRoom == null) {
-					UnityEngine.Debug.Log ("ERROR Tile doesn't belong to a room");
+					UnityEngine.Debug.Log ("Tile doesn't belong to a room");
 				}
 				else {
-					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;	            // remember layout validation before removing tile
+					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;             // remember layout validation before removing tile
+					// remove tile from room, also reset roomID, WallType,...
 					removeFromThisRoom.RemoveTile (TileToBeRemoved);
+  
 					//TODO: check this
-					//RebuildRoom (TileToBeRemoved.RoomID);    // rebuild room to be sure the wall type and layout is still ok
+					RebuildRoom (roomID);    // rebuild room to be sure the wall type and layout is still ok
+
 					removeFromThisRoom.WarnTilesInRoomIfLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
 					
 					// check if it was the last Tile of the room
@@ -362,8 +372,7 @@ namespace Submarine.Model {
 						// destroy room
 						RemoveRoomFromSubmarine (TileToBeRemoved.RoomID);
 					}
-					// set RoomID of Tile to 0
-					TileToBeRemoved.RoomID = 0;
+				
 			
 				}
 			}

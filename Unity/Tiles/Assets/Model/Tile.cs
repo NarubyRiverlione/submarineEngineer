@@ -39,8 +39,14 @@ namespace Submarine.Model {
 		public Tile (int x, int y) {
 			X = x;
 			Y = y;
-			_roomID = 0;
+			// use internal field to prevent calling the callback when initiation title (maybee submarine visuale isn't on screen yet)
+			_roomID = 0; _wallType = 0; 
 			canContainRoom = true;
 		}
+
+		public void Reset() {
+			RoomID = 0;
+			WallType = 0;
+			}
 	}
 }
