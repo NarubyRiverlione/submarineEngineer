@@ -127,8 +127,8 @@ namespace Submarine.Model {
 			}
 
 			// tiles are load, now load rooms (with tiles is it)
+			rooms = new Dictionary<int, Room> (); // reset rooms
 			rooms = loadedSub.rooms; 
-
 		}
 
 		#endregion
@@ -400,7 +400,7 @@ namespace Submarine.Model {
 							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 						}
 
-						UnityEngine.Debug.Log ("New tile has wall type: " + newRoomTile.WallType);
+						//UnityEngine.Debug.Log ("New tile has wall type: " + newRoomTile.WallType);
 
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
@@ -408,7 +408,7 @@ namespace Submarine.Model {
 							AddRoomToSubmarine (newRoom);                   // add new room to submarine
 							newRoom.AddTile (newRoomTile);                  // add Tile to room
 							newRoomTile.RoomID = _nextRoomID - 1;           // set RoomID in Tile
-							UnityEngine.Debug.Log ("Added tile (" + x + "," + y + "): no neighbor Tile is part of a " + buildRoomOfType + ", so started a new room " + newRoomTile.RoomID + ", wall type is " + newRoomTile.WallType);
+							//UnityEngine.Debug.Log ("Added tile (" + x + "," + y + "): no neighbor Tile is part of a " + buildRoomOfType + ", so started a new room " + newRoomTile.RoomID + ", wall type is " + newRoomTile.WallType);
 
 						}
 					}
@@ -485,7 +485,7 @@ namespace Submarine.Model {
 			if (foundSameRoomType)
 				checkAroundThisTile.WallType += 8; // add wall type for West
 
-			UnityEngine.Debug.Log ("(re)build walls around (" + x + "," + y + ") wall type is now" + checkAroundThisTile.WallType);
+			//UnityEngine.Debug.Log ("(re)build walls around (" + x + "," + y + ") wall type is now: " + checkAroundThisTile.WallType);
 
 		}
 
@@ -506,7 +506,7 @@ namespace Submarine.Model {
 				// Tile is not assigned to a room yet, add it tot neighbor room now
 				Room addToThisRoom = rooms [neigboreTile.RoomID];	// room to add this tile too
 
-				UnityEngine.Debug.Log ("Add Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") to existing room ID:" + neigboreTile.RoomID);
+				//UnityEngine.Debug.Log ("Add Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") to existing room ID:" + neigboreTile.RoomID);
 				bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
 				newRoomTile.RoomID = neigboreTile.RoomID;                              // store existing RoomID in newRoomTile
 				addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
@@ -516,8 +516,8 @@ namespace Submarine.Model {
 			else {// Tile is already in a room: check if neighborer is in same room
 				if (newRoomTile.RoomID != neigboreTile.RoomID) {
 					// neighbor Tile is same room type but another room (id) = merge rooms now
-					UnityEngine.Debug.Log ("Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") has RoomID " + newRoomTile.RoomID + " neighbor has RoomID " + neigboreTile.RoomID);
-					UnityEngine.Debug.Log ("Merge rooms now");
+					//UnityEngine.Debug.Log ("Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") has RoomID " + newRoomTile.RoomID + " neighbor has RoomID " + neigboreTile.RoomID);
+					//UnityEngine.Debug.Log ("Merge rooms now");
 					MergeRooms (newRoomTile.RoomID, neigboreTile.RoomID);
 	
 				}
@@ -531,21 +531,23 @@ namespace Submarine.Model {
 				return RoomType.Empty;
 			}
 			else {
+				if (!rooms.ContainsKey (ofThisTile.RoomID)) {
+					throw new Exception ("Tile (" + ofThisTile.X + "," + ofThisTile.Y + ") " +
+					"has roomID " + ofThisTile.RoomID + ", but cannot be found in rooms inside sub ");
+				}
 				return rooms [ofThisTile.RoomID].TypeOfRoom;
 			}
 		}
 
 		public bool IsTilePartOfValidRoomLayout (Tile checkTile) {
 			if (checkTile.RoomID == 0) {
-				UnityEngine.Debug.Log ("Title isn't part of a room, so it cannot check if it's layout is valid");
+				//UnityEngine.Debug.Log ("Title isn't part of a room, so it cannot check if it's layout is valid");
 				return false;
 			}
 			else {
 				return rooms [checkTile.RoomID].IsLayoutValid;
 			}
 		}
-
-
 
 		#endregion
 	}

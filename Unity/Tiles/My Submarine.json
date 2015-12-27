@@ -1,1 +1,1089 @@
-{"lengthOfSub":39,"heightOfSub":6,"startOfBridgeTower":22,"lenghtOfBridgeTower":3,"heightOfBridgeTower":2,"smallerTailUpper":1,"smallerTailLower":1,"smallerTailLenght":4,"rooms":[{"Key":1,"Value":{"TypeOfRoom":"Bridge","MinimimValidSize":0,"ValidationText":"The Bridge needs to be at least 0 spaces","TilesInRoom":[{"X":22,"Y":4,"RoomID":1,"canContainRoom":true,"WallType":3},{"X":22,"Y":5,"RoomID":1,"canContainRoom":true,"WallType":6},{"X":23,"Y":4,"RoomID":1,"canContainRoom":true,"WallType":11},{"X":23,"Y":5,"RoomID":1,"canContainRoom":true,"WallType":14},{"X":24,"Y":4,"RoomID":1,"canContainRoom":true,"WallType":9},{"X":24,"Y":5,"RoomID":1,"canContainRoom":true,"WallType":12}],"CapacityPerTile":0.0,"Output":0,"UnitName":null,"IsAccessable":true,"$type":"Submarine.Model.Bridge"}},{"Key":2,"Value":{"TypeOfRoom":"EngineRoom","MinimimValidSize":9,"ValidationText":"The EngineRoom needs to be at least 9 spaces","TilesInRoom":[{"X":0,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":6},{"X":0,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":3},{"X":1,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":11},{"X":1,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":14},{"X":2,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":14},{"X":2,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":11},{"X":3,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":11},{"X":3,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":14},{"X":4,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":14},{"X":4,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":11},{"X":5,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":11},{"X":6,"Y":1,"RoomID":2,"canContainRoom":true,"WallType":9},{"X":6,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":13},{"X":6,"Y":3,"RoomID":2,"canContainRoom":true,"WallType":12},{"X":5,"Y":3,"RoomID":2,"canContainRoom":true,"WallType":6},{"X":5,"Y":2,"RoomID":2,"canContainRoom":true,"WallType":15}],"CapacityPerTile":1000.0,"Output":0,"UnitName":"pk'","IsAccessable":false,"$type":"Submarine.Model.EngineRoom"}},{"Key":14,"Value":{"TypeOfRoom":"FuelTank","MinimimValidSize":6,"ValidationText":"The FuelTank needs to be at least 6 spaces","TilesInRoom":[{"X":5,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":2},{"X":6,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":7,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":8,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":9,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":10,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":11,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":12,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":10},{"X":13,"Y":0,"RoomID":14,"canContainRoom":true,"WallType":8}],"CapacityPerTile":1000.0,"Output":0,"UnitName":"liters","IsAccessable":false,"$type":"Submarine.Model.FuelTank"}},{"Key":15,"Value":{"TypeOfRoom":"Generator","MinimimValidSize":6,"ValidationText":"The Generator needs to be at least 6 spaces","TilesInRoom":[{"X":7,"Y":1,"RoomID":15,"canContainRoom":true,"WallType":3},{"X":8,"Y":1,"RoomID":15,"canContainRoom":true,"WallType":11},{"X":9,"Y":1,"RoomID":15,"canContainRoom":true,"WallType":9},{"X":9,"Y":2,"RoomID":15,"canContainRoom":true,"WallType":13},{"X":9,"Y":3,"RoomID":15,"canContainRoom":true,"WallType":12},{"X":8,"Y":3,"RoomID":15,"canContainRoom":true,"WallType":14},{"X":8,"Y":2,"RoomID":15,"canContainRoom":true,"WallType":15},{"X":7,"Y":2,"RoomID":15,"canContainRoom":true,"WallType":7},{"X":7,"Y":3,"RoomID":15,"canContainRoom":true,"WallType":6}],"CapacityPerTile":500.0,"Output":0,"UnitName":"MW","IsAccessable":false,"$type":"Submarine.Model.Generator"}},{"Key":16,"Value":{"start_X_BridgeTower":22,"stop_X_BridgeTower":25,"below_Y_BridgeTower":3,"TypeOfRoom":"Conn","MinimimValidSize":6,"ValidationText":"The Conn needs to be at least 6 spaces and must be connected to the Bridge.","TilesInRoom":[{"X":22,"Y":2,"RoomID":16,"canContainRoom":true,"WallType":3},{"X":23,"Y":2,"RoomID":16,"canContainRoom":true,"WallType":11},{"X":23,"Y":3,"RoomID":16,"canContainRoom":true,"WallType":14},{"X":22,"Y":3,"RoomID":16,"canContainRoom":true,"WallType":6},{"X":24,"Y":3,"RoomID":16,"canContainRoom":true,"WallType":12},{"X":24,"Y":2,"RoomID":16,"canContainRoom":true,"WallType":9}],"CapacityPerTile":1.0,"Output":0,"UnitName":"crew","IsAccessable":true,"$type":"Submarine.Model.Conn"}},{"Key":17,"Value":{"TypeOfRoom":"Cabin","MinimimValidSize":2,"ValidationText":"The Cabin needs to be at least 2 spaces","TilesInRoom":[{"X":21,"Y":2,"RoomID":17,"canContainRoom":true,"WallType":1},{"X":21,"Y":3,"RoomID":17,"canContainRoom":true,"WallType":4}],"CapacityPerTile":1.0,"Output":0,"UnitName":"crew","IsAccessable":true,"$type":"Submarine.Model.Cabin"}},{"Key":18,"Value":{"TypeOfRoom":"Gallery","MinimimValidSize":2,"ValidationText":"The Gallery needs to be at least 2 spaces","TilesInRoom":[{"X":20,"Y":3,"RoomID":18,"canContainRoom":true,"WallType":12},{"X":20,"Y":2,"RoomID":18,"canContainRoom":true,"WallType":9},{"X":19,"Y":2,"RoomID":18,"canContainRoom":true,"WallType":11},{"X":19,"Y":3,"RoomID":18,"canContainRoom":true,"WallType":14},{"X":18,"Y":3,"RoomID":18,"canContainRoom":true,"WallType":6},{"X":18,"Y":2,"RoomID":18,"canContainRoom":true,"WallType":3}],"CapacityPerTile":1.0,"Output":0,"UnitName":"crew","IsAccessable":false,"$type":"Submarine.Model.Gallery"}},{"Key":19,"Value":{"TypeOfRoom":"Bunks","MinimimValidSize":6,"ValidationText":"The Bunks needs to be at least 6 spaces","TilesInRoom":[{"X":17,"Y":2,"RoomID":19,"canContainRoom":true,"WallType":9},{"X":16,"Y":2,"RoomID":19,"canContainRoom":true,"WallType":11},{"X":15,"Y":2,"RoomID":19,"canContainRoom":true,"WallType":3},{"X":15,"Y":3,"RoomID":19,"canContainRoom":true,"WallType":6},{"X":16,"Y":3,"RoomID":19,"canContainRoom":true,"WallType":14},{"X":17,"Y":3,"RoomID":19,"canContainRoom":true,"WallType":12}],"CapacityPerTile":2.0,"Output":0,"UnitName":"crew","IsAccessable":true,"$type":"Submarine.Model.Bunks"}},{"Key":21,"Value":{"TypeOfRoom":"RadioRoom","MinimimValidSize":2,"ValidationText":"The RadioRoom needs to be at least 2 spaces","TilesInRoom":[{"X":25,"Y":2,"RoomID":21,"canContainRoom":true,"WallType":1},{"X":25,"Y":3,"RoomID":21,"canContainRoom":true,"WallType":4}],"CapacityPerTile":1.0,"Output":0,"UnitName":"crew","IsAccessable":false,"$type":"Submarine.Model.RadioRoom"}},{"Key":22,"Value":{"TypeOfRoom":"Battery","MinimimValidSize":4,"ValidationText":"The Battery needs to be at least 4 spaces","TilesInRoom":[{"X":14,"Y":0,"RoomID":22,"canContainRoom":true,"WallType":3},{"X":15,"Y":0,"RoomID":22,"canContainRoom":true,"WallType":11},{"X":14,"Y":1,"RoomID":22,"canContainRoom":true,"WallType":6},{"X":15,"Y":1,"RoomID":22,"canContainRoom":true,"WallType":14},{"X":16,"Y":1,"RoomID":22,"canContainRoom":true,"WallType":14},{"X":16,"Y":0,"RoomID":22,"canContainRoom":true,"WallType":11},{"X":17,"Y":0,"RoomID":22,"canContainRoom":true,"WallType":11},{"X":17,"Y":1,"RoomID":22,"canContainRoom":true,"WallType":14},{"X":18,"Y":1,"RoomID":22,"canContainRoom":true,"WallType":14},{"X":18,"Y":0,"RoomID":22,"canContainRoom":true,"WallType":11},{"X":19,"Y":0,"RoomID":22,"canContainRoom":true,"WallType":9},{"X":19,"Y":1,"RoomID":22,"canContainRoom":true,"WallType":12}],"CapacityPerTile":1000.0,"Output":0,"UnitName":"liters","IsAccessable":false,"$type":"Submarine.Model.Battery"}},{"Key":23,"Value":{"TypeOfRoom":"EngineRoom","MinimimValidSize":9,"ValidationText":"The EngineRoom needs to be at least 9 spaces","TilesInRoom":[{"X":10,"Y":1,"RoomID":23,"canContainRoom":true,"WallType":3},{"X":11,"Y":1,"RoomID":23,"canContainRoom":true,"WallType":11},{"X":12,"Y":1,"RoomID":23,"canContainRoom":true,"WallType":9},{"X":12,"Y":2,"RoomID":23,"canContainRoom":true,"WallType":13},{"X":12,"Y":3,"RoomID":23,"canContainRoom":true,"WallType":12},{"X":11,"Y":3,"RoomID":23,"canContainRoom":true,"WallType":14},{"X":11,"Y":2,"RoomID":23,"canContainRoom":true,"WallType":15},{"X":10,"Y":2,"RoomID":23,"canContainRoom":true,"WallType":7},{"X":10,"Y":3,"RoomID":23,"canContainRoom":true,"WallType":6}],"CapacityPerTile":1000.0,"Output":0,"UnitName":"pk'","IsAccessable":false,"$type":"Submarine.Model.EngineRoom"}},{"Key":24,"Value":{"TypeOfRoom":"Cabin","MinimimValidSize":2,"ValidationText":"The Cabin needs to be at least 2 spaces","TilesInRoom":[{"X":14,"Y":3,"RoomID":24,"canContainRoom":true,"WallType":4},{"X":14,"Y":2,"RoomID":24,"canContainRoom":true,"WallType":1}],"CapacityPerTile":1.0,"Output":0,"UnitName":"crew","IsAccessable":true,"$type":"Submarine.Model.Cabin"}},{"Key":27,"Value":{"TypeOfRoom":"Sonar","MinimimValidSize":2,"ValidationText":"The Sonar needs to be at least 2 spaces","TilesInRoom":[{"X":26,"Y":3,"RoomID":27,"canContainRoom":true,"WallType":4},{"X":26,"Y":2,"RoomID":27,"canContainRoom":true,"WallType":1}],"CapacityPerTile":1.0,"Output":0,"UnitName":"crew","IsAccessable":false,"$type":"Submarine.Model.Sonar"}},{"Key":26,"Value":{"TypeOfRoom":"TorpedoRoom","MinimimValidSize":6,"ValidationText":"The TorpedoRoom needs to be at least 6 spaces","TilesInRoom":[{"X":38,"Y":0,"RoomID":26,"canContainRoom":true,"WallType":9},{"X":37,"Y":0,"RoomID":26,"canContainRoom":true,"WallType":11},{"X":38,"Y":3,"RoomID":26,"canContainRoom":true,"WallType":12},{"X":37,"Y":3,"RoomID":26,"canContainRoom":true,"WallType":14},{"X":36,"Y":3,"RoomID":26,"canContainRoom":true,"WallType":14},{"X":35,"Y":3,"RoomID":26,"canContainRoom":true,"WallType":6},{"X":35,"Y":2,"RoomID":26,"canContainRoom":true,"WallType":7},{"X":35,"Y":1,"RoomID":26,"canContainRoom":true,"WallType":7},{"X":35,"Y":0,"RoomID":26,"canContainRoom":true,"WallType":3},{"X":36,"Y":0,"RoomID":26,"canContainRoom":true,"WallType":11},{"X":36,"Y":1,"RoomID":26,"canContainRoom":true,"WallType":15},{"X":36,"Y":2,"RoomID":26,"canContainRoom":true,"WallType":15},{"X":37,"Y":2,"RoomID":26,"canContainRoom":true,"WallType":15},{"X":37,"Y":1,"RoomID":26,"canContainRoom":true,"WallType":15},{"X":38,"Y":1,"RoomID":26,"canContainRoom":true,"WallType":13},{"X":38,"Y":2,"RoomID":26,"canContainRoom":true,"WallType":13}],"CapacityPerTile":1.0,"Output":0,"UnitName":"torpedoes","IsAccessable":false,"$type":"Submarine.Model.TorpedoRoom"}},{"Key":28,"Value":{"TypeOfRoom":"Bunks","MinimimValidSize":6,"ValidationText":"The Bunks needs to be at least 6 spaces","TilesInRoom":[{"X":27,"Y":3,"RoomID":28,"canContainRoom":true,"WallType":6},{"X":27,"Y":2,"RoomID":28,"canContainRoom":true,"WallType":3},{"X":28,"Y":2,"RoomID":28,"canContainRoom":true,"WallType":11},{"X":29,"Y":2,"RoomID":28,"canContainRoom":true,"WallType":9},{"X":29,"Y":3,"RoomID":28,"canContainRoom":true,"WallType":12},{"X":28,"Y":3,"RoomID":28,"canContainRoom":true,"WallType":14}],"CapacityPerTile":2.0,"Output":0,"UnitName":"crew","IsAccessable":true,"$type":"Submarine.Model.Bunks"}},{"Key":29,"Value":{"TypeOfRoom":"Battery","MinimimValidSize":4,"ValidationText":"The Battery needs to be at least 4 spaces","TilesInRoom":[{"X":29,"Y":1,"RoomID":29,"canContainRoom":true,"WallType":12},{"X":29,"Y":0,"RoomID":29,"canContainRoom":true,"WallType":9},{"X":28,"Y":0,"RoomID":29,"canContainRoom":true,"WallType":11},{"X":28,"Y":1,"RoomID":29,"canContainRoom":true,"WallType":14},{"X":27,"Y":1,"RoomID":29,"canContainRoom":true,"WallType":14},{"X":27,"Y":0,"RoomID":29,"canContainRoom":true,"WallType":11},{"X":26,"Y":0,"RoomID":29,"canContainRoom":true,"WallType":11},{"X":26,"Y":1,"RoomID":29,"canContainRoom":true,"WallType":14},{"X":25,"Y":1,"RoomID":29,"canContainRoom":true,"WallType":6},{"X":25,"Y":0,"RoomID":29,"canContainRoom":true,"WallType":3}],"CapacityPerTile":1000.0,"Output":0,"UnitName":"liters","IsAccessable":false,"$type":"Submarine.Model.Battery"}}],"_nextRoomID":30}
+{
+    "lengthOfSub": 39,
+    "heightOfSub": 6,
+    "startOfBridgeTower": 22,
+    "lenghtOfBridgeTower": 3,
+    "heightOfBridgeTower": 2,
+    "smallerTailUpper": 1,
+    "smallerTailLower": 1,
+    "smallerTailLenght": 4,
+    "rooms": [
+        {
+            "Key": 1,
+            "Value": {
+                "TypeOfRoom": "Bridge",
+                "MinimimValidSize": 0,
+                "ValidationText": "The Bridge needs to be at least 0 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 22,
+                        "Y": 4,
+                        "RoomID": 1,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 22,
+                        "Y": 5,
+                        "RoomID": 1,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 23,
+                        "Y": 4,
+                        "RoomID": 1,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 23,
+                        "Y": 5,
+                        "RoomID": 1,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 24,
+                        "Y": 4,
+                        "RoomID": 1,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 24,
+                        "Y": 5,
+                        "RoomID": 1,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    }
+                ],
+                "CapacityPerTile": 0.0,
+                "Output": 0,
+                "UnitName": null,
+                "IsAccessable": true,
+                "$type": "Submarine.Model.Bridge"
+            }
+        },
+        {
+            "Key": 2,
+            "Value": {
+                "TypeOfRoom": "EngineRoom",
+                "MinimimValidSize": 9,
+                "ValidationText": "The EngineRoom needs to be at least 9 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 0,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 0,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 1,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 1,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 2,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 2,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 3,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 3,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 4,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 4,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 5,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 6,
+                        "Y": 1,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 6,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 13
+                    },
+                    {
+                        "X": 6,
+                        "Y": 3,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 5,
+                        "Y": 3,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 5,
+                        "Y": 2,
+                        "RoomID": 2,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    }
+                ],
+                "CapacityPerTile": 1000.0,
+                "Output": 0,
+                "UnitName": "pk'",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.EngineRoom"
+            }
+        },
+        {
+            "Key": 14,
+            "Value": {
+                "TypeOfRoom": "FuelTank",
+                "MinimimValidSize": 6,
+                "ValidationText": "The FuelTank needs to be at least 6 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 5,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 2
+                    },
+                    {
+                        "X": 6,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 7,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 8,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 9,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 10,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 11,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 12,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 10
+                    },
+                    {
+                        "X": 13,
+                        "Y": 0,
+                        "RoomID": 14,
+                        "canContainRoom": true,
+                        "WallType": 8
+                    }
+                ],
+                "CapacityPerTile": 1000.0,
+                "Output": 0,
+                "UnitName": "liters",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.FuelTank"
+            }
+        },
+        {
+            "Key": 15,
+            "Value": {
+                "TypeOfRoom": "Generator",
+                "MinimimValidSize": 6,
+                "ValidationText": "The Generator needs to be at least 6 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 7,
+                        "Y": 1,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 8,
+                        "Y": 1,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 9,
+                        "Y": 1,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 9,
+                        "Y": 2,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 13
+                    },
+                    {
+                        "X": 9,
+                        "Y": 3,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 8,
+                        "Y": 3,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 8,
+                        "Y": 2,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    },
+                    {
+                        "X": 7,
+                        "Y": 2,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 7
+                    },
+                    {
+                        "X": 7,
+                        "Y": 3,
+                        "RoomID": 15,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    }
+                ],
+                "CapacityPerTile": 500.0,
+                "Output": 0,
+                "UnitName": "MW",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.Generator"
+            }
+        },
+        {
+            "Key": 16,
+            "Value": {
+                "start_X_BridgeTower": 22,
+                "stop_X_BridgeTower": 25,
+                "below_Y_BridgeTower": 3,
+                "TypeOfRoom": "Conn",
+                "MinimimValidSize": 6,
+                "ValidationText": "The Conn needs to be at least 6 spaces and must be connected to the Bridge.",
+                "TilesInRoom": [
+                    {
+                        "X": 22,
+                        "Y": 2,
+                        "RoomID": 16,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 23,
+                        "Y": 2,
+                        "RoomID": 16,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 23,
+                        "Y": 3,
+                        "RoomID": 16,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 22,
+                        "Y": 3,
+                        "RoomID": 16,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 24,
+                        "Y": 3,
+                        "RoomID": 16,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 24,
+                        "Y": 2,
+                        "RoomID": 16,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": true,
+                "$type": "Submarine.Model.Conn"
+            }
+        },
+        {
+            "Key": 17,
+            "Value": {
+                "TypeOfRoom": "Cabin",
+                "MinimimValidSize": 2,
+                "ValidationText": "The Cabin needs to be at least 2 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 21,
+                        "Y": 2,
+                        "RoomID": 17,
+                        "canContainRoom": true,
+                        "WallType": 1
+                    },
+                    {
+                        "X": 21,
+                        "Y": 3,
+                        "RoomID": 17,
+                        "canContainRoom": true,
+                        "WallType": 4
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": true,
+                "$type": "Submarine.Model.Cabin"
+            }
+        },
+        {
+            "Key": 18,
+            "Value": {
+                "TypeOfRoom": "Gallery",
+                "MinimimValidSize": 2,
+                "ValidationText": "The Gallery needs to be at least 2 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 20,
+                        "Y": 3,
+                        "RoomID": 18,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 20,
+                        "Y": 2,
+                        "RoomID": 18,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 19,
+                        "Y": 2,
+                        "RoomID": 18,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 19,
+                        "Y": 3,
+                        "RoomID": 18,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 18,
+                        "Y": 3,
+                        "RoomID": 18,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 18,
+                        "Y": 2,
+                        "RoomID": 18,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.Gallery"
+            }
+        },
+        {
+            "Key": 19,
+            "Value": {
+                "TypeOfRoom": "Bunks",
+                "MinimimValidSize": 6,
+                "ValidationText": "The Bunks needs to be at least 6 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 17,
+                        "Y": 2,
+                        "RoomID": 19,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 16,
+                        "Y": 2,
+                        "RoomID": 19,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 15,
+                        "Y": 2,
+                        "RoomID": 19,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 15,
+                        "Y": 3,
+                        "RoomID": 19,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 16,
+                        "Y": 3,
+                        "RoomID": 19,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 17,
+                        "Y": 3,
+                        "RoomID": 19,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    }
+                ],
+                "CapacityPerTile": 2.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": true,
+                "$type": "Submarine.Model.Bunks"
+            }
+        },
+        {
+            "Key": 21,
+            "Value": {
+                "TypeOfRoom": "RadioRoom",
+                "MinimimValidSize": 2,
+                "ValidationText": "The RadioRoom needs to be at least 2 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 25,
+                        "Y": 2,
+                        "RoomID": 21,
+                        "canContainRoom": true,
+                        "WallType": 1
+                    },
+                    {
+                        "X": 25,
+                        "Y": 3,
+                        "RoomID": 21,
+                        "canContainRoom": true,
+                        "WallType": 4
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.RadioRoom"
+            }
+        },
+        {
+            "Key": 22,
+            "Value": {
+                "TypeOfRoom": "Battery",
+                "MinimimValidSize": 4,
+                "ValidationText": "The Battery needs to be at least 4 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 14,
+                        "Y": 0,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 15,
+                        "Y": 0,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 14,
+                        "Y": 1,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 15,
+                        "Y": 1,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 16,
+                        "Y": 1,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 16,
+                        "Y": 0,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 17,
+                        "Y": 0,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 17,
+                        "Y": 1,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 18,
+                        "Y": 1,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 18,
+                        "Y": 0,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 19,
+                        "Y": 0,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 19,
+                        "Y": 1,
+                        "RoomID": 22,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    }
+                ],
+                "CapacityPerTile": 1000.0,
+                "Output": 0,
+                "UnitName": "liters",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.Battery"
+            }
+        },
+        {
+            "Key": 23,
+            "Value": {
+                "TypeOfRoom": "EngineRoom",
+                "MinimimValidSize": 9,
+                "ValidationText": "The EngineRoom needs to be at least 9 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 10,
+                        "Y": 1,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 11,
+                        "Y": 1,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 12,
+                        "Y": 1,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 12,
+                        "Y": 2,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 13
+                    },
+                    {
+                        "X": 12,
+                        "Y": 3,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 11,
+                        "Y": 3,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 11,
+                        "Y": 2,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    },
+                    {
+                        "X": 10,
+                        "Y": 2,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 7
+                    },
+                    {
+                        "X": 10,
+                        "Y": 3,
+                        "RoomID": 23,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    }
+                ],
+                "CapacityPerTile": 1000.0,
+                "Output": 0,
+                "UnitName": "pk'",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.EngineRoom"
+            }
+        },
+        {
+            "Key": 24,
+            "Value": {
+                "TypeOfRoom": "Cabin",
+                "MinimimValidSize": 2,
+                "ValidationText": "The Cabin needs to be at least 2 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 14,
+                        "Y": 3,
+                        "RoomID": 24,
+                        "canContainRoom": true,
+                        "WallType": 4
+                    },
+                    {
+                        "X": 14,
+                        "Y": 2,
+                        "RoomID": 24,
+                        "canContainRoom": true,
+                        "WallType": 1
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": true,
+                "$type": "Submarine.Model.Cabin"
+            }
+        },
+        {
+            "Key": 27,
+            "Value": {
+                "TypeOfRoom": "Sonar",
+                "MinimimValidSize": 2,
+                "ValidationText": "The Sonar needs to be at least 2 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 26,
+                        "Y": 3,
+                        "RoomID": 27,
+                        "canContainRoom": true,
+                        "WallType": 4
+                    },
+                    {
+                        "X": 26,
+                        "Y": 2,
+                        "RoomID": 27,
+                        "canContainRoom": true,
+                        "WallType": 1
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.Sonar"
+            }
+        },
+        {
+            "Key": 26,
+            "Value": {
+                "TypeOfRoom": "TorpedoRoom",
+                "MinimimValidSize": 6,
+                "ValidationText": "The TorpedoRoom needs to be at least 6 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 38,
+                        "Y": 0,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 37,
+                        "Y": 0,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 38,
+                        "Y": 3,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 37,
+                        "Y": 3,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 36,
+                        "Y": 3,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 35,
+                        "Y": 3,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 35,
+                        "Y": 2,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 7
+                    },
+                    {
+                        "X": 35,
+                        "Y": 1,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 7
+                    },
+                    {
+                        "X": 35,
+                        "Y": 0,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 36,
+                        "Y": 0,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 36,
+                        "Y": 1,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    },
+                    {
+                        "X": 36,
+                        "Y": 2,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    },
+                    {
+                        "X": 37,
+                        "Y": 2,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    },
+                    {
+                        "X": 37,
+                        "Y": 1,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 15
+                    },
+                    {
+                        "X": 38,
+                        "Y": 1,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 13
+                    },
+                    {
+                        "X": 38,
+                        "Y": 2,
+                        "RoomID": 26,
+                        "canContainRoom": true,
+                        "WallType": 13
+                    }
+                ],
+                "CapacityPerTile": 1.0,
+                "Output": 0,
+                "UnitName": "torpedoes",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.TorpedoRoom"
+            }
+        },
+        {
+            "Key": 28,
+            "Value": {
+                "TypeOfRoom": "Bunks",
+                "MinimimValidSize": 6,
+                "ValidationText": "The Bunks needs to be at least 6 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 27,
+                        "Y": 3,
+                        "RoomID": 28,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 27,
+                        "Y": 2,
+                        "RoomID": 28,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    },
+                    {
+                        "X": 28,
+                        "Y": 2,
+                        "RoomID": 28,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 29,
+                        "Y": 2,
+                        "RoomID": 28,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 29,
+                        "Y": 3,
+                        "RoomID": 28,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 28,
+                        "Y": 3,
+                        "RoomID": 28,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    }
+                ],
+                "CapacityPerTile": 2.0,
+                "Output": 0,
+                "UnitName": "crew",
+                "IsAccessable": true,
+                "$type": "Submarine.Model.Bunks"
+            }
+        },
+        {
+            "Key": 29,
+            "Value": {
+                "TypeOfRoom": "Battery",
+                "MinimimValidSize": 4,
+                "ValidationText": "The Battery needs to be at least 4 spaces",
+                "TilesInRoom": [
+                    {
+                        "X": 29,
+                        "Y": 1,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 12
+                    },
+                    {
+                        "X": 29,
+                        "Y": 0,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 9
+                    },
+                    {
+                        "X": 28,
+                        "Y": 0,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 28,
+                        "Y": 1,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 27,
+                        "Y": 1,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 27,
+                        "Y": 0,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 26,
+                        "Y": 0,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 11
+                    },
+                    {
+                        "X": 26,
+                        "Y": 1,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 14
+                    },
+                    {
+                        "X": 25,
+                        "Y": 1,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 6
+                    },
+                    {
+                        "X": 25,
+                        "Y": 0,
+                        "RoomID": 29,
+                        "canContainRoom": true,
+                        "WallType": 3
+                    }
+                ],
+                "CapacityPerTile": 1000.0,
+                "Output": 0,
+                "UnitName": "liters",
+                "IsAccessable": false,
+                "$type": "Submarine.Model.Battery"
+            }
+        }
+    ],
+    "_nextRoomID": 30
+}

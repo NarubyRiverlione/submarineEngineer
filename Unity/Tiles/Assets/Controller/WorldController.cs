@@ -43,7 +43,7 @@ public class WorldController : MonoBehaviour {
 	void Start () {
 		instance = this;
 		mySub = new Sub ();
-		Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
+		//Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
 
 		// loading Wall sprites from sheet
 		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");

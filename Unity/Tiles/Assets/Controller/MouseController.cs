@@ -10,11 +10,12 @@ public class MouseController : MonoBehaviour {
 	public GameObject cursorBuilder;
 	public GameObject cursorDestroyer;
 
-	public Text UI_Builder_text;
+	public Text UI_StatusText;
 
 	WorldController world;
 
 	RoomType RoomTypeToBeBuild = RoomType.Empty;
+	Tile prevTileBelowMouse;
 
 	// Use this for initialization
 	void Start () {
@@ -32,31 +33,39 @@ public class MouseController : MonoBehaviour {
 			Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			currentMousePosition.z = 0; // set Z to zero so mouse position isn't on the camera (and be clipped so it isn't visible)
 
-			// move mouse icon to tile below mouse
-
+			// get tile below mouse
 			Tile tileBelowMouse = world.GetTileAtWorldCoordinates (currentMousePosition);
-			// reset title if title isn't build able 
-			if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
-				tileBelowMouse = null;
+
+			// update Cursor only when mouse is in other tile the prev.
+			if (tileBelowMouse != prevTileBelowMouse) {
+				// reset tile if title isn't build able 
+				if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
+					tileBelowMouse = null;
 				
-			if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
-				Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
-				if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
-					cursorBuilder.transform.position = spaceBelowMouseCoordinates;
-					cursorBuilder.SetActive (true);
-					cursorDestroyer.SetActive (false);
+				if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
+					Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
+					if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
+						cursorBuilder.transform.position = spaceBelowMouseCoordinates;
+						cursorBuilder.SetActive (true);
+						cursorDestroyer.SetActive (false);
+					}
+					else { // selected Empty room = show destroyer icon
+						cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
+						cursorBuilder.SetActive (false);
+						cursorDestroyer.SetActive (true);
+					}
+					Debug.Log ("Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + "), part of room: "
+					+ world.mySub.GetRoomTypeOfTile (tileBelowMouse)
+					+ "(" + tileBelowMouse.RoomID + ")"
+					+ " wall type: " + tileBelowMouse.WallType);
 				}
-				else { // selected Empty room = show destroyer icon
-					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
+				else {
+					// hide if cursor isn't on a tile
 					cursorBuilder.SetActive (false);
-					cursorDestroyer.SetActive (true);
-				}
+					cursorDestroyer.SetActive (false);
+				}	
 			}
-			else {
-				// hide if cursor isn't on a tile
-				cursorBuilder.SetActive (false);
-				cursorDestroyer.SetActive (false);
-			}	
+			prevTileBelowMouse = tileBelowMouse;
 
 			// change title type if clicked on (release left mouse)
 			if (Input.GetMouseButtonUp (0)) {
@@ -65,7 +74,7 @@ public class MouseController : MonoBehaviour {
 						world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);	// add
 					else
 						world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);					// remove
-				
+
 				}
 			}
 		}
@@ -84,9 +93,9 @@ public class MouseController : MonoBehaviour {
 				// create 'prototype' of room to get the validation text
 				Room prototypeRoom = Room.CreateRoomOfType (RoomTypeToBeBuild, world.mySub);
 				// show building rules
-				UI_Builder_text.text = prototypeRoom.ValidationText;
+				UI_StatusText.text = prototypeRoom.ValidationText;
 
-				Debug.Log ("Toggle " + nameOfRoomType + " is active: " + typeOfRoom + " = Enum " + RoomTypeToBeBuild);
+				//Debug.Log ("Toggle " + nameOfRoomType + " is active: " + typeOfRoom + " = Enum " + RoomTypeToBeBuild);
 
 			}
 
@@ -95,15 +104,15 @@ public class MouseController : MonoBehaviour {
 
 	// Save sub
 	public void SaveSub () {
-		UI_Builder_text.text = "Saving submarine....";
+		UI_StatusText.text = "Saving submarine....";
 		string filename = UnityEditor.EditorUtility.SaveFilePanel ("Saving submarine", "", "My Submarine", "json");
 		world.mySub.Save (filename);
-		UI_Builder_text.text = "Submarine saved.";
+		UI_StatusText.text = "Submarine saved.";
 	}
 
 	// Load sub
 	public void LoadSub () {
-		UI_Builder_text.text = "Loading submarine....";
+		UI_StatusText.text = "Loading submarine....";
 		string filename = UnityEditor.EditorUtility.OpenFilePanel ("Saving submarine", "", "json");
 
 		// destroy all Tile game objects (and the wall, warning,.. childeren)
@@ -114,7 +123,7 @@ public class MouseController : MonoBehaviour {
 		// add all tiles game objects 
 		world.CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
 
-		UI_Builder_text.text = "Submarine loading.";
+		UI_StatusText.text = "Submarine loading.";
 	}
 }
 	
