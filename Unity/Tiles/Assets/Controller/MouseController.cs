@@ -94,19 +94,28 @@ public class MouseController : MonoBehaviour {
 	}
 
 	// Save sub
-	public void SaveSub() {
+	public void SaveSub () {
 		UI_Builder_text.text = "Saving submarine....";
-		string filename = UnityEditor.EditorUtility.SaveFilePanel("Saving submarine", "", "My Submarine", "json");
-		world.mySub.Save(filename);
+		string filename = UnityEditor.EditorUtility.SaveFilePanel ("Saving submarine", "", "My Submarine", "json");
+		world.mySub.Save (filename);
 		UI_Builder_text.text = "Submarine saved.";
-		}
-	// Load sub
-	public void LoadSub() {
-		UI_Builder_text.text = "Loading submarine....";
-		string filename = UnityEditor.EditorUtility.OpenFilePanel("Saving submarine", "", "json");
-		world.mySub.Load(filename);
-		UI_Builder_text.text = "Submarine loading.";
-		}
 	}
+
+	// Load sub
+	public void LoadSub () {
+		UI_Builder_text.text = "Loading submarine....";
+		string filename = UnityEditor.EditorUtility.OpenFilePanel ("Saving submarine", "", "json");
+
+		// destroy all Tile game objects (and the wall, warning,.. childeren)
+		// (maybe new loaded sub has other dimensions)
+		world.RemoveAllTileGameObjects ();
+		// load new Sub 
+		world.mySub.Load (filename);
+		// add all tiles game objects 
+		world.CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
+
+		UI_Builder_text.text = "Submarine loading.";
+	}
+}
 	
 

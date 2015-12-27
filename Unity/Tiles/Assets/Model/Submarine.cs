@@ -15,15 +15,20 @@ namespace Submarine.Model {
 
 
 		public int lengthOfSub { get; private set; }
+
 		public int heightOfSub { get; private set; }
 
 
 		public int startOfBridgeTower { get; private set; }
+
 		public int lenghtOfBridgeTower { get; private set; }
+
 		public int heightOfBridgeTower { get; private set; }
 
 		public int smallerTailUpper { get; private set; }
+
 		public int smallerTailLower { get; private set; }
+
 		public int smallerTailLenght { get; private set; }
 
 		// tiles inside the sub
@@ -44,52 +49,59 @@ namespace Submarine.Model {
 		}
 		// next roomID
 		[UnityEngine.SerializeField]
-		int _nextRoomID = 1;		// ID 0 = no room assigned to Tile
+		int _nextRoomID = 1;
+		// ID 0 = no room assigned to Tile
 
 
 		#region SAVE / LOAD
-		private static readonly fsSerializer _serializer = new fsSerializer();
 
-		private static string Serialize(Type type, object value) {
+		private static readonly fsSerializer _serializer = new fsSerializer ();
+
+		private static string Serialize (Type type, object value) {
 			// serialize the data
 			fsData data;
-			_serializer.TrySerialize(type, value, out data).AssertSuccessWithoutWarnings();
+			_serializer.TrySerialize (type, value, out data).AssertSuccessWithoutWarnings ();
 
 			// emit the data via JSON
-			return fsJsonPrinter.CompressedJson(data);
-			}
+			return fsJsonPrinter.CompressedJson (data);
+		}
 
-		private static object Deserialize(Type type, string serializedState) {
+		private static object Deserialize (Type type, string serializedState) {
 			// step 1: parse the JSON data
-			fsData data = fsJsonParser.Parse(serializedState);
+			fsData data = fsJsonParser.Parse (serializedState);
 
 			// step 2: de serialize the data
 			object deserialized = null;
-			_serializer.TryDeserialize(data, type, ref deserialized).AssertSuccessWithoutWarnings();
+			_serializer.TryDeserialize (data, type, ref deserialized).AssertSuccessWithoutWarnings ();
 
 			return deserialized;
-			}
+		}
 
-		public void Save(string fileName) {
+		public void Save (string fileName) {
 			// save submarine
-			string jsonStringOfSub = Serialize(typeof(Sub), this);
+			string jsonStringOfSub = Serialize (typeof(Sub), this);
 			// save tiles
-			List<Tile> allTiles = new List<Tile>();         // convert 2D array to List
-			for (int x = 0; x < lengthOfSub - 1; x++) {
-				for (int y = 0; y < heightOfSub - 1; y++) {
-					allTiles.Add(GetTileAt(x, y));
-					}
+			List<Tile> allTiles = new List<Tile> ();         // convert 2D array to List
+			for (int x = 0; x < lengthOfSub; x++) {
+				for (int y = 0; y < heightOfSub; y++) {
+					allTiles.Add (GetTileAt (x, y));
 				}
-			string jsonStringOfAllTitles = Serialize(typeof(List<Tile>), allTiles);
-
-
-			File.WriteAllText(fileName, jsonStringOfSub);
-			File.WriteAllText(fileName.Substring(0,fileName.Length-5) + "_Tiles.json", jsonStringOfAllTitles); // add _Tiles, remain .json
 			}
+			string jsonStringOfAllTitles = Serialize (typeof(List<Tile>), allTiles);
 
-		public void Load(string fileName) {
-			string jsonStringOfSub = File.ReadAllText(fileName);
-			Sub loadedSub =(Sub) Deserialize(typeof(Sub), jsonStringOfSub);
+
+			File.WriteAllText (fileName, jsonStringOfSub);
+			File.WriteAllText (fileName.Substring (0, fileName.Length - 5) + "_Tiles", jsonStringOfAllTitles); // add _Tiles
+		}
+
+
+		// loading function is split into 2 component because first the submarine dimension needs to be read
+		// with thes dimensions know all game objects for the tiles can be created (add UpdateTileSprite as changed action)
+		// when all game objects are created, read the tiles data and show the correct visual via de TileChangedActions
+		public void Load (string fileName) {
+			// only load submarine properties, not the tiles
+			string jsonStringOfSub = File.ReadAllText (fileName);
+			Sub loadedSub = (Sub)Deserialize (typeof(Sub), jsonStringOfSub);
 
 			heightOfSub = loadedSub.heightOfSub;
 			lengthOfSub = loadedSub.lengthOfSub;
@@ -101,22 +113,23 @@ namespace Submarine.Model {
 			smallerTailLenght = loadedSub.smallerTailLenght;
 			smallerTailLower = loadedSub.smallerTailLower;
 			smallerTailUpper = loadedSub.smallerTailUpper;
-			
 
-			rooms = loadedSub.rooms;
 			_nextRoomID = loadedSub._nextRoomID;
 
 			// load all tiles (2D array not supported,,needs conversion)
-			_tile = null; // reset all old tiles
-			string jsonStringOfAllTitles = File.ReadAllText(fileName.Substring(0, fileName.Length - 5) + "_Tiles.json");
-			List<Tile> allTiles= (List < Tile > )Deserialize(typeof(List<Tile>), jsonStringOfAllTitles);
-			foreach (Tile addTile in allTiles) {
-				_tile[addTile.X, addTile.Y] = addTile;
-				//TODO: attach UpdateTileSprite to TileChangedActions
-		   
-				}
+			_tile = new Tile[lengthOfSub, heightOfSub]; // reset all old tiles
 
+			string jsonStringOfAllTitles = File.ReadAllText (fileName.Substring (0, fileName.Length - 5) + "_Tiles");
+			List<Tile> allTiles = (List < Tile >)Deserialize (typeof(List<Tile>), jsonStringOfAllTitles);
+
+			foreach (Tile addTile in allTiles) {
+				_tile [addTile.X, addTile.Y] = addTile;
 			}
+
+			// tiles are load, now load rooms (with tiles is it)
+			rooms = loadedSub.rooms; 
+
+		}
 
 		#endregion
 
@@ -138,12 +151,12 @@ namespace Submarine.Model {
 			// initialize 2D array, still doesn't contain anything
 			_tile = new Tile[lengthOfSub, heightOfSub];
 			// instantiate rooms
-			rooms = new Dictionary<int, Room>();
+			rooms = new Dictionary<int, Room> ();
 			// set tiles around tail and tower as unavailable for building, create Tower
-			CreateSub();
+			CreateSub ();
 			// set room consumables 
-			SetRoomProperties();
-			}
+			SetRoomProperties ();
+		}
 
 
 
@@ -297,22 +310,23 @@ namespace Submarine.Model {
 		}
 
 		private void RebuildRoom (int roomID) {
-			if (rooms.ContainsKey(roomID) == false) {
+			if (rooms.ContainsKey (roomID) == false) {
 				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a room that doesn't exist, roomID:" + roomID);
 			}
 			else {
-				RoomType rebuildRoomType        = rooms [roomID].TypeOfRoom;
-				List<Tile> remeberTilesOfTheRoom = rooms[roomID].TilesInRoom;
+				RoomType rebuildRoomType = rooms [roomID].TypeOfRoom;
+				List<Tile> remeberTilesOfTheRoom = rooms [roomID].TilesInRoom;
 				// reset tiles in the room
-				foreach (Tile rebuildTitle in remeberTilesOfTheRoom) rebuildTitle.Reset();
+				foreach (Tile rebuildTitle in remeberTilesOfTheRoom)
+					rebuildTitle.Reset ();
 				// remove the room so it can be rebuild
-				RemoveRoomFromSubmarine(roomID);
+				RemoveRoomFromSubmarine (roomID);
 				// rebuild room
 				foreach (Tile rebuildTitle in remeberTilesOfTheRoom) {
-					AddTileToRoom(rebuildTitle.X, rebuildTitle.Y, rebuildRoomType);
-					}
-			   
+					AddTileToRoom (rebuildTitle.X, rebuildTitle.Y, rebuildRoomType);
 				}
+			   
+			}
 		}
 
 		#endregion
@@ -406,7 +420,7 @@ namespace Submarine.Model {
 		public void RemoveTileOfRoom (int x, int y) {
 			Tile TileToBeRemoved = GetTileAt (x, y);
 			if (TileToBeRemoved == null) {
-				UnityEngine.Debug.LogError("ERROR cannot remove Tile that doesn't exists");
+				UnityEngine.Debug.LogError ("ERROR cannot remove Tile that doesn't exists");
 			}
 			else {
 				// remove Tile of room

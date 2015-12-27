@@ -9,6 +9,7 @@ namespace Submarine.Model {
 
 		int _roomID;
 
+		[UnityEngine.SerializeField]
 		public int RoomID {
 			get{ return _roomID; }
 			set {
@@ -26,6 +27,7 @@ namespace Submarine.Model {
 
 		int _wallType;
 
+		[UnityEngine.SerializeField]
 		public int WallType { 
 			get { return _wallType; } 
 			set {
@@ -40,13 +42,14 @@ namespace Submarine.Model {
 			X = x;
 			Y = y;
 			// use internal field to prevent calling the callback when initiation title (maybe submarine visuals isn't on screen yet)
-			_roomID = 0; _wallType = 0; 
+			_roomID = 0;
+			_wallType = 0; 
 			canContainRoom = true;
 		}
 
-		public void Reset() {
+		public void Reset () {
 			RoomID = 0;
 			WallType = 0;
-			}
+		}
 	}
 }

@@ -36,42 +36,60 @@ public class WorldController : MonoBehaviour {
 	// Warning Sprites
 	public Sprite Tile_Warning;
 
-	// Wall sprite (sheet)
+	// Wall spritesheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
 
 	// Use this for initialization
 	void Start () {
 		instance = this;
 		mySub = new Sub ();
+		Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
+
 		// loading Wall sprites from sheet
 		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
 
-		Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
-
-		// Create GameObject for each Tile
-		for (int x = 0; x < mySub.lengthOfSub; x++) {
-			for (int y = 0; y < mySub.heightOfSub; y++) {
-				Tile newTile = mySub.GetTileAt (x, y);
-				GameObject newTileSprite = new GameObject ();
-				newTileSprite.name = "Tile_" + x + "/" + y;                                                 // set name of game object to see in Hierarchy
-				newTileSprite.transform.SetParent (this.transform);
-				newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);						// set X, Y of game object
-				   
-				newTileSprite.AddComponent<SpriteRenderer> ();												// add Sprite Renderer component
-				UpdateTileSprite (newTile, newTileSprite);													// set sprite
-
-				newTile.TileChangedActions += ((tile) => { // when the roomID of the title changes, update the sprite
-					UpdateTileSprite (tile, newTileSprite);
-				});
-					
-
-			}
-		}
+		CreateAllTileGameObjects ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void CreateAllTileGameObjects () {
+		// Create GameObject for each Tile
+		for (int x = 0; x < mySub.lengthOfSub; x++) {
+			for (int y = 0; y < mySub.heightOfSub; y++) {
+				Tile newTile = mySub.GetTileAt (x, y);
+				GameObject newTileSprite = new GameObject ();
+				// set name of game object to see in Hierarchy
+				newTileSprite.name = "Tile_" + x + "/" + y;
+				// set WorldController as parten
+				newTileSprite.transform.SetParent (this.transform);
+				// set X, Y of game object
+				newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);
+				// add Sprite Renderer component
+				newTileSprite.AddComponent<SpriteRenderer> ();
+				// set sprite
+				UpdateTileSprite (newTile, newTileSprite);
+				// when the roomID of the title changes, update the sprite
+				newTile.TileChangedActions += (tile => {
+					UpdateTileSprite (tile, newTileSprite);
+				});
+			}
+		}
+	}
+
+	public void RemoveAllTileGameObjects () {
+		string name;
+		for (int x = 0; x < mySub.lengthOfSub; x++) {
+			for (int y = 0; y < mySub.heightOfSub; y++) {
+				name = "Tile_" + x + "/" + y;
+				GameObject tile_gameObject = GameObject.Find (name);
+				if (tile_gameObject != null)
+					Destroy (tile_gameObject); // destroys also all child game objects
+			}
+		}
 	}
 
 	void UpdateTileSprite (Tile showTile, GameObject gameObjectOfTitle) {
@@ -152,7 +170,7 @@ public class WorldController : MonoBehaviour {
 				SpriteRenderer render = newTileWarningSprite.AddComponent<SpriteRenderer> ();	
 				render.sprite = Tile_Warning;
 				// show above Title = on the Tile_Warning sorting layer  						
-				render.sortingLayerName = "Tile_Warning";
+				render.sortingLayerName = "Warnings";
 
 			}
 			if (layoutValid && checkIfWarningAlreadyOnScreen != null) {
@@ -167,7 +185,6 @@ public class WorldController : MonoBehaviour {
 		}
 		// add wall type
 		GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find ("Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
-
 		if (showTile.RoomID != 0) {
 			// only create GameObject when need to show a wall
 			if (checkIfWallIsAlreadyOnScreen == null) { 

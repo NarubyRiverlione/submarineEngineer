@@ -1,8 +1,11 @@
 ﻿namespace Submarine.Model {
 	public class Conn : Room {
 
-
-		int start_X_BridgeTower, stop_X_BridgeTower;
+		[UnityEngine.SerializeField]
+		int start_X_BridgeTower;
+		[UnityEngine.SerializeField]
+		int stop_X_BridgeTower;
+		[UnityEngine.SerializeField]
 		int below_Y_BridgeTower;
 
 		public override bool IsLayoutValid {
