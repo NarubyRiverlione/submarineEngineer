@@ -64,11 +64,11 @@ namespace Submarine.Model {
 
 		public double CapacityPerTile { get; protected set; }
 
-		public virtual int RoomCapacity {
+		public int RoomCapacity {
 			get{ return (int)(Size * CapacityPerTile); }
 		}
 		// current produced or available cargo
-		public Units UnitOfCapacity { get; protected set; }
+		public abstract Units UnitOfCapacity { get; }
 
 	
 
@@ -84,9 +84,16 @@ namespace Submarine.Model {
 
 		public int ReqResource { get; private set; }
 
-		public int CurrentResource { get; set; }
+		public int CurrentResource { 
+			get {
+				if (inSub != null && ResourceUnit != Units.None)
+					return inSub.GetAllResourcesOfUnit (ResourceUnit);
+				else
+					return 0;
+			}
+		}
 
-		public Units ResourceUnit { get; private set; }
+		public abstract Units ResourceUnit { get; }
 
 
 		public int Output { 
@@ -111,19 +118,19 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource, int reqRes) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
+		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
 			TypeOfRoom = ofThisRoomType;
 			coordinatesOfTilesInRoom = new List<Point> ();
 			IsAccessable = true;
 			MinimimValidSize = minSize;
 			CapacityPerTile = capPerTile;
-			UnitOfCapacity = unitOfCap;
 			inSub = sub;
-			ResourceUnit = resource;
-			reqRes = ReqResource;
+			ReqResource = reqRes;
 
 			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
 			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces";
+			if (ReqResource != 0)
+				ValidationText += " and " + ReqResource + " " + ResourceUnit + " to be operational";
 		}
 
 		#endregion

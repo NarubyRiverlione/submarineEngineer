@@ -1,5 +1,19 @@
 ﻿namespace Submarine.Model {
 	public class Cabin : Room {
+		
+
+		public override Units UnitOfCapacity {
+			get {
+				return Units.Officer;
+			}
+		}
+
+		public override Units ResourceUnit {
+			get {
+				return Units.food;
+			}
+		}
+
 
 
 
@@ -9,7 +23,7 @@
 			}
 		}
 
-		public Cabin (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource,  int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap, resource,  reqRes) {
+		public Cabin (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 		}
 	}
 }

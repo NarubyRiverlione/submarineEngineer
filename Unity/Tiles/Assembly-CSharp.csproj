@@ -61,7 +61,6 @@
      <Compile Include="Assets\Model\Rooms\FuelTank.cs" />
      <Compile Include="Assets\Model\Rooms\Gallery.cs" />
      <Compile Include="Assets\Model\Rooms\Generator.cs" />
-     <Compile Include="Assets\Model\Rooms\Mess.cs" />
      <Compile Include="Assets\Model\Rooms\PumpRoom.cs" />
      <Compile Include="Assets\Model\Rooms\RadioRoom.cs" />
      <Compile Include="Assets\Model\Rooms\Sonar.cs" />

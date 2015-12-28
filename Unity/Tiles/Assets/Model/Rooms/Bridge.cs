@@ -1,5 +1,18 @@
 ﻿namespace Submarine.Model {
 	public class Bridge : Room {
+		
+
+		public override Units UnitOfCapacity {
+			get {
+				return Units.None;
+			}
+		}
+
+		public override Units ResourceUnit {
+			get {
+				return Units.Crew;
+			}
+		}
 
 		public override bool IsLayoutValid {
 			get {
@@ -7,7 +20,7 @@
 			}
 		}
 
-		public Bridge (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource,  int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap, resource,  reqRes) {
+		public Bridge (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 		}
 	}
 }

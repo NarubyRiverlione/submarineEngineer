@@ -90,6 +90,7 @@ public class MouseController : MonoBehaviour {
 				string typeOfRoom = nameOfRoomType.Split ('_') [2]; // Toggle_Room_xxxx
 				// set room type to be build
 				RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
+				//TODO: other way then creating a room ?
 				// create 'prototype' of room to get the validation text
 				Room prototypeRoom = Room.CreateRoomOfType (RoomTypeToBeBuild, world.mySub);
 				// show building rules

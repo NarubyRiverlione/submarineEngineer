@@ -1,8 +1,18 @@
 ﻿namespace Submarine.Model {
 	public class PumpRoom : Room {
-		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
+		
 
+		public override Units UnitOfCapacity {
+			get {
+				return Units.liters_pump;
+			}
+		}
 
+		public override Units ResourceUnit {
+			get {
+				return Units.None;
+			}
+		}
 
 		public override bool IsLayoutValid {
 			get {
@@ -10,8 +20,8 @@
 			}
 		}
 
-		public PumpRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource,  int reqRes) :
-			base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap, resource,  reqRes) {
+		public PumpRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) :
+			base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 			IsAccessable = false;
 		}
 	}

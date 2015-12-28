@@ -1,15 +1,21 @@
 ﻿namespace Submarine.Model {
 	public class Conn : Room {
+		
 
-		//		[UnityEngine.SerializeField]
-		//		int start_X_BridgeTower;
-		//		[UnityEngine.SerializeField]
-		//		int stop_X_BridgeTower;
-		//		[UnityEngine.SerializeField]
-		//		int below_Y_BridgeTower;
+		public override Units UnitOfCapacity {
+			get {
+				return Units.None;
+			}
+		}
+
+		public override Units ResourceUnit {
+			get {
+				return Units.Officer;
+			}
+		}
 
 
-
+	
 		public override bool IsLayoutValid {
 			get { // check size req.
 				bool sizeOk = Size >= MinimimValidSize;
@@ -30,7 +36,7 @@
 			}
 		}
 
-		public Conn (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap, resource, reqRes) {
+		public Conn (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 			
 			ValidationText = base.ValidationText + " and must be connected to the Bridge.";
 		}
