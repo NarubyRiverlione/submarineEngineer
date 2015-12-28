@@ -81,13 +81,11 @@ public class WorldController : MonoBehaviour {
 	}
 
 	public void RemoveAllTileGameObjects () {
-		string name;
 		for (int x = 0; x < mySub.lengthOfSub; x++) {
 			for (int y = 0; y < mySub.heightOfSub; y++) {
-				name = "Tile_" + x + "/" + y;
+				string name = "Tile_" + x + "/" + y;
 				GameObject tile_gameObject = GameObject.Find (name);
-				if (tile_gameObject != null)
-					Destroy (tile_gameObject); // destroys also all child game objects
+				Destroy (tile_gameObject); // destroys also all child game objects
 			}
 		}
 	}

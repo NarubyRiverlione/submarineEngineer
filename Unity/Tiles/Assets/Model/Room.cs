@@ -24,13 +24,34 @@ namespace Submarine.Model {
 
 	;
 
+	public enum Units {
+		pks,
+		MWs,
+		AH,
+		liters_fuel,
+		liters_pump,
+		food,
+		tins,
+		Engineers,
+		Cook,
+		Crew,
+		Officer,
+		Lookouts,
+		Sonarman,
+		Radioman,
+		TorpedoMan,
+		Torpedoes,
+		None}
+
+	;
 
 	abstract public class Room {
        
 		public Sub inSub { get; protected set; }
 		// needs reference to sub for layout validation
-
 		public RoomType TypeOfRoom { get; protected set; }
+		//public List<Tile> TilesInRoom { get; protected set; }
+		public List<Point> coordinatesOfTilesInRoom;
 
 		public int Size{ get { return coordinatesOfTilesInRoom.Count (); } }
 
@@ -38,35 +59,64 @@ namespace Submarine.Model {
 
 		public string ValidationText { get; protected set; }
 
-		//public List<Tile> TilesInRoom { get; protected set; }
-		public List<Point> coordinatesOfTilesInRoom;
+		abstract public bool IsLayoutValid { get; }
+
 
 		public double CapacityPerTile { get; protected set; }
 
-		public int capPerTileacity {
+		public int RoomCapacity {
 			get{ return (int)(Size * CapacityPerTile); }
 		}
 
-		public int Output { get; protected set; }
+	
+
+		public int ReqCrew { get; private set; }
+
+		public int CurrentCrew { get; private set; }
+
+		public Units CrewUnit { get; private set; }
+
+		public int RoomCrewPreformance {
+			get{ return (int)(CurrentCrew / ReqCrew * 100); }
+		}
+
+		public int ReqResource { get; private set; }
+
+		public int CurrentResource { get; private set; }
+
+		public Units ResourceUnit { get; private set; }
+
+		public int RoomResourcePreformance {
+			get{ return (int)(CurrentResource / ReqResource * 100); }
+		}
+
+
+		public int Output { 
+			get{ return (int)(RoomCapacity * RoomResourcePreformance / 100); }
+		}
 
 		// current produced or available cargo
-		public string UnitName { get; protected set; }
+		public Units UnitOfCapacity { get; protected set; }
+
 
 		// unit (liter,..) of output and Capacity
 		public bool IsAccessable { get; protected set; }
 
-		abstract public bool IsLayoutValid { get; }
+
 
 		#region CONSTRUCTOR
 
-		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
+		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource, int reqRes) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
 			TypeOfRoom = ofThisRoomType;
 			coordinatesOfTilesInRoom = new List<Point> ();
 			IsAccessable = true;
 			MinimimValidSize = minSize;
 			CapacityPerTile = capPerTile;
-			UnitName = unitOfCap;
+			UnitOfCapacity = unitOfCap;
 			inSub = sub;
+			ResourceUnit = resource;
+			reqRes = ReqResource;
+
 			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
 			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces";
 		}
@@ -75,7 +125,7 @@ namespace Submarine.Model {
 
 		public static Room CreateRoomOfType (RoomType ofThisRoomType, Sub inThisSub) {
 			// let factory create the correct concrete class
-			return RoomFactory.CreateRoomOfType (ofThisRoomType, inThisSub);
+			return RoomFactory.CreateRoomOfType (ofThisRoomType);
 		}
 
 		public void AddTile (Tile addTile) {

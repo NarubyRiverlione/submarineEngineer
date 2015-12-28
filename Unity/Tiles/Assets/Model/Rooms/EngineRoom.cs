@@ -8,8 +8,8 @@
 			}
 		}
 
-		public EngineRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) :
-			base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap) {
+		public EngineRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, Units unitOfCap, Units resource,  int reqRes) :
+			base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap, resource,  reqRes) {
 			IsAccessable = false;
 		}
 	}

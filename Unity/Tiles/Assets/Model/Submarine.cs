@@ -55,6 +55,9 @@ namespace Submarine.Model {
 		int _nextRoomID = 1;
 		// ID 0 = no room assigned to Tile
 
+		public Dictionary<string,int> RoomPropertiesInt { get; private set; }
+
+		public Dictionary<string,Units> RoomPropertiesUnits { get; private set; }
 
 
 		#region SAVE / LOAD
@@ -156,10 +159,13 @@ namespace Submarine.Model {
 			_tile = new Tile[lengthOfSub, heightOfSub];
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
+
+			// set room properties 
+			SetRoomProperties ();
+
 			// set tiles around tail and tower as unavailable for building, create Tower
 			CreateSub ();
-			// set room consumables 
-			SetRoomProperties ();
+
 		}
 
 
@@ -206,66 +212,101 @@ namespace Submarine.Model {
 		}
 		// set min tile size, capacity per tile and unit of capacity for each Room Type
 		private void SetRoomProperties () {
-			RoomFactory.EngineRoom_Min = 12;
-			RoomFactory.EngineRoom_CapPerTile = 1000;
-			RoomFactory.EngineRoom_unitOfCap = "pk'";
+			RoomFactory.inThisSub = this;
 
-			RoomFactory.Generator_Min = 12;
-			RoomFactory.Generator_CapPerTile = 500;
-			RoomFactory.Generator_unitOfCap = "MW";
+			RoomPropertiesInt = new Dictionary<string, int> ();
+			RoomPropertiesUnits = new Dictionary<string, Units> ();
 
-			RoomFactory.Battery_Min = 8;
-			RoomFactory.Battery_CapPerTile = 500;
-			RoomFactory.Battery_unitOfCap = "AH";
+			RoomPropertiesInt ["EngineRoom_Min"] = 12;
+			RoomPropertiesInt ["EngineRoom_CapPerTile"] = 1000;
+			RoomPropertiesUnits ["EngineRoom_unitOfCap"] = Units.pks;
+			RoomPropertiesUnits ["EngineRoom_resource"] = Units.liters_fuel;
+			RoomPropertiesInt ["EngineRoom_reqRes"] = 10;
 
-			RoomFactory.Bridge_Min = 4;
-			RoomFactory.Bridge_CapPerTile = 2;
-			RoomFactory.Bridge_unitOfCap = "crew";
 
-			RoomFactory.Gallery_Min = 6;
-			RoomFactory.Gallery_CapPerTile = 1;
-			RoomFactory.Gallery_unitOfCap = "crew";
+			RoomPropertiesInt ["Generator_Min"] = 12;
+			RoomPropertiesInt ["Generator_CapPerTile"] = 500;
+			RoomPropertiesUnits ["Generator_unitOfCap"] = Units.MWs;
+			RoomPropertiesUnits ["Generator_resource"] = Units.pks;
+			RoomPropertiesInt ["Generator_reqRes"] = 750;
+					
+			RoomPropertiesInt ["Battery_Min"] = 8;
+			RoomPropertiesInt ["Battery_CapPerTile"] = 500;
+			RoomPropertiesUnits ["Battery_unitOfCap"] = Units.AH;
+			RoomPropertiesUnits ["Battery_resource"] = Units.MWs;
+			RoomPropertiesInt ["Battery_reqRes"] = 500;
+					
+			RoomPropertiesInt ["Bridge_Min"] = 4;
+			RoomPropertiesInt ["Bridge_CapPerTile"] = 0;
+			RoomPropertiesUnits ["Bridge_unitOfCap"] = Units.None;
+			RoomPropertiesUnits ["Bridge_resource"] = Units.Lookouts;
+			RoomPropertiesInt ["Bridge_reqRes"] = 2;
 
-			RoomFactory.Cabin_Min = 2;
-			RoomFactory.Cabin_CapPerTile = 1;
-			RoomFactory.Cabin_unitOfCap = "crew";
+			RoomPropertiesInt ["Gallery_Min"] = 6;
+			RoomPropertiesInt ["Gallery_CapPerTile"] = 5;
+			RoomPropertiesUnits ["Gallery_unitOfCap"] = Units.food;
+			RoomPropertiesUnits ["Gallery_resource"] = Units.tins;
+			RoomPropertiesInt ["Gallery_reqRes"] = 5;
+					
+			RoomPropertiesInt ["Cabin_Min"] = 2;
+			RoomPropertiesInt ["Cabin_CapPerTile"] = 1;
+			RoomPropertiesUnits ["Cabin_unitOfCap"] = Units.Officer;
+			RoomPropertiesUnits ["Cabin_resource"] = Units.Crew;
+			RoomPropertiesInt ["Cabin_reqRes"] = 1;
+					
+			RoomPropertiesInt ["Bunks_Min"] = 6;
+			RoomPropertiesInt ["Bunks_CapPerTile"] = 2;
+			RoomPropertiesUnits ["Bunks_unitOfCap"] = Units.Crew;
+			RoomPropertiesUnits ["Bunks_resource"] = Units.food;
+			RoomPropertiesInt ["Bunks_reqRes"] = 2;
 
-			RoomFactory.Bunks_Min = 6;
-			RoomFactory.Bunks_CapPerTile = 2;
-			RoomFactory.Bunks_unitOfCap = "crew";
-
-			RoomFactory.Conn_Min = 9;
-			RoomFactory.Conn_CapPerTile = 1;
-			RoomFactory.Conn_unitOfCap = "crew";
-
-			RoomFactory.Sonar_Min = 4;
-			RoomFactory.Sonar_CapPerTile = 1;
-			RoomFactory.Sonar_unitOfCap = "crew";
-
-			RoomFactory.RadioRoom_Min = 4;
-			RoomFactory.RadioRoom_CapPerTile = 1;
-			RoomFactory.RadioRoom_unitOfCap = "crew";
-
-			RoomFactory.FuelTank_Min = 9;
-			RoomFactory.FuelTank_CapPerTile = 1000;
-			RoomFactory.FuelTank_unitOfCap = "liters";
-
-			RoomFactory.PumpRoom_Min = 6;
-			RoomFactory.PumpRoom_CapPerTile = 1000;
-			RoomFactory.PumpRoom_unitOfCap = "liters";
-
-			RoomFactory.StorageRoom_Min = 4;
-			RoomFactory.StorageRoom_CapPerTile = 500;
-			RoomFactory.StorageRoom_unitOfCap = "food";
-
-			RoomFactory.EscapeHatch_Min = 2;
-			RoomFactory.EscapeHatch_CapPerTile = 1;
-			RoomFactory.EscapeHatch_unitOfCap = "";
-
-			RoomFactory.TorpedoRoom_Min = 12;
-			RoomFactory.TorpedoRoom_CapPerTile = 1;
-			RoomFactory.TorpedoRoom_unitOfCap = "torpedoes";
-
+			RoomPropertiesInt ["Conn_Min"] = 9;
+			RoomPropertiesInt ["Conn_CapPerTile"] = 0;
+			RoomPropertiesUnits ["Conn_unitOfCap"] = Units.None;
+			RoomPropertiesUnits ["Conn_resource"] = Units.Crew;
+			RoomPropertiesInt ["Conn_reqRes"] = 1;
+					
+			RoomPropertiesInt ["Sonar_Min"] = 4;
+			RoomPropertiesInt ["Sonar_CapPerTile"] = 0;
+			RoomPropertiesUnits ["Sonar_unitOfCap"] = Units.None;
+			RoomPropertiesUnits ["Sonar_resource"] = Units.Sonarman;
+			RoomPropertiesInt ["Sonar_reqRes"] = 1;
+					
+			RoomPropertiesInt ["RadioRoom_Min"] = 4;
+			RoomPropertiesInt ["RadioRoom_CapPerTile"] = 0;
+			RoomPropertiesUnits ["RadioRoom_unitOfCap"] = Units.None;
+			RoomPropertiesUnits ["RadioRoom_resource"] = Units.Radioman;
+			RoomPropertiesInt ["RadioRoom_reqRes"] = 1;
+					
+			RoomPropertiesInt ["FuelTank_Min"] = 9;
+			RoomPropertiesInt ["FuelTank_CapPerTile"] = 1000;
+			RoomPropertiesUnits ["FuelTank_unitOfCap"] = Units.liters_fuel;
+			RoomPropertiesUnits ["FuelTank_resource"] = Units.None;
+			RoomPropertiesInt ["FuelTank_reqRes"] = 0;
+					
+			RoomPropertiesInt ["PumpRoom_Min"] = 6;
+			RoomPropertiesInt ["PumpRoom_CapPerTile"] = 1000;
+			RoomPropertiesUnits ["PumpRoom_unitOfCap"] = Units.liters_pump;
+			RoomPropertiesUnits ["PumpRoom_resource"] = Units.MWs;
+			RoomPropertiesInt ["PumpRoom_reqRes"] = 1200;
+					
+			RoomPropertiesInt ["StorageRoom_Min"] = 4;
+			RoomPropertiesInt ["StorageRoom_CapPerTile"] = 100;
+			RoomPropertiesUnits ["StorageRoom_unitOfCap"] = Units.tins;
+			RoomPropertiesUnits ["StorageRoom_resource"] = Units.None;
+			RoomPropertiesInt ["StorageRoom_reqRes"] = 0;
+					
+			RoomPropertiesInt ["EscapeHatch_Min"] = 2;
+			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 0;
+			RoomPropertiesUnits ["EscapeHatch_unitOfCap"] = Units.None;
+			RoomPropertiesUnits ["EscapeHatch_resource"] = Units.None;
+			RoomPropertiesInt ["EscapeHatchreqRes"] = 0;
+					
+			RoomPropertiesInt ["TorpedoRoom_Min"] = 12;
+			RoomPropertiesInt ["TorpedoRoom_CapPerTile"] = 1;
+			RoomPropertiesUnits ["TorpedoRoom_unitOfCap"] = Units.Torpedoes;
+			RoomPropertiesUnits ["TorpedoRoom_resource"] = Units.TorpedoMan;
+			RoomPropertiesInt ["TorpedoRoomreqRes"] = 1;
 
 		}
 

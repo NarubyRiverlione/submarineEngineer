@@ -1,20 +1,28 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Submarine.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/RoomFactory.cs">
     <Files>
-      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="161" Column="14" />
-      <File FileName="Assets/Model/Submarine.cs" Line="332" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="91" Column="7" />
-      <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="124" Column="2" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="185" Column="159" />
+      <File FileName="Assets/Model/Submarine.cs" Line="215" Column="33" />
+      <File FileName="Assets/Model/Room.cs" Line="128" Column="23" />
+      <File FileName="Assets/Model/RoomFactory.cs" Line="61" Column="41" />
+      <File FileName="Assets/Model/Tile.cs" Line="51" Column="1" />
+      <File FileName="Assets/Model/Rooms/Conn.cs" Line="33" Column="123" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="190" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="186" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="188" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1034" offsetY="2057" expression="showTile.Y" liveUpdate="False" />
     <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1031" offsetY="2027" expression="showTile.X" liveUpdate="False" />
     <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1199" offsetY="2053" expression="showTile.WallType" liveUpdate="False" />
+    <Watch file="Assets/Model/Submarine.cs" line="343" offsetX="810" offsetY="4486" expression="rebuildTile.Y" liveUpdate="False" />
+    <Watch file="Assets/Model/Submarine.cs" line="343" offsetX="805" offsetY="4451" expression="rebuildTile.X" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

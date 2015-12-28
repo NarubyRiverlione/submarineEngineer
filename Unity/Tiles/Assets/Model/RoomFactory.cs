@@ -5,95 +5,62 @@ using System.Text;
 
 namespace Submarine.Model {
 	static class RoomFactory {
+		public static Sub inThisSub;
 
-		public static int EngineRoom_Min, EngineRoom_CapPerTile;
-		public static string EngineRoom_unitOfCap;
-
-		public static int Generator_Min, Generator_CapPerTile;
-		public static string Generator_unitOfCap;
-
-		public static int Battery_Min, Battery_CapPerTile;
-		public static string Battery_unitOfCap;
-
-		public static int Bridge_Min, Bridge_CapPerTile;
-		public static string Bridge_unitOfCap;
-
-		public static int Gallery_Min, Gallery_CapPerTile;
-		public static string Gallery_unitOfCap;
-
-		public static int Cabin_Min, Cabin_CapPerTile;
-		public static string Cabin_unitOfCap;
-
-		public static int Bunks_Min, Bunks_CapPerTile;
-		public static string Bunks_unitOfCap;
-
-		public static int Conn_Min, Conn_CapPerTile;
-		public static string Conn_unitOfCap;
-
-		public static int Sonar_Min, Sonar_CapPerTile;
-		public static string Sonar_unitOfCap;
-
-		public static int RadioRoom_Min, RadioRoom_CapPerTile;
-		public static string RadioRoom_unitOfCap;
-
-		public static int FuelTank_Min, FuelTank_CapPerTile;
-		public static string FuelTank_unitOfCap;
-
-		public static int PumpRoom_Min, PumpRoom_CapPerTile;
-		public static string PumpRoom_unitOfCap;
-
-		public static int StorageRoom_Min, StorageRoom_CapPerTile;
-		public static string StorageRoom_unitOfCap;
-
-		public static int EscapeHatch_Min, EscapeHatch_CapPerTile;
-		public static string EscapeHatch_unitOfCap;
-
-		public static int TorpedoRoom_Min, TorpedoRoom_CapPerTile;
-		public static string TorpedoRoom_unitOfCap;
-
-
-		public static Room CreateRoomOfType (RoomType type, Sub inThisSub) {
+		public static Room CreateRoomOfType (RoomType type) {
 			switch (type) {
-
-
 				case RoomType.EngineRoom:
-					return new EngineRoom (type, inThisSub, EngineRoom_Min, EngineRoom_CapPerTile, EngineRoom_unitOfCap);
+					return new EngineRoom (type, inThisSub, getPropInt ("EngineRoom_Min"), getPropInt ("EngineRoom_CapPerTile"), getPropUnit ("EngineRoom_unitOfCap"), getPropUnit ("EngineRoom_resource"), getPropInt ("EngineRoom_reqRes"));
 				case RoomType.Generator:
-					return new Generator (type, inThisSub, Generator_Min, Generator_CapPerTile, Generator_unitOfCap);
+					return new Generator (type, inThisSub, getPropInt ("Generator_Min"), getPropInt ("Generator_CapPerTile"), getPropUnit ("Generator_unitOfCap"), getPropUnit ("Generator_resource"), getPropInt ("Generator_reqRes"));
 				case RoomType.Battery:
-					return new Battery (type, inThisSub, PumpRoom_Min, PumpRoom_CapPerTile, PumpRoom_unitOfCap);
+					return new Battery (type, inThisSub, getPropInt ("Battery_Min"), getPropInt ("Battery_CapPerTile"), getPropUnit ("Battery_unitOfCap"), getPropUnit ("Battery_resource"), getPropInt ("Battery_reqRes"));
 				case RoomType.Bridge:
-					return new Bridge (type, inThisSub, Bridge_Min, Bridge_CapPerTile, Bridge_unitOfCap);
+					return new Bridge (type, inThisSub, getPropInt ("Bridge_Min"), getPropInt ("Bridge_CapPerTile"), getPropUnit ("Bridge_unitOfCap"), getPropUnit ("Bridge_resource"), getPropInt ("Bridge_reqRes"));
 				case RoomType.Gallery:
-					return new Gallery (type, inThisSub, Gallery_Min, Gallery_CapPerTile, Gallery_unitOfCap);
+					return new Gallery (type, inThisSub, getPropInt ("Gallery_Min"), getPropInt ("Gallery_CapPerTile"), getPropUnit ("Gallery_unitOfCap"), getPropUnit ("Gallery_resource"), getPropInt ("Gallery_reqRes"));
 				case RoomType.Cabin:
-					return new Cabin (type, inThisSub, Cabin_Min, Cabin_CapPerTile, Cabin_unitOfCap);
+					return new Cabin (type, inThisSub, getPropInt ("Cabin_Min"), getPropInt ("Cabin_CapPerTile"), getPropUnit ("Cabin_unitOfCap"), getPropUnit ("Cabin_resource"), getPropInt ("Cabin_reqRes"));
 				case RoomType.Bunks:
-					return new Bunks (type, inThisSub, Bunks_Min, Bunks_CapPerTile, Bunks_unitOfCap);
+					return new Bunks (type, inThisSub, getPropInt ("Bunks_Min"), getPropInt ("Bunks_CapPerTile"), getPropUnit ("Bunks_unitOfCap"), getPropUnit ("Bunks_resource"), getPropInt ("Bunks_reqRes"));
 				case RoomType.Conn:
-					return new Conn (type, inThisSub, Conn_Min, Conn_CapPerTile, Conn_unitOfCap);
+					return new Conn (type, inThisSub, getPropInt ("Conn_Min"), getPropInt ("Conn_CapPerTile"), getPropUnit ("Conn_unitOfCap"), getPropUnit ("Conn_resource"), getPropInt ("Conn_reqRes"));
 				case RoomType.Sonar:
-					return new Sonar (type, inThisSub, Sonar_Min, Sonar_CapPerTile, Sonar_unitOfCap);
+					return new Sonar (type, inThisSub, getPropInt ("Sonar_Min"), getPropInt ("Sonar_CapPerTile"), getPropUnit ("Sonar_unitOfCap"), getPropUnit ("Sonar_resource"), getPropInt ("Sonar_reqRes"));
 				case RoomType.RadioRoom:
-					return new RadioRoom (type, inThisSub, RadioRoom_Min, RadioRoom_CapPerTile, RadioRoom_unitOfCap);
+					return new RadioRoom (type, inThisSub, getPropInt ("RadioRoom_Min"), getPropInt ("RadioRoom_CapPerTile"), getPropUnit ("RadioRoom_unitOfCap"), getPropUnit ("RadioRoom_resource"), getPropInt ("RadioRoom_reqRes"));
 				case RoomType.FuelTank:
-					return new FuelTank (type, inThisSub, FuelTank_Min, FuelTank_CapPerTile, FuelTank_unitOfCap);
+					return new FuelTank (type, inThisSub, getPropInt ("FuelTank_Min"), getPropInt ("FuelTank_CapPerTile"), getPropUnit ("FuelTank_unitOfCap"), getPropUnit ("FuelTank_resource"), getPropInt ("FuelTank_reqRes"));
 				case RoomType.PumpRoom:
-					return new PumpRoom (type, inThisSub, PumpRoom_Min, PumpRoom_CapPerTile, PumpRoom_unitOfCap);
+					return new PumpRoom (type, inThisSub, getPropInt ("PumpRoom_Min"), getPropInt ("PumpRoom_CapPerTile"), getPropUnit ("PumpRoom_unitOfCap"), getPropUnit ("PumpRoom_resource"), getPropInt ("PumpRoom_reqRes"));
 				case RoomType.StorageRoom:
-					return new StorageRoom (type, inThisSub, StorageRoom_Min, StorageRoom_CapPerTile, StorageRoom_unitOfCap);
+					return new StorageRoom (type, inThisSub, getPropInt ("StorageRoom_Min"), getPropInt ("StorageRoom_CapPerTile"), getPropUnit ("StorageRoom_unitOfCap"), getPropUnit ("StorageRoom_resource"), getPropInt ("StorageRoom_reqRes"));
 				case RoomType.EscapeHatch:
-					return new EscapeHatch (type, inThisSub, EscapeHatch_Min, EscapeHatch_CapPerTile, EscapeHatch_unitOfCap);
+					return new EscapeHatch (type, inThisSub, getPropInt ("EscapeHatch_Min"), getPropInt ("EscapeHatch_CapPerTile"), getPropUnit ("EscapeHatch_unitOfCap"), getPropUnit ("EscapeHatch_resource"), getPropInt ("EscapeHatch_reqRes"));
 				case RoomType.TorpedoRoom:
-					return new TorpedoRoom (type, inThisSub, TorpedoRoom_Min, TorpedoRoom_CapPerTile, TorpedoRoom_unitOfCap);
+					return new TorpedoRoom (type, inThisSub, getPropInt ("TorpedoRoom_Min"), getPropInt ("TorpedoRoom_CapPerTile"), getPropUnit ("TorpedoRoom_unitOfCap"), getPropUnit ("TorpedoRoom_resource"), getPropInt ("TorpedoRoom_reqRes"));
 
 				case RoomType.Empty:
-					return new EmptyRoom (type, inThisSub, 0, 0, "");
+					return new EmptyRoom (type, inThisSub, 0, 0, Units.None, Units.None, 0);
 
 				default:
-					throw new NotImplementedException ("ERROR: Room type " + type + " isn't implemented yet.");
+					throw new NotImplementedException ("ERROR: Room type " + type + "isn't implemented yet.");
 			//return null;
 			}
+		}
+
+		static int getPropInt (string key) {
+			if (inThisSub.RoomPropertiesInt.ContainsKey (key))
+				return inThisSub.RoomPropertiesInt [key];
+			else
+				throw new Exception ("Room property '" + key + "' isn't found.");
+		}
+
+		static Units getPropUnit (string key) {
+			if (inThisSub.RoomPropertiesUnits.ContainsKey (key))
+				return inThisSub.RoomPropertiesUnits [key];
+			else
+				throw new Exception ("Room property '" + key + "' isn't found.");
 		}
 	}
 }
