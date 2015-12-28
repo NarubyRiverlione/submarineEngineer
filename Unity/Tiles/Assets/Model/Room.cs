@@ -10,7 +10,7 @@ namespace Submarine.Model {
 		Battery = 3,
 		Bridge = 4,
 		Gallery = 5,
-		//	Mess = 6,
+		//	PumpRoom = 6,
 		Cabin = 7,
 		Bunks = 8,
 		Conn = 9,
@@ -27,15 +27,19 @@ namespace Submarine.Model {
 
 	abstract public class Room {
        
+		public Sub inSub { get; protected set; }
+		// needs reference to sub for layout validation
+
 		public RoomType TypeOfRoom { get; protected set; }
 
-		public int Size{ get { return TilesInRoom.Count (); } }
+		public int Size{ get { return coordinatesOfTilesInRoom.Count (); } }
 
 		public int MinimimValidSize { get; protected set; }
 
 		public string ValidationText { get; protected set; }
 
-		public List<Tile> TilesInRoom { get; protected set; }
+		//public List<Tile> TilesInRoom { get; protected set; }
+		public List<Point> coordinatesOfTilesInRoom;
 
 		public double CapacityPerTile { get; protected set; }
 
@@ -55,13 +59,14 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) {    // sub: to get info of the sub (dimensions)
+		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
 			TypeOfRoom = ofThisRoomType;
-			TilesInRoom = new List<Tile> ();
+			coordinatesOfTilesInRoom = new List<Point> ();
 			IsAccessable = true;
 			MinimimValidSize = minSize;
 			CapacityPerTile = capPerTile;
 			UnitName = unitOfCap;
+			inSub = sub;
 			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
 			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces";
 		}
@@ -74,23 +79,36 @@ namespace Submarine.Model {
 		}
 
 		public void AddTile (Tile addTile) {
-			TilesInRoom.Add (addTile);
+			//TilesInRoom.Add (addTile);
+			Point coord = new Point (addTile.X, addTile.Y);
+			coordinatesOfTilesInRoom.Add (coord);
 		}
 
 		public void RemoveTile (Tile removeTile) {
-			TilesInRoom.Remove (removeTile);
+			//TilesInRoom.Remove (removeTile);
+			Point coord = new Point (removeTile.X, removeTile.Y);
+			coordinatesOfTilesInRoom.Remove (coord);
 			// reset Tile (roomId, waalType,...)
-			removeTile.Reset ();
+			// removeTile.Reset ();
 		}
 
-		public void WarnTilesInRoomIfLayoutChanged (bool oldRoomLayoutValid) {
+		public void WarnTilesInRoomThatLayoutChanged (bool oldRoomLayoutValid) {
 			if (oldRoomLayoutValid != IsLayoutValid) {
 				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
-				foreach (Tile warnTile in TilesInRoom) {
+				foreach (Tile warnTile in GetTilesInAroom()) {
 					if (warnTile.TileChangedActions != null)
 						warnTile.TileChangedActions (warnTile);
-				}
+				}				
 			}
+		}
+
+		public List<Tile> GetTilesInAroom () {
+			List<Tile> tiles = new List<Tile> ();
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				Tile tile = inSub.GetTileAt (coord.x, coord.y);
+				tiles.Add (tile);
+			}
+			return tiles;
 		}
 
 

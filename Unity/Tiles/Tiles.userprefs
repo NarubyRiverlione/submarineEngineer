@@ -2,19 +2,19 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Submarine.cs">
     <Files>
-      <File FileName="Assets/Model/Submarine.cs" Line="333" Column="1" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="1" Column="1" />
       <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="87" Column="1" />
-      <File FileName="Assets/Model/Tile.cs" Line="50" Column="3" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="161" Column="14" />
+      <File FileName="Assets/Model/Submarine.cs" Line="332" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="91" Column="7" />
+      <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="333" column="29" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="370" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="334" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1034" offsetY="2057" expression="showTile.Y" liveUpdate="False" />
+    <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1031" offsetY="2027" expression="showTile.X" liveUpdate="False" />
+    <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1199" offsetY="2053" expression="showTile.WallType" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>
