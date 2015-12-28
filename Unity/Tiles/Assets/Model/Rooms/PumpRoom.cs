@@ -1,5 +1,5 @@
 ﻿namespace Submarine.Model {
-	public class BalastTank : Room {
+	public class PumpRoom : Room {
 		// public override RoomType TypeOfRoom { get { return RoomType.FuelTank; } }
 
 
@@ -10,7 +10,7 @@
 			}
 		}
 
-		public BalastTank (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) :
+		public PumpRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, string unitOfCap) :
 			base (ofThisRoomType, sub, minSize, capPerTile, unitOfCap) {
 			IsAccessable = false;
 		}

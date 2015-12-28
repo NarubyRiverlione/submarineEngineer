@@ -206,11 +206,11 @@ namespace Submarine.Model {
 		}
 		// set min tile size, capacity per tile and unit of capacity for each Room Type
 		private void SetRoomProperties () {
-			RoomFactory.EngineRoom_Min = 9;
+			RoomFactory.EngineRoom_Min = 12;
 			RoomFactory.EngineRoom_CapPerTile = 1000;
 			RoomFactory.EngineRoom_unitOfCap = "pk'";
 
-			RoomFactory.Generator_Min = 6;
+			RoomFactory.Generator_Min = 12;
 			RoomFactory.Generator_CapPerTile = 500;
 			RoomFactory.Generator_unitOfCap = "MW";
 
@@ -222,7 +222,7 @@ namespace Submarine.Model {
 			RoomFactory.Bridge_CapPerTile = 2;
 			RoomFactory.Bridge_unitOfCap = "crew";
 
-			RoomFactory.Gallery_Min = 2;
+			RoomFactory.Gallery_Min = 6;
 			RoomFactory.Gallery_CapPerTile = 1;
 			RoomFactory.Gallery_unitOfCap = "crew";
 
@@ -234,25 +234,25 @@ namespace Submarine.Model {
 			RoomFactory.Bunks_CapPerTile = 2;
 			RoomFactory.Bunks_unitOfCap = "crew";
 
-			RoomFactory.Conn_Min = 6;
+			RoomFactory.Conn_Min = 9;
 			RoomFactory.Conn_CapPerTile = 1;
 			RoomFactory.Conn_unitOfCap = "crew";
 
-			RoomFactory.Sonar_Min = 2;
+			RoomFactory.Sonar_Min = 4;
 			RoomFactory.Sonar_CapPerTile = 1;
 			RoomFactory.Sonar_unitOfCap = "crew";
 
-			RoomFactory.RadioRoom_Min = 2;
+			RoomFactory.RadioRoom_Min = 4;
 			RoomFactory.RadioRoom_CapPerTile = 1;
 			RoomFactory.RadioRoom_unitOfCap = "crew";
 
-			RoomFactory.FuelTank_Min = 6;
+			RoomFactory.FuelTank_Min = 9;
 			RoomFactory.FuelTank_CapPerTile = 1000;
 			RoomFactory.FuelTank_unitOfCap = "liters";
 
-			RoomFactory.BalastTank_Min = 4;
-			RoomFactory.BalastTank_CapPerTile = 1000;
-			RoomFactory.BalastTank_unitOfCap = "liters";
+			RoomFactory.PumpRoom_Min = 6;
+			RoomFactory.PumpRoom_CapPerTile = 1000;
+			RoomFactory.PumpRoom_unitOfCap = "liters";
 
 			RoomFactory.StorageRoom_Min = 4;
 			RoomFactory.StorageRoom_CapPerTile = 500;
@@ -262,7 +262,7 @@ namespace Submarine.Model {
 			RoomFactory.EscapeHatch_CapPerTile = 1;
 			RoomFactory.EscapeHatch_unitOfCap = "";
 
-			RoomFactory.TorpedoRoom_Min = 6;
+			RoomFactory.TorpedoRoom_Min = 12;
 			RoomFactory.TorpedoRoom_CapPerTile = 1;
 			RoomFactory.TorpedoRoom_unitOfCap = "torpedoes";
 
@@ -298,16 +298,22 @@ namespace Submarine.Model {
 					UnityEngine.Debug.LogError ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
-					bool newRoomValid = newRoom.IsLayoutValid;	// remember is room was (in)valid before adding this tile
-					foreach (Tile oldRoomTile in oldRoom.GetTilesInAroom()) {
+					// remember is room was (in)valid before adding this tile
+					bool newRoomValid = newRoom.IsLayoutValid;	
+
+					foreach (Point coord in oldRoom.coordinatesOfTilesInRoom) {
+						Tile oldRoomTile = GetTileAt (coord.x, coord.y);
+	
 						// change RoomID of each Tile in old room
 						oldRoomTile.RoomID = newRoomID;
 						// add Tiles to new room (no need to removed them form old room as old room will be destroyed)
 						newRoom.AddTile (oldRoomTile);
 					}
-					newRoom.WarnTilesInRoomThatLayoutChanged (newRoomValid);  // compare new valid layout
-																								 
-					RemoveRoomFromSubmarine (oldRoomID);   // remove old room form sub
+
+					// compare new valid layout
+					newRoom.WarnTilesInRoomThatLayoutChanged (newRoomValid);  
+					// remove old room form sub											 
+					RemoveRoomFromSubmarine (oldRoomID);  
 
 				}
 			}
@@ -320,23 +326,25 @@ namespace Submarine.Model {
 			}
 			else {
 				RoomType rebuildRoomType = rooms [roomID].TypeOfRoom;
-				List<Tile> remeberTilesOfTheRoom = rooms [roomID].GetTilesInAroom ();
-				// remove tiles in the old room (does also reset tile)
-				foreach (Tile rebuildTile in remeberTilesOfTheRoom) {
-					//Tile tileInSub = GetTileAt (rebuildTile.X, rebuildTile.Y);
 
+				List<Point> remeberCoordinatesOfTiles = rooms [roomID].coordinatesOfTilesInRoom;
+
+				// remove tiles in the old room (does also reset tile)
+				foreach (Point coordTeRemove in remeberCoordinatesOfTiles) {
+					Tile rebuildTile = GetTileAt (coordTeRemove.x, coordTeRemove.y);
 					//rooms [roomID].RemoveTile (rebuildTile);
 					rebuildTile.Reset ();
 				}
 				// remove the room so it can be rebuild
 				RemoveRoomFromSubmarine (roomID);
 				// rebuild room
-				foreach (Tile rebuildTile in remeberTilesOfTheRoom) {
+				foreach (Point coordToAdd in remeberCoordinatesOfTiles) {
+					Tile rebuildTile = GetTileAt (coordToAdd.x, coordToAdd.y);
 					AddTileToRoom (rebuildTile.X, rebuildTile.Y, rebuildRoomType);
 				}
 				// room is rebuilt, get new roomID
-				Tile oldTile = remeberTilesOfTheRoom [0];	// get X,Y coordinates so tile can be found in sub
-				int newRoomID = GetTileAt (oldTile.X, oldTile.Y).RoomID;
+				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in su
+				int newRoomID = GetTileAt (coordToGetRoomID.x, coordToGetRoomID.y).RoomID;
 				return rooms [newRoomID];
 			}
 		}

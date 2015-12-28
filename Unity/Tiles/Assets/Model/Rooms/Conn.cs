@@ -20,7 +20,8 @@
 				int stop_X_BridgeTower = inSub.startOfBridgeTower + inSub.lenghtOfBridgeTower;
 				int below_Y_BridgeTower = inSub.heightOfSub - inSub.heightOfBridgeTower - 1;
 
-				foreach (Tile checkTile in GetTilesInAroom()) {
+				foreach (Point coord in coordinatesOfTilesInRoom) {
+					Tile checkTile = inSub.GetTileAt (coord.x, coord.y);
 					if (checkTile.X > start_X_BridgeTower && checkTile.X <= stop_X_BridgeTower && checkTile.Y == below_Y_BridgeTower)
 						locationValid = true;
 				}

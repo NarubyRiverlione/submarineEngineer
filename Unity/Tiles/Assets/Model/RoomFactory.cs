@@ -39,8 +39,8 @@ namespace Submarine.Model {
 		public static int FuelTank_Min, FuelTank_CapPerTile;
 		public static string FuelTank_unitOfCap;
 
-		public static int BalastTank_Min, BalastTank_CapPerTile;
-		public static string BalastTank_unitOfCap;
+		public static int PumpRoom_Min, PumpRoom_CapPerTile;
+		public static string PumpRoom_unitOfCap;
 
 		public static int StorageRoom_Min, StorageRoom_CapPerTile;
 		public static string StorageRoom_unitOfCap;
@@ -61,7 +61,7 @@ namespace Submarine.Model {
 				case RoomType.Generator:
 					return new Generator (type, inThisSub, Generator_Min, Generator_CapPerTile, Generator_unitOfCap);
 				case RoomType.Battery:
-					return new Battery (type, inThisSub, BalastTank_Min, BalastTank_CapPerTile, BalastTank_unitOfCap);
+					return new Battery (type, inThisSub, PumpRoom_Min, PumpRoom_CapPerTile, PumpRoom_unitOfCap);
 				case RoomType.Bridge:
 					return new Bridge (type, inThisSub, Bridge_Min, Bridge_CapPerTile, Bridge_unitOfCap);
 				case RoomType.Gallery:
@@ -78,8 +78,8 @@ namespace Submarine.Model {
 					return new RadioRoom (type, inThisSub, RadioRoom_Min, RadioRoom_CapPerTile, RadioRoom_unitOfCap);
 				case RoomType.FuelTank:
 					return new FuelTank (type, inThisSub, FuelTank_Min, FuelTank_CapPerTile, FuelTank_unitOfCap);
-				case RoomType.BalastTank:
-					return new BalastTank (type, inThisSub, BalastTank_Min, BalastTank_CapPerTile, BalastTank_unitOfCap);
+				case RoomType.PumpRoom:
+					return new PumpRoom (type, inThisSub, PumpRoom_Min, PumpRoom_CapPerTile, PumpRoom_unitOfCap);
 				case RoomType.StorageRoom:
 					return new StorageRoom (type, inThisSub, StorageRoom_Min, StorageRoom_CapPerTile, StorageRoom_unitOfCap);
 				case RoomType.EscapeHatch:

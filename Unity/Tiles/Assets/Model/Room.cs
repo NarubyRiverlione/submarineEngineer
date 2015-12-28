@@ -10,14 +10,14 @@ namespace Submarine.Model {
 		Battery = 3,
 		Bridge = 4,
 		Gallery = 5,
-		//	PumpRoom = 6,
+		
 		Cabin = 7,
 		Bunks = 8,
 		Conn = 9,
 		Sonar = 10,
 		RadioRoom = 11,
 		FuelTank = 12,
-		BalastTank = 13,
+		PumpRoom = 13,
 		StorageRoom = 14,
 		EscapeHatch = 15,
 		TorpedoRoom = 16}
@@ -95,21 +95,14 @@ namespace Submarine.Model {
 		public void WarnTilesInRoomThatLayoutChanged (bool oldRoomLayoutValid) {
 			if (oldRoomLayoutValid != IsLayoutValid) {
 				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
-				foreach (Tile warnTile in GetTilesInAroom()) {
+				foreach (Point coord in coordinatesOfTilesInRoom) {
+					Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
 					if (warnTile.TileChangedActions != null)
 						warnTile.TileChangedActions (warnTile);
-				}				
-			}
+				}
+			}				
 		}
 
-		public List<Tile> GetTilesInAroom () {
-			List<Tile> tiles = new List<Tile> ();
-			foreach (Point coord in coordinatesOfTilesInRoom) {
-				Tile tile = inSub.GetTileAt (coord.x, coord.y);
-				tiles.Add (tile);
-			}
-			return tiles;
-		}
 
 
 	}

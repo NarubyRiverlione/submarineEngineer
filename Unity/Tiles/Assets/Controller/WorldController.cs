@@ -27,7 +27,7 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_Sonar;
 	public Sprite Tile_RadioRoom;
 	public Sprite Tile_FuelTank;
-	public Sprite Tile_BalastTank;
+	public Sprite Tile_PumpRoom;
 	public Sprite Tile_StorageRoom;
 	public Sprite Tile_EscapeHatch;
 	public Sprite Tile_TorpedoRoom;
@@ -131,8 +131,8 @@ public class WorldController : MonoBehaviour {
 			case RoomType.FuelTank:
 				renderer.sprite = Tile_FuelTank;
 				break;
-			case RoomType.BalastTank:
-				renderer.sprite = Tile_BalastTank;
+			case RoomType.PumpRoom:
+				renderer.sprite = Tile_PumpRoom;
 				break;
 			case RoomType.StorageRoom:
 				renderer.sprite = Tile_StorageRoom;
