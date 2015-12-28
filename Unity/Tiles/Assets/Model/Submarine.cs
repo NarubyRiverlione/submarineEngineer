@@ -260,7 +260,7 @@ namespace Submarine.Model {
 			RoomPropertiesUnits ["Bunks_resource"] = Units.food;
 			RoomPropertiesInt ["Bunks_reqRes"] = 2;
 
-			RoomPropertiesInt ["Conn_Min"] = 9;
+			RoomPropertiesInt ["Conn_Min"] = 8;
 			RoomPropertiesInt ["Conn_CapPerTile"] = 0;
 			RoomPropertiesUnits ["Conn_unitOfCap"] = Units.None;
 			RoomPropertiesUnits ["Conn_resource"] = Units.Crew;
@@ -300,19 +300,63 @@ namespace Submarine.Model {
 			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 0;
 			RoomPropertiesUnits ["EscapeHatch_unitOfCap"] = Units.None;
 			RoomPropertiesUnits ["EscapeHatch_resource"] = Units.None;
-			RoomPropertiesInt ["EscapeHatchreqRes"] = 0;
+			RoomPropertiesInt ["EscapeHatch_reqRes"] = 0;
 					
-			RoomPropertiesInt ["TorpedoRoom_Min"] = 12;
+			RoomPropertiesInt ["TorpedoRoom_Min"] = 16;
 			RoomPropertiesInt ["TorpedoRoom_CapPerTile"] = 1;
 			RoomPropertiesUnits ["TorpedoRoom_unitOfCap"] = Units.Torpedoes;
 			RoomPropertiesUnits ["TorpedoRoom_resource"] = Units.TorpedoMan;
-			RoomPropertiesInt ["TorpedoRoomreqRes"] = 1;
+			RoomPropertiesInt ["TorpedoRoom_reqRes"] = 1;
 
 		}
 
 		#endregion
 
 		#region Rooms
+
+		public string GetAllOutputs () {
+
+			SetAvailibleResources ();
+
+			Dictionary<Units,int> allResources = new Dictionary<Units, int> ();
+		
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				// add all outputs of seam room types
+				if (allResources.ContainsKey (room.UnitOfCapacity))
+					allResources [room.UnitOfCapacity] += room.Output;
+				else
+					allResources [room.UnitOfCapacity] = room.Output;
+			}
+			// create output string
+			string output = "";
+			foreach (var unitPair in allResources) {
+				output += unitPair.Value + " " + unitPair.Key + "\t";
+			}
+			return output;
+		}
+
+		private void SetAvailibleResources () {
+			// get all fuel
+			int availibleFuel = GetAllResourcesOfUnit (Units.liters_fuel);
+			// give fuel to all engineRooms
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.ResourceUnit == Units.liters_fuel)
+					room.CurrentResource = availibleFuel;
+			}
+		}
+
+
+		private int GetAllResourcesOfUnit (Units reqUnit) {
+			int resource = 0;
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.UnitOfCapacity == reqUnit)
+					resource += room.Output;
+			}
+			return resource;
+		}
 
 		private void AddRoomToSubmarine (Room addThisRoom) {
 			rooms.Add (_nextRoomID, addThisRoom);
@@ -323,10 +367,9 @@ namespace Submarine.Model {
 			rooms.Remove (RoomID);
 		}
 
-		public Room GetRoom (int RoomID) {
+		private Room GetRoom (int RoomID) {
 			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
-
 
 		private void MergeRooms (int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom (oldRoomID);
@@ -518,6 +561,30 @@ namespace Submarine.Model {
 			}
 		}
 
+		public RoomType GetRoomTypeOfTile (Tile ofThisTile) {
+			if (ofThisTile.RoomID == 0) {
+				// UnityEngine.Debug.WriteLine("Room at (" + ofThisTile.x + "," + ofThisTile.y + ") is not part of a room");
+				return RoomType.Empty;
+			}
+			else {
+				if (!rooms.ContainsKey (ofThisTile.RoomID)) {
+					throw new Exception ("Tile (" + ofThisTile.X + "," + ofThisTile.Y + ") " +
+					"has roomID " + ofThisTile.RoomID + ", but cannot be found in rooms inside sub ");
+				}
+				return rooms [ofThisTile.RoomID].TypeOfRoom;
+			}
+		}
+
+		public bool IsTilePartOfValidRoomLayout (Tile checkTile) {
+			if (checkTile.RoomID == 0) {
+				//UnityEngine.Debug.Log ("Title isn't part of a room, so it cannot check if it's layout is valid");
+				return false;
+			}
+			else {
+				return rooms [checkTile.RoomID].IsLayoutValid;
+			}
+		}
+
 
 		private void BuildWallsAroundTile (Tile checkAroundThisTile) {
 
@@ -588,31 +655,6 @@ namespace Submarine.Model {
 					MergeRooms (newRoomTile.RoomID, neigboreTile.RoomID);
 	
 				}
-			}
-		}
-
-
-		public RoomType GetRoomTypeOfTile (Tile ofThisTile) {
-			if (ofThisTile.RoomID == 0) {
-				// UnityEngine.Debug.WriteLine("Room at (" + ofThisTile.x + "," + ofThisTile.y + ") is not part of a room");
-				return RoomType.Empty;
-			}
-			else {
-				if (!rooms.ContainsKey (ofThisTile.RoomID)) {
-					throw new Exception ("Tile (" + ofThisTile.X + "," + ofThisTile.Y + ") " +
-					"has roomID " + ofThisTile.RoomID + ", but cannot be found in rooms inside sub ");
-				}
-				return rooms [ofThisTile.RoomID].TypeOfRoom;
-			}
-		}
-
-		public bool IsTilePartOfValidRoomLayout (Tile checkTile) {
-			if (checkTile.RoomID == 0) {
-				//UnityEngine.Debug.Log ("Title isn't part of a room, so it cannot check if it's layout is valid");
-				return false;
-			}
-			else {
-				return rooms [checkTile.RoomID].IsLayoutValid;
 			}
 		}
 

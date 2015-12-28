@@ -1,6 +1,6 @@
 ﻿using Submarine.Model;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class WorldController : MonoBehaviour {
 
@@ -32,12 +32,14 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_EscapeHatch;
 	public Sprite Tile_TorpedoRoom;
 
-
 	// Warning Sprites
 	public Sprite Tile_Warning;
 
 	// Wall spritesheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
+
+	// UI Top text
+	public Text UI_Resources_Text;
 
 	// Use this for initialization
 	void Start () {
@@ -53,7 +55,7 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		UI_Resources_Text.text = mySub.GetAllOutputs ();
 	}
 
 	public void CreateAllTileGameObjects () {

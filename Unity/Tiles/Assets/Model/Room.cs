@@ -64,40 +64,45 @@ namespace Submarine.Model {
 
 		public double CapacityPerTile { get; protected set; }
 
-		public int RoomCapacity {
+		public virtual int RoomCapacity {
 			get{ return (int)(Size * CapacityPerTile); }
 		}
-
-	
-
-		public int ReqCrew { get; private set; }
-
-		public int CurrentCrew { get; private set; }
-
-		public Units CrewUnit { get; private set; }
-
-		public int RoomCrewPreformance {
-			get{ return (int)(CurrentCrew / ReqCrew * 100); }
-		}
-
-		public int ReqResource { get; private set; }
-
-		public int CurrentResource { get; private set; }
-
-		public Units ResourceUnit { get; private set; }
-
-		public int RoomResourcePreformance {
-			get{ return (int)(CurrentResource / ReqResource * 100); }
-		}
-
-
-		public int Output { 
-			get{ return (int)(RoomCapacity * RoomResourcePreformance / 100); }
-		}
-
 		// current produced or available cargo
 		public Units UnitOfCapacity { get; protected set; }
 
+	
+
+		//		public int ReqCrew { get; private set; }
+		//
+		//		public int CurrentCrew { get; private set; }
+		//
+		//		public Units CrewUnit { get; private set; }
+		//
+		//		public int RoomCrewPreformance {
+		//			get{ return (int)(CurrentCrew / ReqCrew * 100); }
+		//		}
+
+		public int ReqResource { get; private set; }
+
+		public int CurrentResource { get; set; }
+
+		public Units ResourceUnit { get; private set; }
+
+
+		public int Output { 
+			get { // only output is layout is valid
+				if (IsLayoutValid && CurrentResource >= ReqResource)
+					return RoomCapacity;
+				else
+					return 0;
+			}
+		}
+
+		//		public string OutputText {  // only show output text is there is output (Bridge, Conn, Sonar, Radio, have no output atm)
+		//			get{ return UnitOfCapacity != Units.None ? "(" + TypeOfRoom + ") " + Output + " " + UnitOfCapacity : ""; }
+		//		}
+
+	
 
 		// unit (liter,..) of output and Capacity
 		public bool IsAccessable { get; protected set; }

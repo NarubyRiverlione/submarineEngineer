@@ -1,21 +1,19 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/RoomFactory.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Submarine.cs">
     <Files>
       <File FileName="Assets/Controller/MouseController.cs" Line="124" Column="2" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="185" Column="159" />
-      <File FileName="Assets/Model/Submarine.cs" Line="215" Column="33" />
-      <File FileName="Assets/Model/Room.cs" Line="128" Column="23" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="58" Column="1" />
+      <File FileName="Assets/Model/Submarine.cs" Line="329" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="96" Column="9" />
       <File FileName="Assets/Model/RoomFactory.cs" Line="61" Column="41" />
-      <File FileName="Assets/Model/Tile.cs" Line="51" Column="1" />
-      <File FileName="Assets/Model/Rooms/Conn.cs" Line="33" Column="123" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="190" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="186" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="192" column="1" />
       <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="188" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="190" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
