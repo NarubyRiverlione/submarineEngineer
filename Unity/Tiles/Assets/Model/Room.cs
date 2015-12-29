@@ -31,7 +31,7 @@ namespace Submarine.Model {
 		public Sub inSub { get; protected set; }
 		// needs reference to sub for layout validation
 		public RoomType TypeOfRoom { get; protected set; }
-		//public List<Tile> TilesInRoom { get; protected set; }
+	
 		public List<Point> coordinatesOfTilesInRoom;
 
 		public int Size{ get { return coordinatesOfTilesInRoom.Count (); } }
@@ -75,7 +75,7 @@ namespace Submarine.Model {
 			}
 		}
 
-		// unit (liter,..) of output and Capacity
+		
 		public bool IsAccessable { get; protected set; }
 
 

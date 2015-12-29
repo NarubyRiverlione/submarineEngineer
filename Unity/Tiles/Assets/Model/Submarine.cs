@@ -245,13 +245,13 @@ namespace Submarine.Model {
 			RoomPropertiesInt ["Bunks_CapPerTile"] = 2;
 
 			RoomPropertiesInt ["Conn_Min"] = 8;
-			RoomPropertiesInt ["Conn_CapPerTile"] = 0;
+			RoomPropertiesInt ["Conn_CapPerTile"] = 1;
 					
 			RoomPropertiesInt ["Sonar_Min"] = 4;
-			RoomPropertiesInt ["Sonar_CapPerTile"] = 0;
+			RoomPropertiesInt ["Sonar_CapPerTile"] = 1;
 					
 			RoomPropertiesInt ["RadioRoom_Min"] = 4;
-			RoomPropertiesInt ["RadioRoom_CapPerTile"] = 0;
+			RoomPropertiesInt ["RadioRoom_CapPerTile"] = 1;
 					
 			RoomPropertiesInt ["FuelTank_Min"] = 9;
 			RoomPropertiesInt ["FuelTank_CapPerTile"] = 1000;

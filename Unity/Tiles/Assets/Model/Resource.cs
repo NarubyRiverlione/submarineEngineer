@@ -19,6 +19,9 @@ namespace Submarine.Model {
 		Radioman,
 		Torpedoman,
 		Torpedoes,
+        Radio,
+        Sonar,
+        Ops,
 		None}
 
 	;

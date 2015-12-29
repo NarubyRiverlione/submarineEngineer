@@ -6,7 +6,7 @@ namespace Submarine.Model {
 
 		public override Units UnitOfCapacity {
 			get {
-				return Units.None;
+				return Units.Ops;
 			}
 		}
 
