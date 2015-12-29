@@ -18,6 +18,8 @@ public class MouseController : MonoBehaviour {
 
 	RoomType RoomTypeToBeBuild = RoomType.Empty;
 	Tile prevTileBelowMouse;
+	Vector3 prevMousePosition;
+	// remember where the mouse was so we can detect dragging
 
 	// Use this for initialization
 	void Start () {
@@ -28,11 +30,22 @@ public class MouseController : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+		Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+		// move camera
+		if (Input.GetMouseButton (1)) { // Right mouse button is held down
+			Vector3 diff = prevMousePosition - currentMousePosition;
+			diff.y = 0;
+			Camera.main.transform.Translate (diff);
+			currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition); // get updated mouse position
+		}
+		prevMousePosition = currentMousePosition; // remember where the mouse was so we can detect dragging 
+
+
 		if (world == null) { // sometimes the MouseController does an update before de World is created on start of the game
 			world = WorldController.instance;
 		}
 		else {
-			Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			
 			currentMousePosition.z = 0; // set Z to zero so mouse position isn't on the camera (and be clipped so it isn't visible)
 
 			// get tile below mouse
@@ -79,6 +92,18 @@ public class MouseController : MonoBehaviour {
 
 				}
 			}
+		}
+	}
+
+	// Set zoom  level
+	public void SetZoomLevel (int zoomLevel) {
+		if (zoomLevel == 1) {//reset camera
+			Camera.main.transform.position = new Vector3 (19.5f, 2, -20);
+			Camera.main.GetComponent<Camera> ().orthographicSize = 14;
+		}
+		else {
+			Camera.main.GetComponent<Camera> ().orthographicSize = 14 / zoomLevel;
+			Camera.main.transform.Translate (new Vector3 (0, zoomLevel, 0));
 		}
 	}
 
