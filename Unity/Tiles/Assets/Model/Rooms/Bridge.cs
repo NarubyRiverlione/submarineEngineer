@@ -1,16 +1,10 @@
-﻿namespace Submarine.Model {
-	public class Bridge : Room {
-		
+﻿using System.Collections.Generic;
 
+namespace Submarine.Model {
+	public class Bridge : Room {
 		public override Units UnitOfCapacity {
 			get {
 				return Units.None;
-			}
-		}
-
-		public override Units ResourceUnit {
-			get {
-				return Units.None; //TODO: change to Lookup for production build
 			}
 		}
 
@@ -20,7 +14,7 @@
 			}
 		}
 
-		public Bridge (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
+		public Bridge (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 		}
 	}
 }

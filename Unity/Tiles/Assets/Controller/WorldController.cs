@@ -219,7 +219,7 @@ public class WorldController : MonoBehaviour {
 			// now it's sure the Wall game object exist, update (or set) it's sprite
 			SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
 			//set sprite from wall sprite sheet
-			Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show wall type " + showTile.WallType);
+			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show wall type " + showTile.WallType);
 			render.sprite = WallSpriteSheet [showTile.WallType];
 			// show above Title = on the Tile_Warning sorting layer  						
 			render.sortingLayerName = "Walls";
@@ -229,7 +229,7 @@ public class WorldController : MonoBehaviour {
 				//Destroy (checkIfWallIsAlreadyOnScreen);
 				SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
 				//set sprite from wall sprite sheet
-				Debug.Log ("Remove all walls for  (" + showTile.X + "," + showTile.Y + ")");
+				//Debug.Log ("Remove all walls for  (" + showTile.X + "," + showTile.Y + ")");
 				render.sprite = WallSpriteSheet [15]; // no room = no walls
 			}
 			

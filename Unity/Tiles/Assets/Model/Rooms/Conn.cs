@@ -1,4 +1,6 @@
-﻿namespace Submarine.Model {
+﻿using System.Collections.Generic;
+
+namespace Submarine.Model {
 	public class Conn : Room {
 		
 
@@ -7,13 +9,6 @@
 				return Units.None;
 			}
 		}
-
-		public override Units ResourceUnit {
-			get {
-				return Units.Officers;
-			}
-		}
-
 
 	
 		public override bool IsLayoutValid {
@@ -36,7 +31,7 @@
 			}
 		}
 
-		public Conn (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
+		public Conn (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 			
 			ValidationText = base.ValidationText + " and must be connected to the Bridge.";
 		}

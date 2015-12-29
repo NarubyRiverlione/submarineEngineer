@@ -48,6 +48,7 @@
      <Compile Include="Assets\Controller\MouseController.cs" />
      <Compile Include="Assets\Controller\WorldController.cs" />
      <Compile Include="Assets\Model\Point.cs" />
+     <Compile Include="Assets\Model\Resource.cs" />
      <Compile Include="Assets\Model\Room.cs" />
      <Compile Include="Assets\Model\RoomFactory.cs" />
      <Compile Include="Assets\Model\Rooms\Battery.cs" />

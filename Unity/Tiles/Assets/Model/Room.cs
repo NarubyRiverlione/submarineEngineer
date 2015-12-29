@@ -24,26 +24,7 @@ namespace Submarine.Model {
 
 	;
 
-	public enum Units {
-		pks,
-		MWs,
-		AH,
-		liters_fuel,
-		liters_pump,
-		food,
-		tins,
-		Engineers,
-		Cook,
-		Crew,
-		Officers,
-		Lookouts,
-		Sonarman,
-		Radioman,
-		Torpedoman,
-		Torpedoes,
-		None}
 
-	;
 
 	abstract public class Room {
        
@@ -70,36 +51,13 @@ namespace Submarine.Model {
 		// current produced or available cargo
 		public abstract Units UnitOfCapacity { get; }
 
-	
-
-		//		public int ReqCrew { get; private set; }
-		//
-		//		public int CurrentCrew { get; private set; }
-		//
-		//		public Units CrewUnit { get; private set; }
-		//
-		//		public int RoomCrewPreformance {
-		//			get{ return (int)(CurrentCrew / ReqCrew * 100); }
-		//		}
-
-		public int ReqResource { get; private set; }
-
-		public int CurrentResource { 
-			get {
-				if (inSub != null && ResourceUnit != Units.None)
-					return inSub.GetAllOutputOfUnit (ResourceUnit);
-				else
-					return 0;
-			}
-		}
-
-		public abstract Units ResourceUnit { get; }
+		public List<Resource> NeededResources { get; protected set; }
 
 		bool prevResourcesAvailable;
 		// previous state of resources needs te be remembered so a change in resource supply can be detected = tile needs redrawing
 		public bool ResourcesAvailable {
 			get {
-				bool newResAv = CurrentResource >= ReqResource;
+				bool newResAv = AllResourcesAreAvailable (); //CurrentResource >= ReqResource;
 				if (prevResourcesAvailable != newResAv) {
 					prevResourcesAvailable = newResAv;
 					WarnTilesOfChange ();
@@ -117,12 +75,6 @@ namespace Submarine.Model {
 			}
 		}
 
-		//		public string OutputText {  // only show output text is there is output (Bridge, Conn, Sonar, Radio, have no output atm)
-		//			get{ return UnitOfCapacity != Units.None ? "(" + TypeOfRoom + ") " + Output + " " + UnitOfCapacity : ""; }
-		//		}
-
-	
-
 		// unit (liter,..) of output and Capacity
 		public bool IsAccessable { get; protected set; }
 
@@ -130,21 +82,28 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
+		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) {    // sub: to get info of the sub (dimensions) for extra layout validation of some room types
 			TypeOfRoom = ofThisRoomType;
 			coordinatesOfTilesInRoom = new List<Point> ();
 			IsAccessable = true;
 			MinimimValidSize = minSize;
 			CapacityPerTile = capPerTile;
 			inSub = sub;
-			ReqResource = reqRes;
+			NeededResources = reqRes;
 
 			prevResourcesAvailable = false;
 
 			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
-			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces";
-			if (ReqResource != 0)
-				ValidationText += " and " + ReqResource + " " + ResourceUnit + " to be operational";
+			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " tiles";
+			if (NeededResources != null) {
+				foreach (Resource resouce in NeededResources) {
+					ValidationText += " and " + resouce.amount + " " + resouce.unit;
+				}
+				ValidationText += " to be operational";
+			}
+				
+			if (UnitOfCapacity != Units.None)
+				ValidationText += ", output will be  " + capPerTile + " " + UnitOfCapacity + " per tile";
 		}
 
 		#endregion
@@ -181,6 +140,25 @@ namespace Submarine.Model {
 				if (warnTile.TileChangedActions != null)
 					warnTile.TileChangedActions (warnTile);
 			}
+		}
+
+		private bool AllResourcesAreAvailable () {
+			bool AllAvailable = true; // asume all resouces are available so 1 not available resoucre will detected in the for each search
+			if (NeededResources != null) {
+				foreach (Resource resource in NeededResources) {
+					if (inSub != null && resource.unit != Units.None) {
+						int resouceAvailable = inSub.GetAllOutputOfUnit (resource.unit);
+						if (resouceAvailable < resource.amount)
+							AllAvailable = false;
+					}
+				}
+			}
+			return AllAvailable;
+		}
+
+		public int GetResouceNeeded (Units reqUnit) {
+			Resource foundResource = NeededResources.Where (res => res.unit == reqUnit).FirstOrDefault ();
+			return foundResource != null ? foundResource.amount : 0;
 		}
 	}
 }

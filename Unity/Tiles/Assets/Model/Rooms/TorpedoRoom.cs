@@ -1,20 +1,13 @@
-﻿namespace Submarine.Model {
+﻿using System.Collections.Generic;
+
+namespace Submarine.Model {
 	public class TorpedoRoom : Room {
 		
-
 		public override Units UnitOfCapacity {
 			get {
 				return Units.Torpedoes;
 			}
 		}
-
-		public override Units ResourceUnit {
-			get {
-				return Units.Torpedoman;
-			}
-		}
-
-
 
 		public override bool IsLayoutValid {
 			get {
@@ -22,7 +15,7 @@
 			}
 		}
 
-		public TorpedoRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
+		public TorpedoRoom (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 			IsAccessable = false;
 		}
 	}

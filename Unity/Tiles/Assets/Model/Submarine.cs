@@ -57,6 +57,7 @@ namespace Submarine.Model {
 
 		public Dictionary<string,int> RoomPropertiesInt { get; private set; }
 
+		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
 
 		#region SAVE / LOAD
 
@@ -85,6 +86,7 @@ namespace Submarine.Model {
 		public void Save (string fileName) {
 			// save submarine
 			string jsonStringOfSub = Serialize (typeof(Sub), this);
+
 			// save tiles
 			List<Tile> allTiles = new List<Tile> ();         // convert 2D array to List
 			for (int x = 0; x < lengthOfSub; x++) {
@@ -93,6 +95,9 @@ namespace Submarine.Model {
 				}
 			}
 			string jsonStringOfAllTitles = Serialize (typeof(List<Tile>), allTiles);
+
+			// save room resources
+
 
 
 			File.WriteAllText (fileName, jsonStringOfSub);
@@ -119,6 +124,10 @@ namespace Submarine.Model {
 			smallerTailUpper = loadedSub.smallerTailUpper;
 
 			_nextRoomID = loadedSub._nextRoomID;
+
+			// set to loaded dictionaries
+			RoomPropertiesInt = loadedSub.RoomPropertiesInt;
+			RoomPropertiesReqRes = loadedSub.RoomPropertiesReqRes;
 
 			// load all tiles (2D array not supported,,needs conversion)
 			_tile = new Tile[lengthOfSub, heightOfSub]; // reset all old tiles
@@ -159,6 +168,8 @@ namespace Submarine.Model {
 
 			// set room properties 
 			SetRoomProperties ();
+			// set room resources needs
+			SetRoomResoucresNeeds ();
 
 			// set tiles around tail and tower as unavailable for building, create Tower
 			CreateSub ();
@@ -210,71 +221,81 @@ namespace Submarine.Model {
 		// set min tile size, capacity per tile and unit of capacity for each Room Type
 		private void SetRoomProperties () {
 			RoomFactory.inThisSub = this;
-
 			RoomPropertiesInt = new Dictionary<string, int> ();
-
 
 			RoomPropertiesInt ["EngineRoom_Min"] = 12;
 			RoomPropertiesInt ["EngineRoom_CapPerTile"] = 1000;
-			RoomPropertiesInt ["EngineRoom_reqRes"] = 10;
-
 
 			RoomPropertiesInt ["Generator_Min"] = 12;
 			RoomPropertiesInt ["Generator_CapPerTile"] = 500;
-			RoomPropertiesInt ["Generator_reqRes"] = 750;
 					
 			RoomPropertiesInt ["Battery_Min"] = 10;
 			RoomPropertiesInt ["Battery_CapPerTile"] = 50;
-			RoomPropertiesInt ["Battery_reqRes"] = 500;
 					
 			RoomPropertiesInt ["Bridge_Min"] = 4;
 			RoomPropertiesInt ["Bridge_CapPerTile"] = 0;
-			RoomPropertiesInt ["Bridge_reqRes"] = 2;
 
 			RoomPropertiesInt ["Gallery_Min"] = 6;
 			RoomPropertiesInt ["Gallery_CapPerTile"] = 5;
-			RoomPropertiesInt ["Gallery_reqRes"] = 5;
 					
 			RoomPropertiesInt ["Cabin_Min"] = 2;
 			RoomPropertiesInt ["Cabin_CapPerTile"] = 1;
-			RoomPropertiesInt ["Cabin_reqRes"] = 1;
 					
 			RoomPropertiesInt ["Bunks_Min"] = 6;
 			RoomPropertiesInt ["Bunks_CapPerTile"] = 2;
-			RoomPropertiesInt ["Bunks_reqRes"] = 2;
 
 			RoomPropertiesInt ["Conn_Min"] = 8;
 			RoomPropertiesInt ["Conn_CapPerTile"] = 0;
-			RoomPropertiesInt ["Conn_reqRes"] = 1;
 					
 			RoomPropertiesInt ["Sonar_Min"] = 4;
 			RoomPropertiesInt ["Sonar_CapPerTile"] = 0;
-			RoomPropertiesInt ["Sonar_reqRes"] = 1;
 					
 			RoomPropertiesInt ["RadioRoom_Min"] = 4;
 			RoomPropertiesInt ["RadioRoom_CapPerTile"] = 0;
-			RoomPropertiesInt ["RadioRoom_reqRes"] = 1;
 					
 			RoomPropertiesInt ["FuelTank_Min"] = 9;
 			RoomPropertiesInt ["FuelTank_CapPerTile"] = 1000;
-			RoomPropertiesInt ["FuelTank_reqRes"] = 0;
 					
 			RoomPropertiesInt ["PumpRoom_Min"] = 6;
 			RoomPropertiesInt ["PumpRoom_CapPerTile"] = 1000;
-			RoomPropertiesInt ["PumpRoom_reqRes"] = 1200;
 					
 			RoomPropertiesInt ["StorageRoom_Min"] = 4;
 			RoomPropertiesInt ["StorageRoom_CapPerTile"] = 100;
-			RoomPropertiesInt ["StorageRoom_reqRes"] = 0;
-					
+				
 			RoomPropertiesInt ["EscapeHatch_Min"] = 2;
 			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 0;
-			RoomPropertiesInt ["EscapeHatch_reqRes"] = 0;
 					
 			RoomPropertiesInt ["TorpedoRoom_Min"] = 20;
 			RoomPropertiesInt ["TorpedoRoom_CapPerTile"] = 1;
-			RoomPropertiesInt ["TorpedoRoom_reqRes"] = 1;
+		}
 
+		private void SetRoomResoucresNeeds () {
+			RoomPropertiesReqRes = new Dictionary<RoomType,List<Resource>> ();
+
+			RoomPropertiesReqRes [RoomType.EngineRoom] = new List<Resource> {
+				{ new Resource (Units.liters_fuel, 1000) },
+				{ new Resource (Units.Engineers, 1) }
+			};
+
+			RoomPropertiesReqRes [RoomType.Generator] = new List<Resource> {
+				{ new Resource (Units.pks, 2000) },
+				{ new Resource (Units.Engineers, 1) }
+			};
+			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 1500) } };
+			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Lookouts, 2) } };
+			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> { { new Resource (Units.tins, 30) } };
+			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 1) } };
+			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 6) } };
+			RoomPropertiesReqRes [RoomType.Conn] = new List<Resource> {
+				{ new Resource (Units.Officers, 2) },
+				{ new Resource (Units.Crew, 4) }
+			};
+			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1) } };
+			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1) } };
+			RoomPropertiesReqRes [RoomType.FuelTank] = new List<Resource> ();
+			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_pump, 100) } };
+			RoomPropertiesReqRes [RoomType.StorageRoom] = new List<Resource> ();
+			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { { new Resource (Units.Torpedoman, 4) } };
 		}
 
 		#endregion
@@ -296,8 +317,8 @@ namespace Submarine.Model {
 			int resource = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
-				if (room.ResourceUnit == reqUnit)
-					resource += room.ReqResource;
+				if (room.NeededResources != null)
+					resource += room.GetResouceNeeded (reqUnit);
 			}
 			return resource;
 		}
@@ -383,11 +404,11 @@ namespace Submarine.Model {
 
 		public Tile GetTileAt (int x, int y) {
 			if (x > lengthOfSub - 1 || x < 0) {
-				Debug.WriteLine ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
+				//UnityEngine.Debug.LogError ("ERROR: get Tile x (" + x + ")is outside length (" + (lengthOfSub - 1) + ") of submarine");
 				return null;
 			}
 			if (y > heightOfSub - 1 || y < 0) {
-				Debug.WriteLine ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
+				//UnityEngine.Debug.LogError ("ERROR: get Tile x (" + y + ")is outside height (" + (heightOfSub - 1) + ") of submarine");
 				return null;
 			}
 
@@ -409,7 +430,7 @@ namespace Submarine.Model {
 				}
 				else {
 					if (newRoomTile.RoomID != 0) {
-						UnityEngine.Debug.Log ("Already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
+						//UnityEngine.Debug.Log ("Already in the " + GetRoomTypeOfTile (newRoomTile) + " room (" + newRoomTile.RoomID + "), remove me first");
 					}
 					else {
 						Tile checkTile;
@@ -476,7 +497,7 @@ namespace Submarine.Model {
 				Room removeFromThisRoom = GetRoom (roomID);
 				
 				if (removeFromThisRoom == null) {
-					UnityEngine.Debug.Log ("Tile doesn't belong to a room");
+					//UnityEngine.Debug.Log ("Tile doesn't belong to a room");
 				}
 				else {
 					// remember layout validation before removing tile
@@ -533,7 +554,7 @@ namespace Submarine.Model {
 			if (checkTile.RoomID == 0)
 				return false;
 			
-			if (rooms [checkTile.RoomID].ResourceUnit != Units.None)
+			if (rooms [checkTile.RoomID].NeededResources != null)
 				return rooms [checkTile.RoomID].ResourcesAvailable;
 			else {
 				return true; // no resources needs for this room = requirments always ok

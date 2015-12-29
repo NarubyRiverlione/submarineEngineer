@@ -56,10 +56,10 @@ public class MouseController : MonoBehaviour {
 						cursorBuilder.SetActive (false);
 						cursorDestroyer.SetActive (true);
 					}
-					Debug.Log ("Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + "), part of room: "
-					+ world.mySub.GetRoomTypeOfTile (tileBelowMouse)
-					+ "(" + tileBelowMouse.RoomID + ")"
-					+ " wall type: " + tileBelowMouse.WallType);
+//					Debug.Log ("Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + "), part of room: "
+//					+ world.mySub.GetRoomTypeOfTile (tileBelowMouse)
+//					+ "(" + tileBelowMouse.RoomID + ")"
+//					+ " wall type: " + tileBelowMouse.WallType);
 				}
 				else {
 					// hide if cursor isn't on a tile

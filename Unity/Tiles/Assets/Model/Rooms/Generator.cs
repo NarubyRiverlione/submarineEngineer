@@ -1,4 +1,6 @@
-﻿namespace Submarine.Model {
+﻿using System.Collections.Generic;
+
+namespace Submarine.Model {
 	public class Generator : Room {
 		
 
@@ -8,13 +10,6 @@
 			}
 		}
 
-		public override Units ResourceUnit {
-			get {
-				return Units.pks;
-			}
-		}
-
-
 
 		public override bool IsLayoutValid {
 			get {
@@ -22,7 +17,7 @@
 			}
 		}
 
-		public Generator (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
+		public Generator (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 			IsAccessable = false;
 		}
 	}

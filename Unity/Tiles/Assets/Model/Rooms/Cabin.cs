@@ -1,4 +1,6 @@
-﻿namespace Submarine.Model {
+﻿using System.Collections.Generic;
+
+namespace Submarine.Model {
 	public class Cabin : Room {
 		
 
@@ -8,14 +10,6 @@
 			}
 		}
 
-		public override Units ResourceUnit {
-			get {
-				return Units.food;
-			}
-		}
-
-
-
 
 		public override bool IsLayoutValid {
 			get {
@@ -23,7 +17,7 @@
 			}
 		}
 
-		public Cabin (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, int reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
+		public Cabin (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
 		}
 	}
 }
