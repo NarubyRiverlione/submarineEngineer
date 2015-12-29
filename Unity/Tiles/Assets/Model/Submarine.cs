@@ -282,17 +282,17 @@ namespace Submarine.Model {
 		#region Rooms
 
 		public string GetAllOutputs () {
-
-		
 			Dictionary<Units,int> allResources = new Dictionary<Units, int> ();
 		
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
-				// add all outputs of seam room types
-				if (allResources.ContainsKey (room.UnitOfCapacity))
-					allResources [room.UnitOfCapacity] += room.Output;
-				else
-					allResources [room.UnitOfCapacity] = room.Output;
+				// add all outputs of same room types (don't look at rooms that don't need resources)
+				if (room.ResourceUnit != Units.None) {
+					if (allResources.ContainsKey (room.UnitOfCapacity))
+						allResources [room.UnitOfCapacity] += room.Output;
+					else
+						allResources [room.UnitOfCapacity] = room.Output;
+				}
 			}
 			// create output string
 			string output = "";
@@ -539,6 +539,17 @@ namespace Submarine.Model {
 			}
 		}
 
+		public bool IsTilePartOfRoomWithResources (Tile checkTile) {
+			if (checkTile.RoomID == 0)
+				return false;
+			
+			if (rooms [checkTile.RoomID].ResourceUnit != Units.None)
+				return rooms [checkTile.RoomID].ResourcesAvailable;
+			else {
+				return true; // no resources needs for this room = requirments always ok
+			}
+
+		}
 
 		private void BuildWallsAroundTile (Tile checkAroundThisTile) {
 

@@ -10,7 +10,7 @@
 
 		public override Units ResourceUnit {
 			get {
-				return Units.Crew;
+				return Units.None; //TODO: change to Lookup for production build
 			}
 		}
 

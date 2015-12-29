@@ -33,7 +33,8 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_TorpedoRoom;
 
 	// Warning Sprites
-	public Sprite Tile_Warning;
+	public Sprite Warning_ToSmall;
+	public Sprite Waring_NoResources;
 
 	// Wall spritesheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
@@ -156,7 +157,7 @@ public class WorldController : MonoBehaviour {
 		// check for warnings (valid layout)
 		GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
 		if (showTile.RoomID != 0) {
-			var layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
+
 			if (checkIfWarningAlreadyOnScreen == null) {
 				// create warning game object now		
 				checkIfWarningAlreadyOnScreen = new GameObject ();
@@ -172,9 +173,16 @@ public class WorldController : MonoBehaviour {
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sortingLayerName = "Warnings";
 			}
 			// now it's sure the Wall game object exist, update (or set) it's sprite
+
+			bool resourceAvailable = mySub.IsTilePartOfRoomWithResources (showTile);
+			if (!resourceAvailable)
+				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Waring_NoResources;
+			
+			bool layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
 			if (!layoutValid)
-				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Warning;
-			else
+				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Warning_ToSmall;
+			
+			if (resourceAvailable && layoutValid)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
 			
 		}

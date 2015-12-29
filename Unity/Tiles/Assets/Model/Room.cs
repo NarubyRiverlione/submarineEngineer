@@ -95,10 +95,22 @@ namespace Submarine.Model {
 
 		public abstract Units ResourceUnit { get; }
 
+		bool prevResourcesAvailable;
+		// previous state of resources needs te be remembered so a change in resource supply can be detected = tile needs redrawing
+		public bool ResourcesAvailable {
+			get {
+				bool newResAv = CurrentResource >= ReqResource;
+				if (prevResourcesAvailable != newResAv) {
+					prevResourcesAvailable = newResAv;
+					WarnTilesOfChange ();
+				}	
+				return newResAv;
+			} 
+		}
 
 		public int Output { 
 			get { // only output is layout is valid
-				if (IsLayoutValid && CurrentResource >= ReqResource)
+				if (IsLayoutValid && ResourcesAvailable)
 					return RoomCapacity;
 				else
 					return 0;
@@ -126,6 +138,8 @@ namespace Submarine.Model {
 			CapacityPerTile = capPerTile;
 			inSub = sub;
 			ReqResource = reqRes;
+
+			prevResourcesAvailable = false;
 
 			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
 			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " spaces";
@@ -157,15 +171,16 @@ namespace Submarine.Model {
 		public void WarnTilesInRoomThatLayoutChanged (bool oldRoomLayoutValid) {
 			if (oldRoomLayoutValid != IsLayoutValid) {
 				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
-				foreach (Point coord in coordinatesOfTilesInRoom) {
-					Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
-					if (warnTile.TileChangedActions != null)
-						warnTile.TileChangedActions (warnTile);
-				}
+				WarnTilesOfChange ();
 			}				
 		}
 
-
-
+		private void WarnTilesOfChange () {
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
+				if (warnTile.TileChangedActions != null)
+					warnTile.TileChangedActions (warnTile);
+			}
+		}
 	}
 }
