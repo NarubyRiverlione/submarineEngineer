@@ -223,8 +223,8 @@ namespace Submarine.Model {
 			RoomPropertiesInt ["Generator_CapPerTile"] = 500;
 			RoomPropertiesInt ["Generator_reqRes"] = 750;
 					
-			RoomPropertiesInt ["Battery_Min"] = 8;
-			RoomPropertiesInt ["Battery_CapPerTile"] = 500;
+			RoomPropertiesInt ["Battery_Min"] = 10;
+			RoomPropertiesInt ["Battery_CapPerTile"] = 50;
 			RoomPropertiesInt ["Battery_reqRes"] = 500;
 					
 			RoomPropertiesInt ["Bridge_Min"] = 4;
@@ -271,7 +271,7 @@ namespace Submarine.Model {
 			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 0;
 			RoomPropertiesInt ["EscapeHatch_reqRes"] = 0;
 					
-			RoomPropertiesInt ["TorpedoRoom_Min"] = 16;
+			RoomPropertiesInt ["TorpedoRoom_Min"] = 20;
 			RoomPropertiesInt ["TorpedoRoom_CapPerTile"] = 1;
 			RoomPropertiesInt ["TorpedoRoom_reqRes"] = 1;
 
@@ -281,33 +281,23 @@ namespace Submarine.Model {
 
 		#region Rooms
 
-		public string GetAllOutputs () {
-			Dictionary<Units,int> allResources = new Dictionary<Units, int> ();
-		
+
+		public int GetAllOutputOfUnit (Units outputUnit) {
+			int output = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
-				// add all outputs of same room types (don't look at rooms that don't need resources)
-				if (room.ResourceUnit != Units.None) {
-					if (allResources.ContainsKey (room.UnitOfCapacity))
-						allResources [room.UnitOfCapacity] += room.Output;
-					else
-						allResources [room.UnitOfCapacity] = room.Output;
-				}
-			}
-			// create output string
-			string output = "";
-			foreach (var unitPair in allResources) {
-				output += unitPair.Value + " " + unitPair.Key + "\t";
+				if (room.UnitOfCapacity == outputUnit)
+					output += room.Output;
 			}
 			return output;
 		}
 
-		public int GetAllResourcesOfUnit (Units reqUnit) {
+		public int GetAllNeededResourcesOfUnit (Units reqUnit) {
 			int resource = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
-				if (room.UnitOfCapacity == reqUnit)
-					resource += room.Output;
+				if (room.ResourceUnit == reqUnit)
+					resource += room.ReqResource;
 			}
 			return resource;
 		}

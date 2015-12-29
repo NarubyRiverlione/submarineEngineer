@@ -35,11 +35,11 @@ namespace Submarine.Model {
 		Engineers,
 		Cook,
 		Crew,
-		Officer,
+		Officers,
 		Lookouts,
 		Sonarman,
 		Radioman,
-		TorpedoMan,
+		Torpedoman,
 		Torpedoes,
 		None}
 
@@ -87,7 +87,7 @@ namespace Submarine.Model {
 		public int CurrentResource { 
 			get {
 				if (inSub != null && ResourceUnit != Units.None)
-					return inSub.GetAllResourcesOfUnit (ResourceUnit);
+					return inSub.GetAllOutputOfUnit (ResourceUnit);
 				else
 					return 0;
 			}

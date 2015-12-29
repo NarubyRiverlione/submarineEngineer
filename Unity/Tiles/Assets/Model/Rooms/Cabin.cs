@@ -4,7 +4,7 @@
 
 		public override Units UnitOfCapacity {
 			get {
-				return Units.Officer;
+				return Units.Officers;
 			}
 		}
 

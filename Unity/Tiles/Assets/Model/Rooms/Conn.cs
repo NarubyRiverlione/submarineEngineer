@@ -10,7 +10,7 @@
 
 		public override Units ResourceUnit {
 			get {
-				return Units.Officer;
+				return Units.Officers;
 			}
 		}
 

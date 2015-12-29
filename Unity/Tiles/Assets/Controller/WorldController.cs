@@ -1,6 +1,7 @@
 ﻿using Submarine.Model;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class WorldController : MonoBehaviour {
 
@@ -39,9 +40,6 @@ public class WorldController : MonoBehaviour {
 	// Wall spritesheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
 
-	// UI Top text
-	public Text UI_Resources_Text;
-
 	// Use this for initialization
 	void Start () {
 		instance = this;
@@ -56,7 +54,8 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		UI_Resources_Text.text = mySub.GetAllOutputs ();
+		UpdateResourceLabels ();
+
 	}
 
 	public void CreateAllTileGameObjects () {
@@ -92,6 +91,15 @@ public class WorldController : MonoBehaviour {
 			}
 		}
 	}
+
+	// get Tile at x,y in World
+	public Tile GetTileAtWorldCoordinates (Vector3 coord) {
+		int x = Mathf.FloorToInt (coord.x);
+		int y = Mathf.FloorToInt (coord.y);
+
+		return mySub != null ? mySub.GetTileAt (x, y) : null;
+	}
+
 
 	void UpdateTileSprite (Tile showTile, GameObject gameObjectOfTitle) {
 		SpriteRenderer renderer = gameObjectOfTitle.GetComponent<SpriteRenderer> ();
@@ -229,12 +237,26 @@ public class WorldController : MonoBehaviour {
 
 	}
 
-	// get Tile at x,y in World
-	public Tile GetTileAtWorldCoordinates (Vector3 coord) {
-		int x = Mathf.FloorToInt (coord.x);
-		int y = Mathf.FloorToInt (coord.y);
+	void UpdateResourceLabels () {
+		foreach (Units resourceUnit in Enum.GetValues(typeof(Units))) {
+			if (resourceUnit != Units.None && resourceUnit != Units.liters_pump) { //TODO: make label for liter pump
+				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
+				if (resourceGameObject == null) {
+					Debug.LogError ("ERROR cannot find resource label in UI for :" + resourceUnit);
+				}
+				else {
+					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
+					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
+					// show text (available / needed)
+					Text resourceText = resourceGameObject.GetComponent<Text> ();
+					resourceText.text = outputCount.ToString () + " / " + neededCount.ToString ();
+					// not enough resources = show text in red
+					resourceText.color = neededCount > outputCount ? Color.red : Color.white;
 
-		return mySub != null ? mySub.GetTileAt (x, y) : null;
+
+				}
+			}
+		}
 	}
 
 }

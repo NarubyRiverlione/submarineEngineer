@@ -10,7 +10,7 @@
 
 		public override Units ResourceUnit {
 			get {
-				return Units.TorpedoMan;
+				return Units.Torpedoman;
 			}
 		}
 

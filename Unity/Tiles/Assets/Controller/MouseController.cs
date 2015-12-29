@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Submarine.Model;
+
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 
 public class MouseController : MonoBehaviour {
@@ -106,25 +108,28 @@ public class MouseController : MonoBehaviour {
 	// Save sub
 	public void SaveSub () {
 		UI_StatusText.text = "Saving submarine....";
-		string filename = UnityEditor.EditorUtility.SaveFilePanel ("Saving submarine", "", "My Submarine", "json");
-		world.mySub.Save (filename);
-		UI_StatusText.text = "Submarine saved.";
+		string filename = EditorUtility.SaveFilePanel ("Saving submarine", "", "My Submarine", "json");
+		if (filename != null) {
+			world.mySub.Save (filename);
+			UI_StatusText.text = "Submarine saved.";
+		}
 	}
 
 	// Load sub
 	public void LoadSub () {
 		UI_StatusText.text = "Loading submarine....";
-		string filename = UnityEditor.EditorUtility.OpenFilePanel ("Saving submarine", "", "json");
+		string filename = EditorUtility.OpenFilePanel ("Saving submarine", "", "json");
+		if (filename != null) {
+			// destroy all Tile game objects (and the wall, warning,.. childeren)
+			// (maybe new loaded sub has other dimensions)
+			world.RemoveAllTileGameObjects ();
+			// load new Sub 
+			world.mySub.Load (filename);
+			// add all tiles game objects 
+			world.CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
 
-		// destroy all Tile game objects (and the wall, warning,.. childeren)
-		// (maybe new loaded sub has other dimensions)
-		world.RemoveAllTileGameObjects ();
-		// load new Sub 
-		world.mySub.Load (filename);
-		// add all tiles game objects 
-		world.CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
-
-		UI_StatusText.text = "Submarine loading.";
+			UI_StatusText.text = "Submarine loading.";
+		}
 	}
 }
 	
