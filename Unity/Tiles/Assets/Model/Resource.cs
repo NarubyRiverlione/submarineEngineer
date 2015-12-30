@@ -10,18 +10,20 @@ namespace Submarine.Model {
 		liters_pump,
 		food,
 		tins,
+		Crew,
+		// needed for generic output of Bunks
 		Engineers,
 		Cook,
-		Crew,
+		Watchstander,
 		Officers,
-		Lookouts,
+		//Lookouts,
 		Sonarman,
 		Radioman,
 		Torpedoman,
 		Torpedoes,
-        Radio,
-        Sonar,
-        Ops,
+		Radio,
+		Sonar,
+		Ops,
 		None}
 
 	;

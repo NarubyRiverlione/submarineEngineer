@@ -55,6 +55,7 @@ public class WorldController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		UpdateResourceLabels ();
+		UpdateDesignValidation ();
 
 	}
 
@@ -242,7 +243,7 @@ public class WorldController : MonoBehaviour {
 			if (resourceUnit != Units.None && resourceUnit != Units.liters_pump) { //TODO: make label for liter pump
 				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
 				if (resourceGameObject == null) {
-					Debug.LogError ("ERROR cannot find resource label in UI for :" + resourceUnit);
+					//Debug.Log ("ERROR cannot find resource label in UI for :" + resourceUnit);
 				}
 				else {
 					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
@@ -257,6 +258,28 @@ public class WorldController : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	void UpdateDesignValidation () {
+		string validationCriteria;
+		validationCriteria = "Ops";
+		SetOrResetValidation (validationCriteria, mySub.ValidateOps ());
+		validationCriteria = "Radio";
+		SetOrResetValidation (validationCriteria, mySub.ValidateRadio ());
+		validationCriteria = "Sonar";
+		SetOrResetValidation (validationCriteria, mySub.ValidateSonar ());
+		validationCriteria = "Weapons";
+		SetOrResetValidation (validationCriteria, mySub.ValidateWeapons ());
+		validationCriteria = "Propulsion";
+		SetOrResetValidation (validationCriteria, mySub.ValidatePropulsion ());
+	}
+
+	void SetOrResetValidation (string validationCriteria, bool ok) {
+		GameObject findCheckbox = GameObject.Find ("Toggle_" + validationCriteria);
+		if (findCheckbox != null) {
+			findCheckbox.GetComponent<Toggle> ().isOn = ok;
+		}
+
 	}
 
 }

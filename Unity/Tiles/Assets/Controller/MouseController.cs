@@ -12,7 +12,8 @@ public class MouseController : MonoBehaviour {
 	public GameObject cursorBuilder;
 	public GameObject cursorDestroyer;
 
-	public Text UI_StatusText;
+	public Text UI_Room_Info_Text;
+	public Text UI_Information_Text;
 
 	WorldController world;
 
@@ -69,10 +70,7 @@ public class MouseController : MonoBehaviour {
 						cursorBuilder.SetActive (false);
 						cursorDestroyer.SetActive (true);
 					}
-//					Debug.Log ("Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + "), part of room: "
-//					+ world.mySub.GetRoomTypeOfTile (tileBelowMouse)
-//					+ "(" + tileBelowMouse.RoomID + ")"
-//					+ " wall type: " + tileBelowMouse.WallType);
+					ShowRoomInformation (tileBelowMouse);
 				}
 				else {
 					// hide if cursor isn't on a tile
@@ -121,7 +119,7 @@ public class MouseController : MonoBehaviour {
 				// create 'prototype' of room to get the validation text
 				Room prototypeRoom = Room.CreateRoomOfType (RoomTypeToBeBuild, world.mySub);
 				// show building rules
-				UI_StatusText.text = prototypeRoom.ValidationText;
+				UI_Room_Info_Text.text = prototypeRoom.ValidationText;
 
 				//Debug.Log ("Toggle " + nameOfRoomType + " is active: " + typeOfRoom + " = Enum " + RoomTypeToBeBuild);
 
@@ -130,19 +128,31 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
+	void ShowRoomInformation (Tile tileBelowMouse) {
+		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
+		if (tileBelowMouse.RoomID != 0) {
+			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
+			info += " wich is part of the "	+ room.TypeOfRoom + "\n" + room.ValidationText;
+			//	+ "(" + tileBelowMouse.RoomID + ")"
+			//	+ " wall type: " + tileBelowMouse.WallType);
+		}
+
+		UI_Information_Text.text = info;
+	}
+
 	// Save sub
 	public void SaveSub () {
-		UI_StatusText.text = "Saving submarine....";
+		UI_Room_Info_Text.text = "Saving submarine....";
 		string filename = EditorUtility.SaveFilePanel ("Saving submarine", "", "My Submarine", "json");
 		if (filename != null) {
 			world.mySub.Save (filename);
-			UI_StatusText.text = "Submarine saved.";
+			UI_Room_Info_Text.text = "Submarine saved.";
 		}
 	}
 
 	// Load sub
 	public void LoadSub () {
-		UI_StatusText.text = "Loading submarine....";
+		UI_Room_Info_Text.text = "Loading submarine....";
 		string filename = EditorUtility.OpenFilePanel ("Saving submarine", "", "json");
 		if (filename != null) {
 			// destroy all Tile game objects (and the wall, warning,.. childeren)
@@ -153,7 +163,7 @@ public class MouseController : MonoBehaviour {
 			// add all tiles game objects 
 			world.CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
 
-			UI_StatusText.text = "Submarine loading.";
+			UI_Room_Info_Text.text = "Submarine loading.";
 		}
 	}
 }

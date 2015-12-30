@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using FullSerializer;
 
 namespace Submarine.Model {
 	public enum RoomType {
@@ -31,13 +32,14 @@ namespace Submarine.Model {
 		public Sub inSub { get; protected set; }
 		// needs reference to sub for layout validation
 		public RoomType TypeOfRoom { get; protected set; }
-	
+
 		public List<Point> coordinatesOfTilesInRoom;
 
 		public int Size{ get { return coordinatesOfTilesInRoom.Count (); } }
 
 		public int MinimimValidSize { get; protected set; }
 
+		[fsIgnore]
 		public string ValidationText { get; protected set; }
 
 		abstract public bool IsLayoutValid { get; }

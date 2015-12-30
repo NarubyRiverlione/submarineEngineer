@@ -52,12 +52,13 @@ namespace Submarine.Model {
 
 		// next roomID
 		[UnityEngine.SerializeField]
-		int _nextRoomID = 1;
 		// ID 0 = no room assigned to Tile
+		int _nextRoomID = 1;
 
 		public Dictionary<string,int> RoomPropertiesInt { get; private set; }
 
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
+
 
 		#region SAVE / LOAD
 
@@ -175,9 +176,6 @@ namespace Submarine.Model {
 			CreateSub ();
 
 		}
-
-
-
 		// set tiles around tail and tower as unavailable for building, create Tower
 		private void CreateSub () {
 			// instantiate Tiles
@@ -282,13 +280,16 @@ namespace Submarine.Model {
 				{ new Resource (Units.Engineers, 1) }
 			};
 			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 1500) } };
-			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Lookouts, 2) } };
-			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> { { new Resource (Units.tins, 30) } };
+			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstander, 2) } };
+			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
+				{ new Resource (Units.tins, 30) },
+				{ new Resource (Units.Cook, 1) }
+			};
 			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 1) } };
 			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 6) } };
 			RoomPropertiesReqRes [RoomType.Conn] = new List<Resource> {
 				{ new Resource (Units.Officers, 2) },
-				{ new Resource (Units.Crew, 4) }
+				{ new Resource (Units.Watchstander, 4) }
 			};
 			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1) } };
 			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1) } };
@@ -296,6 +297,97 @@ namespace Submarine.Model {
 			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_pump, 100) } };
 			RoomPropertiesReqRes [RoomType.StorageRoom] = new List<Resource> ();
 			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { { new Resource (Units.Torpedoman, 4) } };
+
+
+		}
+
+		#endregion
+
+		//TODO refactor this, too much same code
+
+		#region Design Validation
+
+		public bool ValidateOps () {
+			int roomCount = 0, validCount = 0;
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.TypeOfRoom == RoomType.Conn) {
+					roomCount++;
+					if (room.ResourcesAvailable)			// only need 1 Ops unit
+						validCount++;
+				}
+			}
+			if (roomCount == 0)
+				return false;
+			return roomCount == validCount ? true : false;
+		}
+
+		public bool ValidateRadio () {
+			int roomCount = 0, validCount = 0;
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.TypeOfRoom == RoomType.RadioRoom) {
+					roomCount++;
+					if (room.Output > 0)			// only need 1 Radio unit
+						validCount++;
+				}
+			}
+			if (roomCount == 0)
+				return false;
+			return roomCount == validCount ? true : false;
+		}
+
+		public bool ValidateSonar () {
+			int roomCount = 0, validCount = 0;
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.TypeOfRoom == RoomType.Sonar) {
+					roomCount++;
+					if (room.Output > 0)		// only need 1 Sonar unit
+						validCount++;
+				}
+			}
+			if (roomCount == 0)
+				return false;
+			return roomCount == validCount ? true : false;
+		}
+
+		public bool ValidateWeapons () {
+			int roomCount = 0, validCount = 0;
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.TypeOfRoom == RoomType.TorpedoRoom) { // may be later also check missle deck
+					roomCount++;
+					if (room.Output > 0)
+						validCount++;
+				}
+			}
+			if (roomCount == 0)
+				return false;
+			return roomCount == validCount ? true : false;
+		}
+
+		public bool ValidatePropulsion () {	// Engine & battery must be ok
+			int roomCount = 0, validCount = 0;
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.TypeOfRoom == RoomType.EngineRoom) {
+					roomCount++;
+					if (room.Output > 0)
+						validCount++;
+				}
+			}
+			foreach (var roomPair in rooms) {
+				Room room = roomPair.Value;
+				if (room.TypeOfRoom == RoomType.Battery) {
+					roomCount++;
+					if (room.Output > 0)
+						validCount++;
+				}
+			}
+			if (roomCount == 0)
+				return false;
+			return roomCount == validCount ? true : false;
 		}
 
 		#endregion
@@ -309,6 +401,12 @@ namespace Submarine.Model {
 				Room room = roomPair.Value;
 				if (room.UnitOfCapacity == outputUnit)
 					output += room.Output;
+				//TODO: set dedicated CrewTypes for bunks
+				if (room.TypeOfRoom == RoomType.Bunks &&
+				    (outputUnit == Units.Cook || outputUnit == Units.Watchstander || outputUnit == Units.Engineers || outputUnit == Units.Radioman || outputUnit == Units.Sonarman || outputUnit == Units.Torpedoman)) {
+					output += 4;
+				}
+
 			}
 			return output;
 		}
@@ -332,7 +430,7 @@ namespace Submarine.Model {
 			rooms.Remove (RoomID);
 		}
 
-		private Room GetRoom (int RoomID) {
+		public Room GetRoom (int RoomID) {
 			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
 
@@ -638,7 +736,6 @@ namespace Submarine.Model {
 	}
 
 	
-
 		
 
 }
