@@ -40,22 +40,41 @@ public class WorldController : MonoBehaviour {
 	// Wall spritesheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
 
+	public UI_FileBrowser _uiFB;
+	public string filePath;
+	private bool chooseFilePathNow = false;
+
+	private bool Loading = false;
+	// loading false = saving
+
 	// Use this for initialization
 	void Start () {
 		instance = this;
 		mySub = new Sub ();
 		//Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
-
+	
 		// loading Wall sprites from sheet
 		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
 
 		CreateAllTileGameObjects ();
+		ShowAllTilesViaCallback ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		UpdateResourceLabels ();
 		UpdateDesignValidation ();
+		// wait until filepath is know
+		if (_uiFB.GetPath () != null && chooseFilePathNow) {
+			Debug.Log ("Opened : " + _uiFB.GetPath ());
+			filePath = _uiFB.GetPath ();
+			chooseFilePathNow = false;
+			if (Loading)
+				LoadingSub ();
+			else // loading false = saving
+				SavingSub ();
+			
+		}
 
 	}
 
@@ -73,12 +92,12 @@ public class WorldController : MonoBehaviour {
 				newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);
 				// add Sprite Renderer component
 				newTileSprite.AddComponent<SpriteRenderer> ();
-				// set sprite
-				UpdateTileSprite (newTile, newTileSprite);
+
 				// when the roomID of the title changes, update the sprite
 				newTile.TileChangedActions += (tile => {
-					UpdateTileSprite (tile, newTileSprite);
+					UpdateTileSprite (newTile, newTileSprite);
 				});
+
 			}
 		}
 	}
@@ -93,6 +112,18 @@ public class WorldController : MonoBehaviour {
 		}
 	}
 
+	void ShowAllTilesViaCallback () {
+		for (int x = 0; x < mySub.lengthOfSub; x++) {
+			for (int y = 0; y < mySub.heightOfSub; y++) {
+				Tile checkTile = mySub.GetTileAt (x, y);
+				if (checkTile.TileChangedActions != null)
+					checkTile.TileChangedActions (checkTile);
+				else
+					Debug.LogError ("ERROR no action found for tile (" + x + "," + y + "), roomID:" + checkTile.RoomID);
+			}
+		}
+	}
+
 	// get Tile at x,y in World
 	public Tile GetTileAtWorldCoordinates (Vector3 coord) {
 		int x = Mathf.FloorToInt (coord.x);
@@ -100,7 +131,6 @@ public class WorldController : MonoBehaviour {
 
 		return mySub != null ? mySub.GetTileAt (x, y) : null;
 	}
-
 
 	void UpdateTileSprite (Tile showTile, GameObject gameObjectOfTitle) {
 		SpriteRenderer renderer = gameObjectOfTitle.GetComponent<SpriteRenderer> ();
@@ -227,7 +257,6 @@ public class WorldController : MonoBehaviour {
 		}
 		else { // roomID = 0,  don't remove Wall game object but set it to wall type 15 = show no walls (removeing wall type gives strange behaviour)
 			if (checkIfWallIsAlreadyOnScreen != null) {
-				//Destroy (checkIfWallIsAlreadyOnScreen);
 				SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
 				//set sprite from wall sprite sheet
 				//Debug.Log ("Remove all walls for  (" + showTile.X + "," + showTile.Y + ")");
@@ -280,6 +309,35 @@ public class WorldController : MonoBehaviour {
 			findCheckbox.GetComponent<Toggle> ().isOn = ok;
 		}
 
+	}
+
+
+	// Get filepath
+	public void GetFilePath (bool loading) {
+		_uiFB.Open (filePath);
+		chooseFilePathNow = true; 
+		Loading = loading;
+	}
+	// Loading sub
+	private void LoadingSub () {
+		if (filePath != null) {
+			Loading = false;
+			// destroy all Tile game objects (and the wall, warning,.. childeren)
+			// (maybe new loaded sub has other dimensions)
+			RemoveAllTileGameObjects ();
+			// load new Sub 
+			mySub.Load (filePath);
+			// add all tiles game objects 
+			CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
+			ShowAllTilesViaCallback ();
+		
+		}
+	}
+	// Save sub
+	private void SavingSub () {
+		if (filePath != null) {
+			mySub.Save (filePath);
+		}
 	}
 
 }

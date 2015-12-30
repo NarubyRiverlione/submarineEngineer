@@ -130,7 +130,7 @@ namespace Submarine.Model {
 			RoomPropertiesInt = loadedSub.RoomPropertiesInt;
 			RoomPropertiesReqRes = loadedSub.RoomPropertiesReqRes;
 
-			// load all tiles (2D array not supported,,needs conversion)
+			// load all tiles (2D array not supported,needs conversion)
 			_tile = new Tile[lengthOfSub, heightOfSub]; // reset all old tiles
 
 			string jsonStringOfAllTitles = File.ReadAllText (fileName.Substring (0, fileName.Length - 5) + "_Tiles");
@@ -143,6 +143,19 @@ namespace Submarine.Model {
 			// tiles are load, now load rooms (with tiles is it)
 			rooms = new Dictionary<int, Room> (); // reset rooms
 			rooms = loadedSub.rooms; 
+
+			foreach (var roomPair in rooms) {
+				int roomid = roomPair.Key;
+				Room room = roomPair.Value;
+
+				foreach (Point coord in room.coordinatesOfTilesInRoom) {
+					Tile checkTile = GetTileAt (coord.x, coord.y);
+					if (checkTile.RoomID != roomid) {
+						UnityEngine.Debug.LogError ("I don't belong here !!");
+					}
+				}
+			}
+
 		}
 
 		#endregion
@@ -303,16 +316,16 @@ namespace Submarine.Model {
 
 		#endregion
 
-		//TODO refactor this, too much same code
 
 		#region Design Validation
-		private bool ValidationCriteria(RoomType checkRoomType, int minOutput = 0) {
+
+		private bool ValidationCriteria (RoomType checkRoomType, int minOutput = 0) {
 			int roomCount = 0, validCount = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
 				if (room.TypeOfRoom == checkRoomType) {
 					roomCount++;
-					if (room.Output > minOutput)			
+					if (room.Output > minOutput)
 						validCount++;
 				}
 			}
@@ -322,7 +335,7 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateOps () {
-				return ValidationCriteria(RoomType.Conn);
+			return ValidationCriteria (RoomType.Conn);
 		}
 
 		public bool ValidateRadio () {
@@ -330,16 +343,16 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateSonar () {
-			return ValidationCriteria(RoomType.Sonar );
+			return ValidationCriteria (RoomType.Sonar);
 		}
 
 		public bool ValidateWeapons () {
-		// may be later also check missle deck
-			return ValidationCriteria(RoomType.TorpedoRoom);
+			// may be later also check missle deck
+			return ValidationCriteria (RoomType.TorpedoRoom);
 		}
 
 		public bool ValidatePropulsion () {	// Engine & battery must be ok
-			bool engineOk = ValidationCriteria(RoomType.EngineRoom);
+			bool engineOk = ValidationCriteria (RoomType.EngineRoom);
 			bool batteryOk = ValidationCriteria (RoomType.Battery);
 			return engineOk && batteryOk;
 		}
@@ -446,6 +459,7 @@ namespace Submarine.Model {
 				// room is rebuilt, get new roomID
 				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in su
 				int newRoomID = GetTileAt (coordToGetRoomID.x, coordToGetRoomID.y).RoomID;
+
 				return rooms [newRoomID];
 			}
 		}

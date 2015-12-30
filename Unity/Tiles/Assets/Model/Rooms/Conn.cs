@@ -32,8 +32,8 @@ namespace Submarine.Model {
 		}
 
 		public Conn (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
-			
-			ValidationText = base.ValidationText + " and must be connected to the Bridge.";
+			//SetRoomValidationText ();
+			ValidationText += " and must be connected to the Bridge.";
 		}
 	}
 }

@@ -99,8 +99,7 @@ namespace Submarine.Model {
 				
 		}
 
-		protected void SetRoomValidationText ()
-		{	// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
+		protected void SetRoomValidationText () {	// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
 			ValidationText = "The " + TypeOfRoom + " needs to be at least " + MinimimValidSize + " tiles";
 			if (NeededResources != null) {
 				foreach (Resource resouce in NeededResources) {
@@ -142,9 +141,12 @@ namespace Submarine.Model {
 
 		private void WarnTilesOfChange () {
 			foreach (Point coord in coordinatesOfTilesInRoom) {
+				//FIXME: tile not correct
 				Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
 				if (warnTile.TileChangedActions != null)
 					warnTile.TileChangedActions (warnTile);
+				else
+					UnityEngine.Debug.Log ("No action for " + coord.x + "," + coord.y + " roomid " + warnTile.RoomID);
 			}
 		}
 

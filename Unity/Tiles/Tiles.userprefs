@@ -1,33 +1,32 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Submarine.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Room.cs">
     <Files>
-      <File FileName="Assets/Model/Submarine.cs" Line="433" Column="3" />
-      <File FileName="Assets/Controller/MouseController.cs" Line="134" Column="30" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="249" Column="1" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="333" Column="3" />
+      <File FileName="Assets/Model/Submarine.cs" Line="573" Column="27" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
       <File FileName="Assets/Model/RoomFactory.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="42" Column="2" />
-      <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Resource.cs" Line="17" Column="16" />
-      <File FileName="Assets/Model/Rooms/TorpedoRoom.cs" Line="8" Column="75" />
-      <File FileName="Assets/Model/Rooms/Bridge.cs" Line="1" Column="1" />
-      <File FileName="Assets/Source/fsResult.cs" Line="157" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="144" Column="30" />
+      <File FileName="Assets/Model/Tile.cs" Line="20" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="450" column="23" />
+      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="573" column="27" />
+      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Room.cs" line="145" column="24" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1034" offsetY="2057" expression="showTile.Y" liveUpdate="False" />
     <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1031" offsetY="2027" expression="showTile.X" liveUpdate="False" />
     <Watch file="Assets/Model/Submarine.cs" line="343" offsetX="810" offsetY="4486" expression="rebuildTile.Y" liveUpdate="False" />
     <Watch file="Assets/Model/Submarine.cs" line="343" offsetX="805" offsetY="4451" expression="rebuildTile.X" liveUpdate="False" />
-    <Watch file="Assets/Model/Room.cs" line="52" offsetX="835" offsetY="2111" expression="this.TypeOfRoom" liveUpdate="False" />
     <Watch file="Assets/Controller/WorldController.cs" line="159" offsetX="1054" offsetY="1900" expression="showTile.RoomID" liveUpdate="False" />
     <Watch file="Assets/Source/Converters/fsDictionaryConverter.cs" line="151" offsetX="727" offsetY="2293" expression="key" liveUpdate="False" />
-    <Watch file="Assets/Model/Room.cs" line="150" offsetX="1038" offsetY="2110" expression="resource.unit" liveUpdate="False" />
-    <Watch file="Assets/Model/Room.cs" line="151" offsetX="1247" offsetY="2108" expression="resource.amount" liveUpdate="False" />
-    <Watch file="Assets/Model/Room.cs" line="151" offsetX="1240" offsetY="2078" expression="resouceAvailable" liveUpdate="False" />
-    <Watch file="Assets/Model/Room.cs" line="156" offsetX="855" offsetY="2181" expression="AllAvailable" liveUpdate="False" />
+    <Watch file="Assets/Model/Room.cs" line="148" offsetX="999" offsetY="1894" expression="coord.x" liveUpdate="False" />
+    <Watch file="Assets/Model/Room.cs" line="148" offsetX="1050" offsetY="1920" expression="coord.y" liveUpdate="False" />
+    <Watch file="Assets/Model/Tile.cs" line="20" offsetX="798" offsetY="323" expression="X" liveUpdate="False" />
+    <Watch file="Assets/Model/Tile.cs" line="20" offsetX="805" offsetY="355" expression="Y" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

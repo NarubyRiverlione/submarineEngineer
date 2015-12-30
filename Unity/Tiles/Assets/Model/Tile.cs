@@ -13,13 +13,26 @@ namespace Submarine.Model {
 		public int RoomID {
 			get{ return _roomID; }
 			set {
+				if (value == 0 && _roomID != 0)
+					UnityEngine.Debug.Log ("RoomID reset for (" + X + "," + Y + ")");
+				
 				_roomID = value;
+
 				if (TileChangedActions != null) // call all the registered callbacks
 					TileChangedActions (this);
+				
 			}
 		}
 
-		public Action<Tile> TileChangedActions { get; set; }
+		Action<Tile> _TileChangedActions;
+
+		public Action<Tile> TileChangedActions {
+			get { return _TileChangedActions; } 
+			set { 
+				_TileChangedActions = value; 
+
+			}
+		}
 		// functions can registered via this Action to changes of roomID
 
 		public bool canContainRoom { get; set; }
@@ -41,9 +54,7 @@ namespace Submarine.Model {
 		public Tile (int x, int y) {
 			X = x;
 			Y = y;
-			// use internal field to prevent calling the callback when initiation title (maybe submarine visuals isn't on screen yet)
-			_roomID = 0;
-			_wallType = 0; 
+			Reset ();
 			canContainRoom = true;
 		}
 

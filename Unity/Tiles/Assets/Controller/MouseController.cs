@@ -4,8 +4,6 @@ using Submarine.Model;
 
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
-
 
 public class MouseController : MonoBehaviour {
 
@@ -116,7 +114,7 @@ public class MouseController : MonoBehaviour {
 				// set room type to be build
 				RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
 				//TODO: other way then creating a room ?
-				// create 'prototype' of room to get the validation text
+				// create 'prototype' of room to get the validation text as validation text is set in Constructor and uses needs requirments
 				Room prototypeRoom = Room.CreateRoomOfType (RoomTypeToBeBuild, world.mySub);
 				// show building rules
 				UI_Room_Info_Text.text = prototypeRoom.ValidationText;
@@ -132,40 +130,19 @@ public class MouseController : MonoBehaviour {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
-			info += " wich is part of the "	+ room.TypeOfRoom + "\n" + room.ValidationText;
-			//	+ "(" + tileBelowMouse.RoomID + ")"
-			//	+ " wall type: " + tileBelowMouse.WallType);
+			info += " wich is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
+			//TODO: remove next line before production build
+			info += "\n"
+			+ " RoomID: " + tileBelowMouse.RoomID
+			+ " wall type: " + tileBelowMouse.WallType
+			+ " layout validate: " + room.IsLayoutValid
+			+ " resouces availible " + room.ResourcesAvailable;
 		}
 
 		UI_Information_Text.text = info;
 	}
 
-	// Save sub
-	public void SaveSub () {
-		UI_Room_Info_Text.text = "Saving submarine....";
-		string filename = EditorUtility.SaveFilePanel ("Saving submarine", "", "My Submarine", "json");
-		if (filename != null) {
-			world.mySub.Save (filename);
-			UI_Room_Info_Text.text = "Submarine saved.";
-		}
-	}
 
-	// Load sub
-	public void LoadSub () {
-		UI_Room_Info_Text.text = "Loading submarine....";
-		string filename = EditorUtility.OpenFilePanel ("Saving submarine", "", "json");
-		if (filename != null) {
-			// destroy all Tile game objects (and the wall, warning,.. childeren)
-			// (maybe new loaded sub has other dimensions)
-			world.RemoveAllTileGameObjects ();
-			// load new Sub 
-			world.mySub.Load (filename);
-			// add all tiles game objects 
-			world.CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
-
-			UI_Room_Info_Text.text = "Submarine loading.";
-		}
-	}
 }
 	
 
