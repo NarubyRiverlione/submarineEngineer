@@ -174,12 +174,9 @@
         {
             "Key": 1,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
+                "RoomID": 1,
                 "TypeOfRoom": "Bridge",
                 "MinimimValidSize": 4,
-                "ValidationText": "The Bridge needs to be at least 4 tiles and 2 Watchstander to be operational",
                 "CapacityPerTile": 0.0,
                 "NeededResources": {
                     "$ref": "11"
@@ -217,133 +214,241 @@
         {
             "Key": 2,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "Bunks",
-                "MinimimValidSize": 6,
-                "ValidationText": "The Bunks needs to be at least 6 tiles and 6 food to be operational, output will be  2 Crew per tile",
-                "CapacityPerTile": 2.0,
+                "RoomID": 2,
+                "TypeOfRoom": "EngineRoom",
+                "MinimimValidSize": 12,
+                "CapacityPerTile": 1000.0,
                 "NeededResources": {
-                    "$ref": "18"
+                    "$ref": "3"
                 },
-                "IsAccessable": true,
+                "IsAccessable": false,
                 "coordinatesOfTilesInRoom": [
                     {
-                        "x": 17,
+                        "x": 0,
                         "y": 1
                     },
                     {
-                        "x": 17,
-                        "y": 0
-                    },
-                    {
-                        "x": 18,
-                        "y": 0
-                    },
-                    {
-                        "x": 18,
+                        "x": 1,
                         "y": 1
                     },
                     {
-                        "x": 19,
+                        "x": 2,
                         "y": 1
                     },
                     {
-                        "x": 19,
-                        "y": 0
+                        "x": 3,
+                        "y": 1
+                    },
+                    {
+                        "x": 4,
+                        "y": 1
+                    },
+                    {
+                        "x": 5,
+                        "y": 1
+                    },
+                    {
+                        "x": 5,
+                        "y": 2
+                    },
+                    {
+                        "x": 5,
+                        "y": 3
+                    },
+                    {
+                        "x": 4,
+                        "y": 2
+                    },
+                    {
+                        "x": 3,
+                        "y": 2
+                    },
+                    {
+                        "x": 2,
+                        "y": 2
+                    },
+                    {
+                        "x": 1,
+                        "y": 2
+                    },
+                    {
+                        "x": 0,
+                        "y": 2
                     }
                 ],
-                "$type": "Submarine.Model.Bunks"
+                "$type": "Submarine.Model.EngineRoom"
             }
         },
         {
             "Key": 3,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "Gallery",
-                "MinimimValidSize": 6,
-                "ValidationText": "The Gallery needs to be at least 6 tiles and 30 tins and 1 Cook to be operational, output will be  5 food per tile",
-                "CapacityPerTile": 5.0,
+                "RoomID": 3,
+                "TypeOfRoom": "Generator",
+                "MinimimValidSize": 12,
+                "CapacityPerTile": 500.0,
                 "NeededResources": {
-                    "$ref": "13"
+                    "$ref": "6"
                 },
                 "IsAccessable": false,
                 "coordinatesOfTilesInRoom": [
                     {
-                        "x": 20,
+                        "x": 6,
                         "y": 1
                     },
                     {
-                        "x": 20,
-                        "y": 0
-                    },
-                    {
-                        "x": 21,
-                        "y": 0
-                    },
-                    {
-                        "x": 21,
+                        "x": 7,
                         "y": 1
                     },
                     {
-                        "x": 22,
+                        "x": 8,
                         "y": 1
                     },
                     {
-                        "x": 22,
-                        "y": 0
+                        "x": 9,
+                        "y": 1
+                    },
+                    {
+                        "x": 9,
+                        "y": 2
+                    },
+                    {
+                        "x": 9,
+                        "y": 3
+                    },
+                    {
+                        "x": 8,
+                        "y": 3
+                    },
+                    {
+                        "x": 7,
+                        "y": 3
+                    },
+                    {
+                        "x": 6,
+                        "y": 3
+                    },
+                    {
+                        "x": 6,
+                        "y": 2
+                    },
+                    {
+                        "x": 7,
+                        "y": 2
+                    },
+                    {
+                        "x": 8,
+                        "y": 2
                     }
                 ],
-                "$type": "Submarine.Model.Gallery"
+                "$type": "Submarine.Model.Generator"
             }
         },
         {
             "Key": 4,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "StorageRoom",
-                "MinimimValidSize": 4,
-                "ValidationText": "The StorageRoom needs to be at least 4 tiles to be operational, output will be  100 tins per tile",
-                "CapacityPerTile": 100.0,
+                "RoomID": 4,
+                "TypeOfRoom": "FuelTank",
+                "MinimimValidSize": 9,
+                "CapacityPerTile": 1000.0,
                 "NeededResources": {
-                    "$ref": "30"
+                    "$ref": "27"
                 },
                 "IsAccessable": false,
                 "coordinatesOfTilesInRoom": [
                     {
-                        "x": 23,
-                        "y": 1
-                    },
-                    {
-                        "x": 23,
+                        "x": 5,
                         "y": 0
                     },
                     {
-                        "x": 24,
+                        "x": 6,
                         "y": 0
                     },
                     {
-                        "x": 24,
-                        "y": 1
+                        "x": 7,
+                        "y": 0
+                    },
+                    {
+                        "x": 8,
+                        "y": 0
+                    },
+                    {
+                        "x": 9,
+                        "y": 0
+                    },
+                    {
+                        "x": 10,
+                        "y": 0
+                    },
+                    {
+                        "x": 11,
+                        "y": 0
+                    },
+                    {
+                        "x": 12,
+                        "y": 0
+                    },
+                    {
+                        "x": 13,
+                        "y": 0
                     }
                 ],
-                "$type": "Submarine.Model.StorageRoom"
+                "$type": "Submarine.Model.FuelTank"
             }
         },
         {
             "Key": 5,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
+                "RoomID": 5,
+                "TypeOfRoom": "Conn",
+                "MinimimValidSize": 8,
+                "CapacityPerTile": 1.0,
+                "NeededResources": {
+                    "$ref": "20"
                 },
+                "IsAccessable": true,
+                "coordinatesOfTilesInRoom": [
+                    {
+                        "x": 22,
+                        "y": 3
+                    },
+                    {
+                        "x": 22,
+                        "y": 2
+                    },
+                    {
+                        "x": 23,
+                        "y": 2
+                    },
+                    {
+                        "x": 23,
+                        "y": 3
+                    },
+                    {
+                        "x": 24,
+                        "y": 3
+                    },
+                    {
+                        "x": 24,
+                        "y": 2
+                    },
+                    {
+                        "x": 25,
+                        "y": 3
+                    },
+                    {
+                        "x": 25,
+                        "y": 2
+                    }
+                ],
+                "$type": "Submarine.Model.Conn"
+            }
+        },
+        {
+            "Key": 6,
+            "Value": {
+                "RoomID": 6,
                 "TypeOfRoom": "RadioRoom",
                 "MinimimValidSize": 4,
-                "ValidationText": "The RadioRoom needs to be at least 4 tiles and 1 Radioman to be operational, output will be  1 Radio per tile",
                 "CapacityPerTile": 1.0,
                 "NeededResources": {
                     "$ref": "25"
@@ -371,14 +476,11 @@
             }
         },
         {
-            "Key": 6,
+            "Key": 7,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
+                "RoomID": 7,
                 "TypeOfRoom": "Sonar",
                 "MinimimValidSize": 4,
-                "ValidationText": "The Sonar needs to be at least 4 tiles and 1 Sonarman to be operational, output will be  1 Sonar per tile",
                 "CapacityPerTile": 1.0,
                 "NeededResources": {
                     "$ref": "23"
@@ -406,65 +508,11 @@
             }
         },
         {
-            "Key": 7,
-            "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "Conn",
-                "MinimimValidSize": 8,
-                "ValidationText": "The Conn needs to be at least 8 tiles and 2 Officers and 4 Watchstander to be operational, output will be  1 Ops per tile and must be connected to the Bridge.",
-                "CapacityPerTile": 1.0,
-                "NeededResources": {
-                    "$ref": "20"
-                },
-                "IsAccessable": true,
-                "coordinatesOfTilesInRoom": [
-                    {
-                        "x": 25,
-                        "y": 3
-                    },
-                    {
-                        "x": 25,
-                        "y": 2
-                    },
-                    {
-                        "x": 24,
-                        "y": 2
-                    },
-                    {
-                        "x": 24,
-                        "y": 3
-                    },
-                    {
-                        "x": 23,
-                        "y": 3
-                    },
-                    {
-                        "x": 23,
-                        "y": 2
-                    },
-                    {
-                        "x": 22,
-                        "y": 2
-                    },
-                    {
-                        "x": 22,
-                        "y": 3
-                    }
-                ],
-                "$type": "Submarine.Model.Conn"
-            }
-        },
-        {
             "Key": 8,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
+                "RoomID": 8,
                 "TypeOfRoom": "Cabin",
                 "MinimimValidSize": 2,
-                "ValidationText": "The Cabin needs to be at least 2 tiles and 1 food to be operational, output will be  1 Officers per tile",
                 "CapacityPerTile": 1.0,
                 "NeededResources": {
                     "$ref": "16"
@@ -486,304 +534,121 @@
         {
             "Key": 9,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "TorpedoRoom",
-                "MinimimValidSize": 20,
-                "ValidationText": "The TorpedoRoom needs to be at least 20 tiles and 4 Torpedoman to be operational, output will be  1 Torpedoes per tile",
-                "CapacityPerTile": 1.0,
+                "RoomID": 9,
+                "TypeOfRoom": "Gallery",
+                "MinimimValidSize": 6,
+                "CapacityPerTile": 5.0,
                 "NeededResources": {
-                    "$ref": "31"
+                    "$ref": "13"
                 },
                 "IsAccessable": false,
                 "coordinatesOfTilesInRoom": [
                     {
-                        "x": 37,
+                        "x": 20,
                         "y": 3
                     },
                     {
-                        "x": 37,
+                        "x": 20,
                         "y": 2
                     },
                     {
-                        "x": 35,
+                        "x": 19,
+                        "y": 2
+                    },
+                    {
+                        "x": 19,
                         "y": 3
                     },
                     {
-                        "x": 34,
+                        "x": 18,
                         "y": 3
                     },
                     {
-                        "x": 34,
+                        "x": 18,
                         "y": 2
-                    },
-                    {
-                        "x": 34,
-                        "y": 1
-                    },
-                    {
-                        "x": 34,
-                        "y": 0
-                    },
-                    {
-                        "x": 35,
-                        "y": 0
-                    },
-                    {
-                        "x": 36,
-                        "y": 0
-                    },
-                    {
-                        "x": 37,
-                        "y": 0
-                    },
-                    {
-                        "x": 38,
-                        "y": 0
-                    },
-                    {
-                        "x": 38,
-                        "y": 1
-                    },
-                    {
-                        "x": 37,
-                        "y": 1
-                    },
-                    {
-                        "x": 36,
-                        "y": 1
-                    },
-                    {
-                        "x": 35,
-                        "y": 1
-                    },
-                    {
-                        "x": 35,
-                        "y": 2
-                    },
-                    {
-                        "x": 36,
-                        "y": 2
-                    },
-                    {
-                        "x": 38,
-                        "y": 2
-                    },
-                    {
-                        "x": 38,
-                        "y": 3
-                    },
-                    {
-                        "x": 36,
-                        "y": 3
                     }
                 ],
-                "$type": "Submarine.Model.TorpedoRoom"
+                "$type": "Submarine.Model.Gallery"
+            }
+        },
+        {
+            "Key": 10,
+            "Value": {
+                "RoomID": 10,
+                "TypeOfRoom": "Bunks",
+                "MinimimValidSize": 6,
+                "CapacityPerTile": 2.0,
+                "NeededResources": {
+                    "$ref": "18"
+                },
+                "IsAccessable": true,
+                "coordinatesOfTilesInRoom": [
+                    {
+                        "x": 17,
+                        "y": 3
+                    },
+                    {
+                        "x": 17,
+                        "y": 2
+                    },
+                    {
+                        "x": 16,
+                        "y": 2
+                    },
+                    {
+                        "x": 16,
+                        "y": 3
+                    },
+                    {
+                        "x": 15,
+                        "y": 3
+                    },
+                    {
+                        "x": 15,
+                        "y": 2
+                    }
+                ],
+                "$type": "Submarine.Model.Bunks"
             }
         },
         {
             "Key": 11,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "EngineRoom",
-                "MinimimValidSize": 12,
-                "ValidationText": "The EngineRoom needs to be at least 12 tiles and 1000 liters_fuel and 1 Engineers to be operational, output will be  1000 pks per tile",
-                "CapacityPerTile": 1000.0,
+                "RoomID": 11,
+                "TypeOfRoom": "StorageRoom",
+                "MinimimValidSize": 4,
+                "CapacityPerTile": 100.0,
                 "NeededResources": {
-                    "$ref": "3"
+                    "$ref": "30"
                 },
                 "IsAccessable": false,
                 "coordinatesOfTilesInRoom": [
                     {
-                        "x": 0,
-                        "y": 2
-                    },
-                    {
-                        "x": 0,
+                        "x": 15,
                         "y": 1
                     },
                     {
-                        "x": 1,
+                        "x": 15,
+                        "y": 0
+                    },
+                    {
+                        "x": 16,
+                        "y": 0
+                    },
+                    {
+                        "x": 16,
                         "y": 1
-                    },
-                    {
-                        "x": 2,
-                        "y": 1
-                    },
-                    {
-                        "x": 3,
-                        "y": 1
-                    },
-                    {
-                        "x": 4,
-                        "y": 1
-                    },
-                    {
-                        "x": 5,
-                        "y": 1
-                    },
-                    {
-                        "x": 5,
-                        "y": 2
-                    },
-                    {
-                        "x": 5,
-                        "y": 3
-                    },
-                    {
-                        "x": 4,
-                        "y": 2
-                    },
-                    {
-                        "x": 3,
-                        "y": 2
-                    },
-                    {
-                        "x": 2,
-                        "y": 2
-                    },
-                    {
-                        "x": 1,
-                        "y": 2
                     }
                 ],
-                "$type": "Submarine.Model.EngineRoom"
+                "$type": "Submarine.Model.StorageRoom"
             }
         },
         {
             "Key": 12,
             "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "Generator",
-                "MinimimValidSize": 12,
-                "ValidationText": "The Generator needs to be at least 12 tiles and 2000 pks and 1 Engineers to be operational, output will be  500 MWs per tile",
-                "CapacityPerTile": 500.0,
-                "NeededResources": {
-                    "$ref": "6"
-                },
-                "IsAccessable": false,
-                "coordinatesOfTilesInRoom": [
-                    {
-                        "x": 6,
-                        "y": 3
-                    },
-                    {
-                        "x": 6,
-                        "y": 2
-                    },
-                    {
-                        "x": 6,
-                        "y": 1
-                    },
-                    {
-                        "x": 7,
-                        "y": 1
-                    },
-                    {
-                        "x": 8,
-                        "y": 1
-                    },
-                    {
-                        "x": 8,
-                        "y": 2
-                    },
-                    {
-                        "x": 7,
-                        "y": 2
-                    },
-                    {
-                        "x": 7,
-                        "y": 3
-                    },
-                    {
-                        "x": 8,
-                        "y": 3
-                    },
-                    {
-                        "x": 9,
-                        "y": 3
-                    },
-                    {
-                        "x": 9,
-                        "y": 2
-                    },
-                    {
-                        "x": 9,
-                        "y": 1
-                    }
-                ],
-                "$type": "Submarine.Model.Generator"
-            }
-        },
-        {
-            "Key": 15,
-            "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
-                "TypeOfRoom": "FuelTank",
-                "MinimimValidSize": 9,
-                "ValidationText": "The FuelTank needs to be at least 9 tiles to be operational, output will be  1000 liters_fuel per tile",
-                "CapacityPerTile": 1000.0,
-                "NeededResources": {
-                    "$ref": "27"
-                },
-                "IsAccessable": false,
-                "coordinatesOfTilesInRoom": [
-                    {
-                        "x": 11,
-                        "y": 0
-                    },
-                    {
-                        "x": 10,
-                        "y": 0
-                    },
-                    {
-                        "x": 7,
-                        "y": 0
-                    },
-                    {
-                        "x": 6,
-                        "y": 0
-                    },
-                    {
-                        "x": 5,
-                        "y": 0
-                    },
-                    {
-                        "x": 8,
-                        "y": 0
-                    },
-                    {
-                        "x": 9,
-                        "y": 0
-                    },
-                    {
-                        "x": 12,
-                        "y": 0
-                    },
-                    {
-                        "x": 13,
-                        "y": 0
-                    }
-                ],
-                "$type": "Submarine.Model.FuelTank"
-            }
-        },
-        {
-            "Key": 16,
-            "Value": {
-                "inSub": {
-                    "$ref": "0"
-                },
+                "RoomID": 12,
                 "TypeOfRoom": "Battery",
                 "MinimimValidSize": 10,
-                "ValidationText": "The Battery needs to be at least 10 tiles and 1500 MWs to be operational, output will be  50 AH per tile",
                 "CapacityPerTile": 50.0,
                 "NeededResources": {
                     "$ref": "9"
@@ -791,50 +656,241 @@
                 "IsAccessable": false,
                 "coordinatesOfTilesInRoom": [
                     {
-                        "x": 26,
+                        "x": 17,
+                        "y": 1
+                    },
+                    {
+                        "x": 17,
                         "y": 0
                     },
                     {
-                        "x": 25,
+                        "x": 18,
                         "y": 0
                     },
                     {
-                        "x": 25,
+                        "x": 18,
                         "y": 1
                     },
                     {
-                        "x": 26,
+                        "x": 19,
                         "y": 1
                     },
                     {
-                        "x": 27,
-                        "y": 1
-                    },
-                    {
-                        "x": 27,
+                        "x": 19,
                         "y": 0
                     },
                     {
-                        "x": 28,
+                        "x": 20,
                         "y": 0
                     },
                     {
-                        "x": 28,
+                        "x": 20,
                         "y": 1
                     },
                     {
-                        "x": 29,
+                        "x": 21,
                         "y": 1
                     },
                     {
-                        "x": 29,
+                        "x": 21,
                         "y": 0
                     }
                 ],
                 "$type": "Submarine.Model.Battery"
             }
+        },
+        {
+            "Key": 16,
+            "Value": {
+                "RoomID": 16,
+                "TypeOfRoom": "Battery",
+                "MinimimValidSize": 10,
+                "CapacityPerTile": 50.0,
+                "NeededResources": {
+                    "$ref": "9"
+                },
+                "IsAccessable": false,
+                "coordinatesOfTilesInRoom": [
+                    {
+                        "x": 29,
+                        "y": 1
+                    },
+                    {
+                        "x": 29,
+                        "y": 0
+                    },
+                    {
+                        "x": 28,
+                        "y": 0
+                    },
+                    {
+                        "x": 27,
+                        "y": 0
+                    },
+                    {
+                        "x": 26,
+                        "y": 0
+                    },
+                    {
+                        "x": 26,
+                        "y": 1
+                    },
+                    {
+                        "x": 27,
+                        "y": 1
+                    },
+                    {
+                        "x": 28,
+                        "y": 1
+                    },
+                    {
+                        "x": 25,
+                        "y": 1
+                    },
+                    {
+                        "x": 25,
+                        "y": 0
+                    }
+                ],
+                "$type": "Submarine.Model.Battery"
+            }
+        },
+        {
+            "Key": 15,
+            "Value": {
+                "RoomID": 15,
+                "TypeOfRoom": "TorpedoRoom",
+                "MinimimValidSize": 20,
+                "CapacityPerTile": 1.0,
+                "NeededResources": {
+                    "$ref": "31"
+                },
+                "IsAccessable": false,
+                "coordinatesOfTilesInRoom": [
+                    {
+                        "x": 36,
+                        "y": 0
+                    },
+                    {
+                        "x": 37,
+                        "y": 0
+                    },
+                    {
+                        "x": 38,
+                        "y": 0
+                    },
+                    {
+                        "x": 38,
+                        "y": 1
+                    },
+                    {
+                        "x": 37,
+                        "y": 1
+                    },
+                    {
+                        "x": 36,
+                        "y": 1
+                    },
+                    {
+                        "x": 35,
+                        "y": 1
+                    },
+                    {
+                        "x": 38,
+                        "y": 3
+                    },
+                    {
+                        "x": 37,
+                        "y": 3
+                    },
+                    {
+                        "x": 36,
+                        "y": 3
+                    },
+                    {
+                        "x": 35,
+                        "y": 3
+                    },
+                    {
+                        "x": 34,
+                        "y": 3
+                    },
+                    {
+                        "x": 34,
+                        "y": 2
+                    },
+                    {
+                        "x": 34,
+                        "y": 1
+                    },
+                    {
+                        "x": 34,
+                        "y": 0
+                    },
+                    {
+                        "x": 35,
+                        "y": 0
+                    },
+                    {
+                        "x": 35,
+                        "y": 2
+                    },
+                    {
+                        "x": 36,
+                        "y": 2
+                    },
+                    {
+                        "x": 37,
+                        "y": 2
+                    },
+                    {
+                        "x": 38,
+                        "y": 2
+                    }
+                ],
+                "$type": "Submarine.Model.TorpedoRoom"
+            }
+        },
+        {
+            "Key": 17,
+            "Value": {
+                "RoomID": 17,
+                "TypeOfRoom": "Bunks",
+                "MinimimValidSize": 6,
+                "CapacityPerTile": 2.0,
+                "NeededResources": {
+                    "$ref": "18"
+                },
+                "IsAccessable": true,
+                "coordinatesOfTilesInRoom": [
+                    {
+                        "x": 30,
+                        "y": 3
+                    },
+                    {
+                        "x": 31,
+                        "y": 3
+                    },
+                    {
+                        "x": 32,
+                        "y": 3
+                    },
+                    {
+                        "x": 32,
+                        "y": 2
+                    },
+                    {
+                        "x": 31,
+                        "y": 2
+                    },
+                    {
+                        "x": 30,
+                        "y": 2
+                    }
+                ],
+                "$type": "Submarine.Model.Bunks"
+            }
         }
     ],
-    "_nextRoomID": 17,
-    "$id": "0"
+    "_nextRoomID": 18
 }

@@ -28,9 +28,13 @@ namespace Submarine.Model {
 
 
 	abstract public class Room {
-       
-		public Sub inSub { get; protected set; }
+		// don't save point to Sub but set it in Load
+		[fsIgnore]
 		// needs reference to sub for layout validation
+		public Sub inSub { get; set; }
+
+		public int RoomID { get; set; }
+
 		public RoomType TypeOfRoom { get; protected set; }
 
 		public List<Point> coordinatesOfTilesInRoom;
@@ -62,7 +66,8 @@ namespace Submarine.Model {
 				bool newResAv = AllResourcesAreAvailable (); //CurrentResource >= ReqResource;
 				if (prevResourcesAvailable != newResAv) {
 					prevResourcesAvailable = newResAv;
-					WarnTilesOfChange ();
+					if (IsLayoutValid)
+						WarnTilesOfChange ();
 				}	
 				return newResAv;
 			} 
@@ -115,7 +120,7 @@ namespace Submarine.Model {
 
 		public static Room CreateRoomOfType (RoomType ofThisRoomType, Sub inThisSub) {
 			// let factory create the correct concrete class
-			return RoomFactory.CreateRoomOfType (ofThisRoomType);
+			return RoomFactory.CreateRoomOfType (ofThisRoomType, inThisSub);
 		}
 
 		public void AddTile (Tile addTile) {
@@ -143,6 +148,9 @@ namespace Submarine.Model {
 			foreach (Point coord in coordinatesOfTilesInRoom) {
 				//FIXME: tile not correct
 				Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
+				if (warnTile.RoomID != RoomID)
+					UnityEngine.Debug.LogError ("I don't belong here !!");
+
 				if (warnTile.TileChangedActions != null)
 					warnTile.TileChangedActions (warnTile);
 				else

@@ -13,8 +13,8 @@ namespace Submarine.Model {
 		public int RoomID {
 			get{ return _roomID; }
 			set {
-				if (value == 0 && _roomID != 0)
-					UnityEngine.Debug.Log ("RoomID reset for (" + X + "," + Y + ")");
+//				if (value == 0 && _roomID != 0)
+//					UnityEngine.Debug.Log ("RoomID reset for (" + X + "," + Y + ")");
 				
 				_roomID = value;
 

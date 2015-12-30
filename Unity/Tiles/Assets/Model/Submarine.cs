@@ -147,6 +147,7 @@ namespace Submarine.Model {
 			foreach (var roomPair in rooms) {
 				int roomid = roomPair.Key;
 				Room room = roomPair.Value;
+				room.inSub = this; // set point too this Submarine
 
 				foreach (Point coord in room.coordinatesOfTilesInRoom) {
 					Tile checkTile = GetTileAt (coord.x, coord.y);
@@ -231,7 +232,7 @@ namespace Submarine.Model {
 		}
 		// set min tile size, capacity per tile and unit of capacity for each Room Type
 		private void SetRoomProperties () {
-			RoomFactory.inThisSub = this;
+			//RoomFactory.inThisSub = this;
 			RoomPropertiesInt = new Dictionary<string, int> ();
 
 			RoomPropertiesInt ["EngineRoom_Min"] = 12;
@@ -540,9 +541,12 @@ namespace Submarine.Model {
 						if (newRoomTile.RoomID == 0) {
 							// if no neighbor Tile is part of same room type then start a new room with this Tile
 							Room newRoom = Room.CreateRoomOfType (buildRoomOfType, inThisSub: this);     // create new room of this room type
-							AddRoomToSubmarine (newRoom);                   // add new room to submarine
+							newRoom.RoomID = _nextRoomID;					// set RoomID in new room
+							AddRoomToSubmarine (newRoom);                   // add new room to submarine, _nextRoomID well be inc.
 							newRoom.AddTile (newRoomTile);                  // add Tile to room
-							newRoomTile.RoomID = _nextRoomID - 1;           // set RoomID in Tile
+							// set RoomID in Tile, this will also fire the Update Sprite so be sure everything else is set !!
+							newRoomTile.RoomID = newRoom.RoomID;           	
+
 							//UnityEngine.Debug.Log ("Added tile (" + x + "," + y + "): no neighbor Tile is part of a " + buildRoomOfType + ", so started a new room " + newRoomTile.RoomID + ", wall type is " + newRoomTile.WallType);
 
 						}
@@ -579,7 +583,7 @@ namespace Submarine.Model {
 						// rebuild room to be sure the wall type and layout is still OK
 						Room newRoom = RebuildRoom (roomID);    
 						removeFromThisRoom = null; 			// set to null be sure it isn't used anymore, the room is rebuild
-						roomID = TileToBeRemoved.RoomID; 	// get new roomID
+						//roomID = newRoom.RoomID; 	// get new roomID
 
 						// compare new valid layout
 						newRoom.WarnTilesInRoomThatLayoutChanged (oldRoomLayoutValid);	 

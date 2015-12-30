@@ -1,20 +1,18 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Room.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/RoomFactory.cs">
     <Files>
-      <File FileName="Assets/Controller/WorldController.cs" Line="333" Column="3" />
-      <File FileName="Assets/Model/Submarine.cs" Line="573" Column="27" />
-      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/RoomFactory.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="144" Column="30" />
-      <File FileName="Assets/Model/Tile.cs" Line="20" Column="5" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="271" Column="1" />
+      <File FileName="Assets/Model/Submarine.cs" Line="235" Column="6" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="92" Column="1" />
+      <File FileName="Assets/Model/RoomFactory.cs" Line="8" Column="26" />
+      <File FileName="Assets/Model/Room.cs" Line="126" Column="39" />
+      <File FileName="Assets/Model/Tile.cs" Line="17" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="450" column="23" />
-      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="573" column="27" />
-      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Room.cs" line="145" column="24" />
+      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Submarine.cs" line="589" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
@@ -28,5 +26,8 @@
     <Watch file="Assets/Model/Room.cs" line="148" offsetX="1050" offsetY="1920" expression="coord.y" liveUpdate="False" />
     <Watch file="Assets/Model/Tile.cs" line="20" offsetX="798" offsetY="323" expression="X" liveUpdate="False" />
     <Watch file="Assets/Model/Tile.cs" line="20" offsetX="805" offsetY="355" expression="Y" liveUpdate="False" />
+    <Watch file="Assets/Model/Room.cs" line="150" offsetX="680" offsetY="2682" expression="coord.x" liveUpdate="False" />
+    <Watch file="Assets/Model/Room.cs" line="150" offsetX="823" offsetY="2682" expression="coord.y" liveUpdate="False" />
+    <Watch file="Assets/Model/Room.cs" line="151" offsetX="977" offsetY="2682" expression="warnTile.RoomID" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>
