@@ -95,17 +95,21 @@ namespace Submarine.Model {
 
 			prevResourcesAvailable = false;
 
-			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
-			ValidationText = "The " + ofThisRoomType + " needs to be at least " + MinimimValidSize + " tiles";
+			SetRoomValidationText ();
+				
+		}
+
+		protected void SetRoomValidationText ()
+		{	// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
+			ValidationText = "The " + TypeOfRoom + " needs to be at least " + MinimimValidSize + " tiles";
 			if (NeededResources != null) {
 				foreach (Resource resouce in NeededResources) {
 					ValidationText += " and " + resouce.amount + " " + resouce.unit;
 				}
 				ValidationText += " to be operational";
 			}
-				
 			if (UnitOfCapacity != Units.None)
-				ValidationText += ", output will be  " + capPerTile + " " + UnitOfCapacity + " per tile";
+				ValidationText += ", output will be  " + CapacityPerTile + " " + UnitOfCapacity + " per tile";
 		}
 
 		#endregion
