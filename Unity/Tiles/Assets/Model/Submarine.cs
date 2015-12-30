@@ -306,88 +306,42 @@ namespace Submarine.Model {
 		//TODO refactor this, too much same code
 
 		#region Design Validation
-
-		public bool ValidateOps () {
+		private bool ValidationCriteria(RoomType checkRoomType, int minOutput = 0) {
 			int roomCount = 0, validCount = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
-				if (room.TypeOfRoom == RoomType.Conn) {
+				if (room.TypeOfRoom == checkRoomType) {
 					roomCount++;
-					if (room.ResourcesAvailable)			// only need 1 Ops unit
+					if (room.Output > minOutput)			
 						validCount++;
 				}
 			}
 			if (roomCount == 0)
 				return false;
 			return roomCount == validCount ? true : false;
+		}
+
+		public bool ValidateOps () {
+				return ValidationCriteria(RoomType.Conn);
 		}
 
 		public bool ValidateRadio () {
-			int roomCount = 0, validCount = 0;
-			foreach (var roomPair in rooms) {
-				Room room = roomPair.Value;
-				if (room.TypeOfRoom == RoomType.RadioRoom) {
-					roomCount++;
-					if (room.Output > 0)			// only need 1 Radio unit
-						validCount++;
-				}
-			}
-			if (roomCount == 0)
-				return false;
-			return roomCount == validCount ? true : false;
+			return ValidationCriteria (RoomType.RadioRoom);
 		}
 
 		public bool ValidateSonar () {
-			int roomCount = 0, validCount = 0;
-			foreach (var roomPair in rooms) {
-				Room room = roomPair.Value;
-				if (room.TypeOfRoom == RoomType.Sonar) {
-					roomCount++;
-					if (room.Output > 0)		// only need 1 Sonar unit
-						validCount++;
-				}
-			}
-			if (roomCount == 0)
-				return false;
-			return roomCount == validCount ? true : false;
+			return ValidationCriteria(RoomType.Sonar );
 		}
 
 		public bool ValidateWeapons () {
-			int roomCount = 0, validCount = 0;
-			foreach (var roomPair in rooms) {
-				Room room = roomPair.Value;
-				if (room.TypeOfRoom == RoomType.TorpedoRoom) { // may be later also check missle deck
-					roomCount++;
-					if (room.Output > 0)
-						validCount++;
-				}
-			}
-			if (roomCount == 0)
-				return false;
-			return roomCount == validCount ? true : false;
+		// may be later also check missle deck
+			return ValidationCriteria(RoomType.TorpedoRoom);
 		}
 
 		public bool ValidatePropulsion () {	// Engine & battery must be ok
-			int roomCount = 0, validCount = 0;
-			foreach (var roomPair in rooms) {
-				Room room = roomPair.Value;
-				if (room.TypeOfRoom == RoomType.EngineRoom) {
-					roomCount++;
-					if (room.Output > 0)
-						validCount++;
-				}
-			}
-			foreach (var roomPair in rooms) {
-				Room room = roomPair.Value;
-				if (room.TypeOfRoom == RoomType.Battery) {
-					roomCount++;
-					if (room.Output > 0)
-						validCount++;
-				}
-			}
-			if (roomCount == 0)
-				return false;
-			return roomCount == validCount ? true : false;
+			bool engineOk = ValidationCriteria(RoomType.EngineRoom);
+			bool batteryOk = ValidationCriteria (RoomType.Battery);
+			return engineOk && batteryOk;
 		}
 
 		#endregion
