@@ -1,5 +1,4 @@
-# Dive...Dive..Dive
-Emergency dive: Wall of Text incoming #
+# Dive...Dive..Dive   Emergency dive: Wall of Text incoming #
 
 Inspired by the Starship corporation [http://www.starshipcorporation.com](Link URL) project and Prison Architect [https://www.introversion.co.uk/prisonarchitect/](Link URL) I've started developing a 2D submarine building simulator. 
 
