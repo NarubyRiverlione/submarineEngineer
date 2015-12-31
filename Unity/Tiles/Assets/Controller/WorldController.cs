@@ -82,6 +82,7 @@ public class WorldController : MonoBehaviour {
             Panel_Resources.SetActive(true);
             Panel_Legenda.SetActive(true);
             Panel_DesignValidation.SetActive(true);
+            _uiFB.FileBrowserWindow.transform.parent.GetComponent<Image>().raycastTarget = true;
 
             filePath = _uiFB.GetPath ();
 			chooseFilePathNow = false;
@@ -345,8 +346,11 @@ public class WorldController : MonoBehaviour {
         Panel_Legenda.SetActive(false);
         Panel_DesignValidation.SetActive(false);
 
+        
         _uiFB.Open (saveDir, loading);
-		chooseFilePathNow = true; 
+        //_uiFB.FileBrowserWindow.GetComponentInParent<Image>().raycastTarget = false;
+        _uiFB.FileBrowserWindow.transform.parent.GetComponent<Image>().raycastTarget = false;
+        chooseFilePathNow = true; 
 		Loading = loading;
 	}
 
