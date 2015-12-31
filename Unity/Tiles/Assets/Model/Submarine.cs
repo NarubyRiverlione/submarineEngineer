@@ -361,7 +361,7 @@ namespace Submarine.Model {
 				if (room.UnitOfOutput == outputUnit)
 					output += room.Output;
 				//TODO: add dedicated CrewTypes in bunks via UI, this is only too debug the design validation
-				if (room.TypeOfRoom == RoomType.Bunks && room.ResourcesAvailable && room.IsLayoutValid &&
+				if (room.TypeOfRoom == RoomType.Bunks && room.IsLayoutValid && // && room.ResourcesAvailable   &&
 				    (outputUnit == Units.Cook || outputUnit == Units.Watchstander || outputUnit == Units.Engineers || outputUnit == Units.Radioman || outputUnit == Units.Sonarman || outputUnit == Units.Torpedoman)) {
 					output += 4;
 				}
