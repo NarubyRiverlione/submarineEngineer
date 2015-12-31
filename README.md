@@ -1,14 +1,9 @@
-Dive...Dive..Dive
-Emergency dive: Wall of Text incoming
+# Dive...Dive..Dive
+Emergency dive: Wall of Text incoming #
 
 Inspired by the Starship corporation [http://www.starshipcorporation.com](Link URL) project and Prison Architect [https://www.introversion.co.uk/prisonarchitect/](Link URL) I've started developing a 2D submarine building simulator. 
-To be clear this it not the classic strategical  sub simulator where you drive and fight a submarine, this is above my skills (atm)
-To continue the disclaimers: this is my first Unity [http://unity3d.com](Link URL) project. 
-I'm no good (understatement) in graphic design.
-This project is very infant. I've started it in the Christmas holiday 2015.
-English is not my native language, if you spotted a grammar error in this text or the game please let it know.
 
-Now that all that negativity is done lets focus on what the design goals are:
+## Design goals ##
 
 * Different rooms types inside a submarine. 
 * Layout and size of the rooms should be flexible, not fixed  small,medium, large rectangular as in starship corporation.
@@ -20,8 +15,6 @@ Now that all that negativity is done lets focus on what the design goals are:
 * Using Kanban as project planning tool (https://kanbanflow.com/board/20b5bcfae2f3d4d66f4bb019ce3a272e)
 * Using Git and Bitbucket as (private) repository, see below
 * Using Bitbucket Issues tracker to log bugs.
-
-
 * Resources should 'magical' be available in required rooms. There needs to be a connection. Ex. The fuel tank is connected via a pipe to the engine room. Engine room is connected to the propeller via the shaft,...
 * (Almost) all rooms need electricity, so cables needs to connect them to the generator/battery.
 * Crew should be able to walk between there work, eating and rest location.
@@ -33,7 +26,8 @@ Now that all that negativity is done lets focus on what the design goals are:
 * Provide different submarine outlines.
 * Provide different submarine classes . Let go nucleair !  ssn / sbbn / ..
 
-Some unknowns:
+
+### Some unknowns: ###
 * Realistic numbers for engine horepower, generator output Watts, battery, crew requirements.
 * Main and trim Ballast tank and pump room needed?  Or not as this is only a 2D representation and there located in the hull.
 * Calculated weight distribution(how?)
