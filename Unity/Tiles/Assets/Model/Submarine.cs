@@ -57,7 +57,7 @@ namespace Submarine.Model {
 		// Room properties: capacity / tile, min size (output unit is set in concrete classes)
 		public Dictionary<string,int> RoomPropertiesInt { get; private set; }
 
-		// Requirments of a room, can be more then 1 = List
+		// Requirements of a room, can be more then 1 = List
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
 
 
@@ -89,7 +89,7 @@ namespace Submarine.Model {
 			// save submarine
 			string jsonStringOfSub = Serialize (typeof(Sub), this);
 
-			// save tiles, fsserialize doesn't support saving/loading of mulit dimension array = convert 2D array to List = save to other file
+			// save tiles, fsserialize doesn't support saving/loading of multi dimension array = convert 2D array to List = save to other file
 			List<Tile> allTiles = new List<Tile> ();         
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
@@ -104,7 +104,7 @@ namespace Submarine.Model {
 		}
 
 		// loading function is split into 2 component because first the submarine dimension needs to be read
-		// with thes dimensions know all game objects for the tiles can be created (add UpdateTileSprite as changed action)
+		// with these dimensions know all game objects for the tiles can be created (add UpdateTileSprite as changed action)
 		// when all game objects are created, read the tiles data and show the correct visual via de TileChangedActions
 		public void Load (string fileName) {
 			// only load submarine properties, not the tiles
@@ -154,9 +154,9 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		//TODO: should be in a concrete class as it't tight to the submarine outline image, so other classes and outline images can be uses
+		//TODO: should be in a concrete class as it's tight to the submarine outline image, so other classes and outline images can be uses
 
-		// set sub dimensions, room properties, room requirment but don't create rooms or outline here
+		// set sub dimensions, room properties, room requirement but don't create rooms or outline here
 		// GameObject should be created first so Action updateSprite is attached before a room is created
 		public Sub () { 
 			
@@ -340,7 +340,7 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateWeapons () {
-			// may be later also check missle deck
+			//TODO: may be later also check missile deck
 			return ValidationCriteria (RoomType.TorpedoRoom);
 		}
 
@@ -449,7 +449,7 @@ namespace Submarine.Model {
 				}
 
 				// room is rebuilt, get new roomID
-				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in su
+				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in sub
 				int newRoomID = GetTileAt (coordToGetRoomID.x, coordToGetRoomID.y).RoomID;
 
 				// return new room
@@ -616,7 +616,7 @@ namespace Submarine.Model {
 			if (rooms [checkTile.RoomID].NeededResources != null)
 				return rooms [checkTile.RoomID].ResourcesAvailable;
 			else {
-				return true; // no resources needs for this room = requirments always ok
+				return true; // no resources needs for this room = requirements always ok
 			}
 
 		}

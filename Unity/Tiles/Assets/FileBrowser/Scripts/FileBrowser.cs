@@ -245,7 +245,7 @@ public class FileBrowser {
 
 				if (Dir.Exists)
 					RetrieveFiles (new DirectoryInfo (path), true); // Retrieve hierarchy from given path
-                else {
+				else {
 					RetrieveFiles (m_pCurrentDirectory, true);
 				}
 			}
@@ -304,7 +304,7 @@ public class FileBrowser {
 			FileAttributes attributes = File.GetAttributes (_files [i].FullName);
 			
 			if ((attributes & FileAttributes.System) == FileAttributes.System
-			    || (attributes & FileAttributes.Hidden) == FileAttributes.Hidden) {
+				|| (attributes & FileAttributes.Hidden) == FileAttributes.Hidden) {
 				_files.RemoveAt (i);
 			}
 		}
@@ -320,8 +320,8 @@ public class FileBrowser {
 			FileAttributes attributes = File.GetAttributes (_dirs [i].FullName);
 			
 			if ((attributes & FileAttributes.System) == FileAttributes.System
-			    || (attributes & FileAttributes.Hidden) == FileAttributes.Hidden
-			    || (attributes & FileAttributes.Archive) == FileAttributes.Archive) {
+				|| (attributes & FileAttributes.Hidden) == FileAttributes.Hidden
+				|| (attributes & FileAttributes.Archive) == FileAttributes.Archive) {
 				_dirs.RemoveAt (i);
 			}
 		}
@@ -459,8 +459,8 @@ public class FileBrowser {
 				GoToRoot (false);
 			}
 		}
-        // Else, retrieve files with given key
-        else {
+		// Else, retrieve files with given key
+		else {
 			// Reset search lists
 			lock (m_pSearchedFiles) {
 				m_pSearchedFiles.Clear ();
@@ -590,8 +590,8 @@ public class FileBrowser {
 			FileAttributes attributes = File.GetAttributes (dirs [i].FullName);
 
 			if ((attributes & FileAttributes.System) != FileAttributes.System
-			             && (attributes & FileAttributes.Hidden) != FileAttributes.Hidden
-			             && (attributes & FileAttributes.Archive) != FileAttributes.Archive) {
+						 && (attributes & FileAttributes.Hidden) != FileAttributes.Hidden
+						 && (attributes & FileAttributes.Archive) != FileAttributes.Archive) {
 				if (dirs [i].Name.Contains (Key)) {
 					lock (m_pSearchedDirectories) {
 						m_pSearchedDirectories.Add (dirs [i]);

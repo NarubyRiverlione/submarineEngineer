@@ -59,9 +59,9 @@ namespace Submarine.Model {
 		// List with all needed resources for a room before room is operational
 		public List<Resource> NeededResources { get; protected set; }
 
-		// previous state of resources needs te be remembered so a change in resource supply can be detected = tile needs redrawing
+		// previous state of resources needs the be remembered so a change in resource supply can be detected = tile needs redrawing
 		bool prevResourcesAvailable;
-		// check is ALL resouces are available, if change in availability is detected warn tile to be redraw via Action Callback
+		// check is ALL resources are available, if change in availability is detected warn tile to be redraw via Action Callback
 		public bool ResourcesAvailable {
 			get {
 				bool newResAv = AllResourcesAreAvailable (); 
@@ -106,7 +106,7 @@ namespace Submarine.Model {
 		}
 
 		protected void SetRoomValidationText () {
-			// don't stop scentese with a '.', maybee a concrete class will add aditional requirements
+			// don't stop sentence with a '.', maybe a concrete class will add additional requirements
 
 			ValidationText = "The " + TypeOfRoom + " needs to be at least " + MinimimValidSize + " tiles";
 
@@ -162,13 +162,13 @@ namespace Submarine.Model {
 					warnTile.TileChangedActions (warnTile);
 				#if DEBUG
 				else //TODO: check can be remove
-					UnityEngine.Debug.Log ("No action for " + coord.x + "," + coord.y + " roomid " + warnTile.RoomID);
+					UnityEngine.Debug.Log ("No action for " + coord.x + "," + coord.y + " room id " + warnTile.RoomID);
 				#endif
 			}
 		}
 
 		private bool AllResourcesAreAvailable () {
-			bool AllAvailable = true; // asume all resouces are available so 1 not available resoucre will detected in the for each search
+			bool AllAvailable = true; // amuse all resources are available so 1 not available resource will detected in the for each search
 			if (NeededResources != null) {
 				foreach (Resource resource in NeededResources) {
 					if (inSub != null && resource.unit != Units.None) {
