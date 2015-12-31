@@ -143,7 +143,7 @@ namespace Submarine.Model {
 			rooms = loadedSub.rooms; 
 
 			foreach (var roomPair in rooms) {
-				int roomid = roomPair.Key;
+				//int roomid = roomPair.Key;
 				Room room = roomPair.Value;
 				room.inSub = this; // set ref. point too this Submarine 
 			}

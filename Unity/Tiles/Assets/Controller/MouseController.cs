@@ -99,12 +99,12 @@ public class MouseController : MonoBehaviour {
 	// Set zoom  level
 	public void SetZoomLevel (int zoomLevel) {
 		if (zoomLevel == 1) {//reset camera
-			Camera.main.transform.position = new Vector3 (19.5f, 2, -20); // TODO: check if this hard coded offset will work with other submarine outline images or if it needs to be set via Model
+			Camera.main.transform.position = new Vector3 (19.5f, 4, -20); // TODO: check if this hard coded offset will work with other submarine outline images or if it needs to be set via Model
 			Camera.main.GetComponent<Camera> ().orthographicSize = 14;
 		}
 		else {
 			Camera.main.GetComponent<Camera> ().orthographicSize = 14 / zoomLevel;
-			Camera.main.transform.Translate (new Vector3 (0, zoomLevel, 0));
+			//Camera.main.transform.Translate (new Vector3 (0, zoomLevel, 0));
 		}
 	}
 

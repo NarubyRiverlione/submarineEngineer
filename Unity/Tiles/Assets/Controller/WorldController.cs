@@ -380,4 +380,8 @@ public class WorldController : MonoBehaviour {
 
 	#endregion
 
+    public void QuitGame() {
+        Application.Quit();
+        }
+
 }
