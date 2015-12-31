@@ -3,9 +3,15 @@
 
 namespace Submarine.Model {
 	public class Tile {
-		public int X { get; private set; }
+		[UnityEngine.SerializeField]
+		private Point _coord;
 
-		public int Y { get; private set; }
+		public int X { get { return _coord.x; } }
+
+		public int Y { get { return _coord.y; } }
+
+		// functions can registered via this Action to be informed when tile is changed
+		public Action<Tile> TileChangedActions { get; set; }
 
 		int _roomID;
 
@@ -13,30 +19,14 @@ namespace Submarine.Model {
 		public int RoomID {
 			get{ return _roomID; }
 			set {
-//				if (value == 0 && _roomID != 0)
-//					UnityEngine.Debug.Log ("RoomID reset for (" + X + "," + Y + ")");
-				
 				_roomID = value;
-
 				if (TileChangedActions != null) // call all the registered callbacks
 					TileChangedActions (this);
-				
 			}
 		}
 
-		Action<Tile> _TileChangedActions;
-
-		public Action<Tile> TileChangedActions {
-			get { return _TileChangedActions; } 
-			set { 
-				_TileChangedActions = value; 
-
-			}
-		}
-		// functions can registered via this Action to changes of roomID
-
-		public bool canContainRoom { get; set; }
 		// used to exclude Tiles that are outside the outline of the sub
+		public bool canContainRoom { get; set; }
 
 		int _wallType;
 
@@ -52,8 +42,7 @@ namespace Submarine.Model {
 
 
 		public Tile (int x, int y) {
-			X = x;
-			Y = y;
+			_coord = new Point (x, y);
 			Reset ();
 			canContainRoom = true;
 		}

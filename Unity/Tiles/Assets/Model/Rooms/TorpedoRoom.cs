@@ -3,7 +3,7 @@
 namespace Submarine.Model {
 	public class TorpedoRoom : Room {
 		
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.Torpedoes; //TODO: should produce 1 Weapon Unit instead ?
 			}

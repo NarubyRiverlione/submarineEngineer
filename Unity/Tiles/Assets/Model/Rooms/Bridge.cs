@@ -2,7 +2,7 @@
 
 namespace Submarine.Model {
 	public class Bridge : Room {
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.None;
 			}

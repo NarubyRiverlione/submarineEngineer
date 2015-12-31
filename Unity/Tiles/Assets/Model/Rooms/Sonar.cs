@@ -4,7 +4,7 @@ namespace Submarine.Model {
 	public class Sonar : Room {
 		
 
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.Sonar;
 			}

@@ -4,7 +4,7 @@ namespace Submarine.Model {
 	public class Cabin : Room {
 		
 
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.Officers;
 			}

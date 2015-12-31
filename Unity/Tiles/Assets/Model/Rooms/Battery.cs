@@ -3,7 +3,7 @@
 namespace Submarine.Model {
 	public class Battery : Room {
 
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.AH;
 			}

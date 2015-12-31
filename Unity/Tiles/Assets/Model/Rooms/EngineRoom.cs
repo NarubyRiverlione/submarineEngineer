@@ -3,7 +3,7 @@
 namespace Submarine.Model {
 	public class EngineRoom : Room {
 
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.pks;
 			}

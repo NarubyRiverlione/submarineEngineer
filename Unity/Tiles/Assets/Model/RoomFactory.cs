@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Submarine.Model {
 	static class RoomFactory {
-		//static Sub inThisSub;
 
 		public static Room CreateRoomOfType (RoomType type, Sub inThisSub) {
 			switch (type) {

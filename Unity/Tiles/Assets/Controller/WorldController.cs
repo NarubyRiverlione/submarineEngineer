@@ -50,20 +50,24 @@ public class WorldController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		instance = this;
-		mySub = new Sub ();
+		mySub = new Sub (); // will set dimensions so game objects for each tile can be created
 		//Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
 	
 		// loading Wall sprites from sheet
 		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
 
 		CreateAllTileGameObjects ();
-		ShowAllTilesViaCallback ();
+		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailible
+		ShowAllTilesViaCallback ();		// now show tiles (needed for empty tiles)
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		UpdateResourceLabels ();
-		UpdateDesignValidation ();
+		if (mySub != null) { // don't update when sub isn't created yet
+			UpdateResourceLabels ();
+
+			UpdateDesignValidation ();
+		}
 		// wait until filepath is know
 		if (_uiFB.GetPath () != null && chooseFilePathNow) {
 			Debug.Log ("Opened : " + _uiFB.GetPath ());
@@ -78,7 +82,9 @@ public class WorldController : MonoBehaviour {
 
 	}
 
-	public void CreateAllTileGameObjects () {
+	#region Update Graphics
+
+	void CreateAllTileGameObjects () {
 		// Create GameObject for each Tile
 		for (int x = 0; x < mySub.lengthOfSub; x++) {
 			for (int y = 0; y < mySub.heightOfSub; y++) {
@@ -92,8 +98,7 @@ public class WorldController : MonoBehaviour {
 				newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);
 				// add Sprite Renderer component
 				newTileSprite.AddComponent<SpriteRenderer> ();
-
-				// when the roomID of the title changes, update the sprite
+				// when action of the title is called, update the sprite
 				newTile.TileChangedActions += (tile => {
 					UpdateTileSprite (newTile, newTileSprite);
 				});
@@ -102,7 +107,7 @@ public class WorldController : MonoBehaviour {
 		}
 	}
 
-	public void RemoveAllTileGameObjects () {
+	void RemoveAllTileGameObjects () {
 		for (int x = 0; x < mySub.lengthOfSub; x++) {
 			for (int y = 0; y < mySub.heightOfSub; y++) {
 				string name = "Tile_" + x + "/" + y;
@@ -111,15 +116,16 @@ public class WorldController : MonoBehaviour {
 			}
 		}
 	}
-
+		
+	// only call this in Start and LoadingSub, changes are being done via Callback Action
 	void ShowAllTilesViaCallback () {
 		for (int x = 0; x < mySub.lengthOfSub; x++) {
 			for (int y = 0; y < mySub.heightOfSub; y++) {
 				Tile checkTile = mySub.GetTileAt (x, y);
 				if (checkTile.TileChangedActions != null)
 					checkTile.TileChangedActions (checkTile);
-				else
-					Debug.LogError ("ERROR no action found for tile (" + x + "," + y + "), roomID:" + checkTile.RoomID);
+				//				else
+				//					Debug.LogError ("ERROR no action found for tile (" + x + "," + y + "), roomID:" + checkTile.RoomID);
 			}
 		}
 	}
@@ -132,8 +138,11 @@ public class WorldController : MonoBehaviour {
 		return mySub != null ? mySub.GetTileAt (x, y) : null;
 	}
 
+	// Update Tile (RoomType, Warnings, Wall)
 	void UpdateTileSprite (Tile showTile, GameObject gameObjectOfTitle) {
 		SpriteRenderer renderer = gameObjectOfTitle.GetComponent<SpriteRenderer> ();
+		#region Room Type
+		// Update Room Type Sprite
 		switch (mySub.GetRoomTypeOfTile (showTile)) {
 			case RoomType.Empty:
 				renderer.sprite = Tile_Empty;
@@ -192,11 +201,12 @@ public class WorldController : MonoBehaviour {
 		if (showTile != null && !showTile.canContainRoom) {
 			renderer.sprite = Tile_Transparent;
 		}
+		#endregion
 
+		#region Warnings
 		// check for warnings (valid layout)
 		GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
 		if (showTile.RoomID != 0) {
-
 			if (checkIfWarningAlreadyOnScreen == null) {
 				// create warning game object now		
 				checkIfWarningAlreadyOnScreen = new GameObject ();
@@ -211,16 +221,16 @@ public class WorldController : MonoBehaviour {
 				// show above Title = on the Tile_Warning sorting layer  						
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sortingLayerName = "Warnings";
 			}
-			// now it's sure the Wall game object exist, update (or set) it's sprite
-
+			// now it's sure the Tile_Warning_ game object exist, update (or set) it's sprite
+			// Show warning if room cannot operate because lake of resouces
 			bool resourceAvailable = mySub.IsTilePartOfRoomWithResources (showTile);
 			if (!resourceAvailable)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Waring_NoResources;
-			
+			// Show warning if room layout is invalid
 			bool layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
 			if (!layoutValid)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Warning_ToSmall;
-			
+			// Show no warnings (remove prev.) if all is fine
 			if (resourceAvailable && layoutValid)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
 			
@@ -229,7 +239,9 @@ public class WorldController : MonoBehaviour {
 			if (checkIfWarningAlreadyOnScreen != null)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
 		}
+		#endregion
 
+		#region Wall
 		// add wall type
 		GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find ("Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
 		if (showTile.RoomID != 0) {
@@ -264,17 +276,16 @@ public class WorldController : MonoBehaviour {
 			}
 			
 		}
+		#endregion
 
 	}
 
+	// Update UI Resouces
 	void UpdateResourceLabels () {
 		foreach (Units resourceUnit in Enum.GetValues(typeof(Units))) {
 			if (resourceUnit != Units.None && resourceUnit != Units.liters_pump) { //TODO: make label for liter pump
 				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
-				if (resourceGameObject == null) {
-					//Debug.Log ("ERROR cannot find resource label in UI for :" + resourceUnit);
-				}
-				else {
+				if (resourceGameObject != null) { // some Units are showed in UI Design Validation, not here
 					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
 					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
 					// show text (available / needed)
@@ -282,13 +293,12 @@ public class WorldController : MonoBehaviour {
 					resourceText.text = outputCount.ToString () + " / " + neededCount.ToString ();
 					// not enough resources = show text in red
 					resourceText.color = neededCount > outputCount ? Color.red : Color.white;
-
-
 				}
 			}
 		}
 	}
 
+	// Update UI Design Validation
 	void UpdateDesignValidation () {
 		string validationCriteria;
 		validationCriteria = "Ops";
@@ -302,7 +312,7 @@ public class WorldController : MonoBehaviour {
 		validationCriteria = "Propulsion";
 		SetOrResetValidation (validationCriteria, mySub.ValidatePropulsion ());
 	}
-
+	// update 1 Validation Criteria
 	void SetOrResetValidation (string validationCriteria, bool ok) {
 		GameObject findCheckbox = GameObject.Find ("Toggle_" + validationCriteria);
 		if (findCheckbox != null) {
@@ -311,6 +321,10 @@ public class WorldController : MonoBehaviour {
 
 	}
 
+	#endregion
+
+
+	#region Load / Save
 
 	// Get filepath
 	public void GetFilePath (bool loading) {
@@ -318,6 +332,7 @@ public class WorldController : MonoBehaviour {
 		chooseFilePathNow = true; 
 		Loading = loading;
 	}
+
 	// Loading sub
 	private void LoadingSub () {
 		if (filePath != null) {
@@ -329,15 +344,18 @@ public class WorldController : MonoBehaviour {
 			mySub.Load (filePath);
 			// add all tiles game objects 
 			CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
+			// Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbore to updates it's warning or wall
 			ShowAllTilesViaCallback ();
-		
 		}
 	}
-	// Save sub
+
+	// Saving sub
 	private void SavingSub () {
 		if (filePath != null) {
 			mySub.Save (filePath);
 		}
 	}
+
+	#endregion
 
 }

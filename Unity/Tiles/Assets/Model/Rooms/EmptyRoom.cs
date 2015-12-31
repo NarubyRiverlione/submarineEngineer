@@ -4,7 +4,7 @@ namespace Submarine.Model {
 	public class EmptyRoom : Room {
 		
 
-		public override Units UnitOfCapacity {
+		public override Units UnitOfOutput {
 			get {
 				return Units.None;
 			}

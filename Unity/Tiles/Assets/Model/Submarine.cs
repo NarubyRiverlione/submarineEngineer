@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-//using System.Threading.Tasks;
 using FullSerializer;
 
 
@@ -55,8 +54,10 @@ namespace Submarine.Model {
 		// ID 0 = no room assigned to Tile
 		int _nextRoomID = 1;
 
+		// Room properties: capacity / tile, min size (output unit is set in concrete classes)
 		public Dictionary<string,int> RoomPropertiesInt { get; private set; }
 
+		// Requirments of a room, can be more then 1 = List
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
 
 
@@ -88,8 +89,8 @@ namespace Submarine.Model {
 			// save submarine
 			string jsonStringOfSub = Serialize (typeof(Sub), this);
 
-			// save tiles
-			List<Tile> allTiles = new List<Tile> ();         // convert 2D array to List
+			// save tiles, fsserialize doesn't support saving/loading of mulit dimension array = convert 2D array to List = save to other file
+			List<Tile> allTiles = new List<Tile> ();         
 			for (int x = 0; x < lengthOfSub; x++) {
 				for (int y = 0; y < heightOfSub; y++) {
 					allTiles.Add (GetTileAt (x, y));
@@ -97,10 +98,7 @@ namespace Submarine.Model {
 			}
 			string jsonStringOfAllTitles = Serialize (typeof(List<Tile>), allTiles);
 
-			// save room resources
-
-
-
+			// save files to disk
 			File.WriteAllText (fileName, jsonStringOfSub);
 			File.WriteAllText (fileName.Substring (0, fileName.Length - 5) + "_Tiles", jsonStringOfAllTitles); // add _Tiles
 		}
@@ -147,16 +145,8 @@ namespace Submarine.Model {
 			foreach (var roomPair in rooms) {
 				int roomid = roomPair.Key;
 				Room room = roomPair.Value;
-				room.inSub = this; // set point too this Submarine
-
-				foreach (Point coord in room.coordinatesOfTilesInRoom) {
-					Tile checkTile = GetTileAt (coord.x, coord.y);
-					if (checkTile.RoomID != roomid) {
-						UnityEngine.Debug.LogError ("I don't belong here !!");
-					}
-				}
+				room.inSub = this; // set ref. point too this Submarine 
 			}
-
 		}
 
 		#endregion
@@ -164,7 +154,12 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Sub () {
+		//TODO: should be in a concrete class as it't tight to the submarine outline image, so other classes and outline images can be uses
+
+		// set sub dimensions, room properties, room requirment but don't create rooms or outline here
+		// GameObject should be created first so Action updateSprite is attached before a room is created
+		public Sub () { 
+			
 			lengthOfSub = 39;
 			heightOfSub = 6;
 
@@ -178,6 +173,12 @@ namespace Submarine.Model {
 
 			// initialize 2D array, still doesn't contain anything
 			_tile = new Tile[lengthOfSub, heightOfSub];
+			// instantiate Tiles
+			for (int x = 0; x < lengthOfSub; x++) {
+				for (int y = 0; y < heightOfSub; y++) {
+					_tile [x, y] = new Tile (x, y);
+				}
+			}
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
@@ -185,19 +186,10 @@ namespace Submarine.Model {
 			SetRoomProperties ();
 			// set room resources needs
 			SetRoomResoucresNeeds ();
-
-			// set tiles around tail and tower as unavailable for building, create Tower
-			CreateSub ();
-
 		}
+
 		// set tiles around tail and tower as unavailable for building, create Tower
-		private void CreateSub () {
-			// instantiate Tiles
-			for (int x = 0; x < lengthOfSub; x++) {
-				for (int y = 0; y < heightOfSub; y++) {
-					_tile [x, y] = new Tile (x, y);
-				}
-			}
+		public void SetOutlines () {
 			// set Tile's outside sub outlines as unavailable
 			// upper smaller tail section
 			for (int x = 0; x <= smallerTailLenght; x++) {
@@ -230,9 +222,9 @@ namespace Submarine.Model {
 				}
 			}
 		}
-		// set min tile size, capacity per tile and unit of capacity for each Room Type
-		private void SetRoomProperties () {
-			//RoomFactory.inThisSub = this;
+
+		// set min tile size, capacity per tile and unit of capacity for each Room Type (output unit is set in concrete classes)
+		private void SetRoomProperties () {//TODO: read from config file for this submarine outline type
 			RoomPropertiesInt = new Dictionary<string, int> ();
 
 			RoomPropertiesInt ["EngineRoom_Min"] = 12;
@@ -362,19 +354,17 @@ namespace Submarine.Model {
 
 		#region Rooms
 
-
 		public int GetAllOutputOfUnit (Units outputUnit) {
 			int output = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
-				if (room.UnitOfCapacity == outputUnit)
+				if (room.UnitOfOutput == outputUnit)
 					output += room.Output;
-				//TODO: set dedicated CrewTypes for bunks
-				if (room.TypeOfRoom == RoomType.Bunks &&
+				//TODO: add dedicated CrewTypes in bunks via UI, this is only too debug the design validation
+				if (room.TypeOfRoom == RoomType.Bunks && room.ResourcesAvailable && room.IsLayoutValid &&
 				    (outputUnit == Units.Cook || outputUnit == Units.Watchstander || outputUnit == Units.Engineers || outputUnit == Units.Radioman || outputUnit == Units.Sonarman || outputUnit == Units.Torpedoman)) {
 					output += 4;
 				}
-
 			}
 			return output;
 		}
@@ -418,7 +408,6 @@ namespace Submarine.Model {
 
 					foreach (Point coord in oldRoom.coordinatesOfTilesInRoom) {
 						Tile oldRoomTile = GetTileAt (coord.x, coord.y);
-	
 						// change RoomID of each Tile in old room
 						oldRoomTile.RoomID = newRoomID;
 						// add Tiles to new room (no need to removed them form old room as old room will be destroyed)
@@ -426,10 +415,9 @@ namespace Submarine.Model {
 					}
 
 					// compare new valid layout
-					newRoom.WarnTilesInRoomThatLayoutChanged (newRoomValid);  
+					newRoom.WarnTilesIfRoomLayoutValidationIsChanged (newRoomValid);  
 					// remove old room form sub											 
 					RemoveRoomFromSubmarine (oldRoomID);  
-
 				}
 			}
 		}
@@ -450,17 +438,21 @@ namespace Submarine.Model {
 					//rooms [roomID].RemoveTile (rebuildTile);
 					rebuildTile.Reset ();
 				}
+
 				// remove the room so it can be rebuild
 				RemoveRoomFromSubmarine (roomID);
+
 				// rebuild room
 				foreach (Point coordToAdd in remeberCoordinatesOfTiles) {
 					Tile rebuildTile = GetTileAt (coordToAdd.x, coordToAdd.y);
 					AddTileToRoom (rebuildTile.X, rebuildTile.Y, rebuildRoomType);
 				}
+
 				// room is rebuilt, get new roomID
 				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in su
 				int newRoomID = GetTileAt (coordToGetRoomID.x, coordToGetRoomID.y).RoomID;
 
+				// return new room
 				return rooms [newRoomID];
 			}
 		}
@@ -566,10 +558,7 @@ namespace Submarine.Model {
 				int roomID = TileToBeRemoved.RoomID;
 				Room removeFromThisRoom = GetRoom (roomID);
 				
-				if (removeFromThisRoom == null) {
-					//UnityEngine.Debug.Log ("Tile doesn't belong to a room");
-				}
-				else {
+				if (removeFromThisRoom != null) {
 					// remember layout validation before removing tile
 					bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;             
 
@@ -586,7 +575,7 @@ namespace Submarine.Model {
 						//roomID = newRoom.RoomID; 	// get new roomID
 
 						// compare new valid layout
-						newRoom.WarnTilesInRoomThatLayoutChanged (oldRoomLayoutValid);	 
+						newRoom.WarnTilesIfRoomLayoutValidationIsChanged (oldRoomLayoutValid);	 
 					}
 					else {
 						// destroy room
@@ -633,7 +622,6 @@ namespace Submarine.Model {
 		}
 
 		private void BuildWallsAroundTile (Tile checkAroundThisTile) {
-
 			checkAroundThisTile.WallType = 0; // reset already found walls
 
 			int x = checkAroundThisTile.X, y = checkAroundThisTile.Y;
@@ -666,7 +654,6 @@ namespace Submarine.Model {
 				checkAroundThisTile.WallType += 8; // add wall type for West
 
 			//UnityEngine.Debug.Log ("(re)build walls around (" + x + "," + y + ") wall type is now: " + checkAroundThisTile.WallType);
-
 		}
 
 		// check is neighbor Tile is same room type, add or merge. Return if same room type is found
@@ -690,7 +677,7 @@ namespace Submarine.Model {
 				bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
 				newRoomTile.RoomID = neigboreTile.RoomID;                              // store existing RoomID in newRoomTile
 				addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
-				addToThisRoom.WarnTilesInRoomThatLayoutChanged (oldRoomLayoutValid);	// compare new valid layout 
+				addToThisRoom.WarnTilesIfRoomLayoutValidationIsChanged (oldRoomLayoutValid);	// compare new valid layout 
 				
 			}
 			else {// Tile is already in a room: check if neighborer is in same room
@@ -706,8 +693,5 @@ namespace Submarine.Model {
 
 		#endregion
 	}
-
-	
-		
 
 }
