@@ -13,7 +13,7 @@ Inspired by the Starship corporation [http://www.starshipcorporation.com](Link U
 * Submarine design is only valid if all required rooms are operational.
 * Using Kanban as project planning tool (https://kanbanflow.com/board/20b5bcfae2f3d4d66f4bb019ce3a272e)
 * Using Git and Bitbucket as (private) repository, see below
-* Using Bitbucket Issues tracker to log bugs.
+* Using Bitbucket Issues tracker to log bugs https://bitbucket.org/RMeeuws/submarine-engineer/issues/new
 * Resources should 'magical' be available in required rooms. There needs to be a connection. Ex. The fuel tank is connected via a pipe to the engine room. Engine room is connected to the propeller via the shaft,...
 * (Almost) all rooms need electricity, so cables needs to connect them to the generator/battery.
 * Crew should be able to walk between there work, eating and rest location.
@@ -41,3 +41,6 @@ Inspired by the Starship corporation [http://www.starshipcorporation.com](Link U
 
 You probably noticed the division in the lineup of goals. 
 Well, the first part is done! There is a (I hope) working Alpha 1 available for pic and Mac.
+
+
+Please log bugs at https://bitbucket.org/RMeeuws/submarine-engineer/issues/new
