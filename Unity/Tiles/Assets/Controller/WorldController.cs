@@ -40,12 +40,19 @@ public class WorldController : MonoBehaviour {
 	// Wall sprite sheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
 
-	public UI_FileBrowser _uiFB;
-	public string filePath;
+    // UI Panels
+    public GameObject Panel_Resources;
+    public GameObject Panel_Legenda;
+    public GameObject Panel_DesignValidation;
+
+    public UI_FileBrowser _uiFB;
+	public string filePath=null;
 	private bool chooseFilePathNow = false;
 
 	private bool Loading = false;
-	// loading false = saving
+    string saveDir = "Saves";
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -68,10 +75,15 @@ public class WorldController : MonoBehaviour {
 
 			UpdateDesignValidation ();
 		}
-		// wait until file path is know
-		if (_uiFB.GetPath () != null && chooseFilePathNow) {
-			Debug.Log ("Opened : " + _uiFB.GetPath ());
-			filePath = _uiFB.GetPath ();
+        // if a filepath is requited (chooseFilePathNow==true) and FileBrowserWindow isn't visible (any more)
+        // the a file is chosen or cancel is pressed
+        if (! _uiFB.FileBrowserWindow.activeSelf && chooseFilePathNow) {
+            // show other panels for view
+            Panel_Resources.SetActive(true);
+            Panel_Legenda.SetActive(true);
+            Panel_DesignValidation.SetActive(true);
+
+            filePath = _uiFB.GetPath ();
 			chooseFilePathNow = false;
 			if (Loading)
 				LoadingSub ();
@@ -328,33 +340,39 @@ public class WorldController : MonoBehaviour {
 
 	// Get file path
 	public void GetFilePath (bool loading) {
-		_uiFB.Open (filePath);
+        // remove other panels for view
+        Panel_Resources.SetActive(false);
+        Panel_Legenda.SetActive(false);
+        Panel_DesignValidation.SetActive(false);
+
+        _uiFB.Open (saveDir, loading);
 		chooseFilePathNow = true; 
 		Loading = loading;
 	}
 
-	// Loading sub
-	private void LoadingSub () {
-		if (filePath != null) {
-			Loading = false;
-			// destroy all Tile game objects (and the wall, warning,.. children)
-			// (maybe new loaded sub has other dimensions)
-			RemoveAllTileGameObjects ();
-			// load new Sub 
-			mySub.Load (filePath);
-			// add all tiles game objects 
-			CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
-			// Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbor to updates it's warning or wall
-			ShowAllTilesViaCallback ();
-		}
-	}
+    // Loading sub
+    private void LoadingSub() {
+        if (filePath != null) {
+            Loading = false;
+            // destroy all Tile game objects (and the wall, warning,.. children)
+            // (maybe new loaded sub has other dimensions)
+            RemoveAllTileGameObjects();
+            // load new Sub 
+            mySub.Load(filePath);
+            // add all tiles game objects 
+            CreateAllTileGameObjects();     // also subscript too the  .TileChangedActions with UpdateTileSprite 
+                                            // Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbor to updates it's warning or wall
+            ShowAllTilesViaCallback();
+            }
+        }
+        
 
 	// Saving sub
 	private void SavingSub () {
 		if (filePath != null) {
 			mySub.Save (filePath);
 		}
-	}
+        }
 
 	#endregion
 

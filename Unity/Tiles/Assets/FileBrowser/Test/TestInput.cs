@@ -11,7 +11,7 @@ public class TestInput : MonoBehaviour
 	{
 		if (Input.GetKeyDown (KeyCode.Space))
 		{
-			_uiFB.Open (Path);
+			_uiFB.Open (Path,true);
 			DoOnce = true;
 		}
 

@@ -21,7 +21,7 @@ public class UI_FileBrowser : MonoBehaviour {
 	private string StartingDirectory = "";
 	// You can specify a starting directory here for the file browser. An empty string open the game folder.
 	private FileBrowser _FB;
-    
+	
 	// UI Main Managment
 
 	private enum ButtonType {
@@ -45,6 +45,8 @@ public class UI_FileBrowser : MonoBehaviour {
 
 	public GameObject FileBrowserWindow;
 	// The menu root
+
+	public GameObject OpenButton;
 
 	public Toggle FolderOnly;
 	// Choose to show files or not
@@ -191,6 +193,8 @@ public class UI_FileBrowser : MonoBehaviour {
 		m_pOpenedPath = null;
 		FileBrowserWindow.SetActive (true);
 
+	  
+
 		if (StartingDirectory == null || StartingDirectory == string.Empty)
 			_FB.Relocate (null);
 		else
@@ -199,9 +203,13 @@ public class UI_FileBrowser : MonoBehaviour {
 		RefreshButtons ();
 	}
 
-	public void Open (string Path) {
+	public void Open (string Path, bool Loading) {
 		m_pOpenedPath = null;
 		FileBrowserWindow.SetActive (true);
+        if (OpenButton != null) {
+            string textButton = Loading ? "OPEN" : "SAVE";
+            OpenButton.GetComponentInChildren<Text>().text = textButton;
+            }
 
 		if (Path == null || Path == string.Empty)
 			_FB.Relocate (null);
@@ -439,8 +447,8 @@ public class UI_FileBrowser : MonoBehaviour {
 		if (_Button == CurrentlySelected && ValidateDoubleClick) {
 			OpenFile ();
 		}
-        // Selecte the file and start the double click cooldown
-        else {
+		// Selecte the file and start the double click cooldown
+		else {
 			CurrentlySelected = _Button;
 			StartCoroutine (DoubleClick ());
 		}
@@ -479,8 +487,8 @@ public class UI_FileBrowser : MonoBehaviour {
 
 	public void Rename () {
 		if (RenameInputField.text.Trim () != string.Empty
-		    && CurrentlySelected != null
-		    && RenameInputField.text.IndexOfAny (new char[] { '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' }) == -1) {
+			&& CurrentlySelected != null
+			&& RenameInputField.text.IndexOfAny (new char[] { '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' }) == -1) {
 			RectTransform _CurrentRect = CurrentlySelected.gameObject.GetComponent<RectTransform> ();
 			string _text = _CurrentRect.FindChild ("Text").gameObject.GetComponent<Text> ().text;
 
@@ -902,10 +910,10 @@ public class UI_FileBrowser : MonoBehaviour {
 					// Add a button for each file
 					for (int i = 0; i < _ThumbnailsFiles.Length; i++) {
 						if (_ThumbnailsFiles [i].Extension.ToLower () == ".png"
-						    || _ThumbnailsFiles [i].Extension.ToLower () == ".jpg"
-						    || _ThumbnailsFiles [i].Extension.ToLower () == ".jpeg"
-						    || _ThumbnailsFiles [i].Extension.ToLower () == ".gif"
-						    || _ThumbnailsFiles [i].Extension.ToLower () == ".bmp") {
+							|| _ThumbnailsFiles [i].Extension.ToLower () == ".jpg"
+							|| _ThumbnailsFiles [i].Extension.ToLower () == ".jpeg"
+							|| _ThumbnailsFiles [i].Extension.ToLower () == ".gif"
+							|| _ThumbnailsFiles [i].Extension.ToLower () == ".bmp") {
 							ThumbData _data = new ThumbData ();
 							_data._fullName = _ThumbnailsFiles [i].FullName;
 							_data._name = _ThumbnailsFiles [i].Name;
