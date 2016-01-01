@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9037d8a9ff1955049a3411fac43e86ec
-timeCreated: 1450969960
+guid: 9c075f9c2b5ed42699f9e7a10f2fa4c9
+timeCreated: 1451662761
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -18,8 +18,8 @@ TextureImporter:
     21300022: Walls_11
     21300024: Walls_12
     21300026: Walls_13
-    21300028: Walls_15
-    21300030: Walls_14
+    21300028: Walls_14
+    21300030: Walls_15
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -45,7 +45,7 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -138,7 +138,7 @@ TextureImporter:
         x: 43
         y: 47
         width: 20
-        height: 20
+        height: 1
       alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -234,12 +234,12 @@ TextureImporter:
     - name: Walls_15
       rect:
         serializedVersion: 2
-        x: 65
-        y: 4
+        x: 64
+        y: 5
         width: 20
         height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

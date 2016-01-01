@@ -21,7 +21,6 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_Generator;
 	public Sprite Tile_Battery;
 	public Sprite Tile_Gallery;
-	public Sprite Tile_Mess;
 	public Sprite Tile_Cabin;
 	public Sprite Tile_Bunks;
 	public Sprite Tile_Conn;
@@ -30,8 +29,9 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_FuelTank;
 	public Sprite Tile_PumpRoom;
 	public Sprite Tile_StorageRoom;
-	public Sprite Tile_EscapeHatch;
 	public Sprite Tile_TorpedoRoom;
+	//	public Sprite Tile_Mess;
+	//	public Sprite Tile_EscapeHatch;
 
 	// Warning Sprites
 	public Sprite Warning_ToSmall;
@@ -40,17 +40,17 @@ public class WorldController : MonoBehaviour {
 	// Wall sprite sheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
 
-    // UI Panels
-    public GameObject Panel_Resources;
-    public GameObject Panel_Legenda;
-    public GameObject Panel_DesignValidation;
+	// UI Panels
+	public GameObject Panel_Resources;
+	public GameObject Panel_Legenda;
+	public GameObject Panel_DesignValidation;
 
-    public UI_FileBrowser _uiFB;
-	public string filePath=null;
+	public UI_FileBrowser _uiFB;
+	public string filePath = null;
 	private bool chooseFilePathNow = false;
 
 	private bool Loading = false;
-    string saveDir = "Saves";
+	string saveDir = "Saves";
 
 
 
@@ -75,16 +75,16 @@ public class WorldController : MonoBehaviour {
 
 			UpdateDesignValidation ();
 		}
-        // if a filepath is requited (chooseFilePathNow==true) and FileBrowserWindow isn't visible (any more)
-        // the a file is chosen or cancel is pressed
-        if (! _uiFB.FileBrowserWindow.activeSelf && chooseFilePathNow) {
-            // show other panels for view
-            Panel_Resources.SetActive(true);
-            Panel_Legenda.SetActive(true);
-            Panel_DesignValidation.SetActive(true);
-            _uiFB.FileBrowserWindow.transform.parent.GetComponent<Image>().raycastTarget = true;
+		// if a filepath is requited (chooseFilePathNow==true) and FileBrowserWindow isn't visible (any more)
+		// the a file is chosen or cancel is pressed
+		if (!_uiFB.FileBrowserWindow.activeSelf && chooseFilePathNow) {
+			// show other panels for view
+			Panel_Resources.SetActive (true);
+			Panel_Legenda.SetActive (true);
+			Panel_DesignValidation.SetActive (true);
+			_uiFB.FileBrowserWindow.transform.parent.GetComponent<Image> ().raycastTarget = true;
 
-            filePath = _uiFB.GetPath ();
+			filePath = _uiFB.GetPath ();
 			chooseFilePathNow = false;
 			if (Loading)
 				LoadingSub ();
@@ -198,9 +198,6 @@ public class WorldController : MonoBehaviour {
 				break;
 			case RoomType.StorageRoom:
 				renderer.sprite = Tile_StorageRoom;
-				break;
-			case RoomType.EscapeHatch:
-				renderer.sprite = Tile_EscapeHatch;
 				break;
 			case RoomType.TorpedoRoom:
 				renderer.sprite = Tile_TorpedoRoom;
@@ -341,34 +338,34 @@ public class WorldController : MonoBehaviour {
 
 	// Get file path
 	public void GetFilePath (bool loading) {
-        // remove other panels for view
-        Panel_Resources.SetActive(false);
-        Panel_Legenda.SetActive(false);
-        Panel_DesignValidation.SetActive(false);
+		// remove other panels for view
+		Panel_Resources.SetActive (false);
+		Panel_Legenda.SetActive (false);
+		Panel_DesignValidation.SetActive (false);
 
         
-        _uiFB.Open (saveDir, loading);
-        //_uiFB.FileBrowserWindow.GetComponentInParent<Image>().raycastTarget = false;
-        _uiFB.FileBrowserWindow.transform.parent.GetComponent<Image>().raycastTarget = false;
-        chooseFilePathNow = true; 
+		_uiFB.Open (saveDir, loading);
+		//_uiFB.FileBrowserWindow.GetComponentInParent<Image>().raycastTarget = false;
+		_uiFB.FileBrowserWindow.transform.parent.GetComponent<Image> ().raycastTarget = false;
+		chooseFilePathNow = true; 
 		Loading = loading;
 	}
 
-    // Loading sub
-    private void LoadingSub() {
-        if (filePath != null) {
-            Loading = false;
-            // destroy all Tile game objects (and the wall, warning,.. children)
-            // (maybe new loaded sub has other dimensions)
-            RemoveAllTileGameObjects();
-            // load new Sub 
-            mySub.Load(filePath);
-            // add all tiles game objects 
-            CreateAllTileGameObjects();     // also subscript too the  .TileChangedActions with UpdateTileSprite 
-                                            // Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbor to updates it's warning or wall
-            ShowAllTilesViaCallback();
-            }
-        }
+	// Loading sub
+	private void LoadingSub () {
+		if (filePath != null) {
+			Loading = false;
+			// destroy all Tile game objects (and the wall, warning,.. children)
+			// (maybe new loaded sub has other dimensions)
+			RemoveAllTileGameObjects ();
+			// load new Sub 
+			mySub.Load (filePath);
+			// add all tiles game objects 
+			CreateAllTileGameObjects ();     // also subscript too the  .TileChangedActions with UpdateTileSprite 
+			// Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbor to updates it's warning or wall
+			ShowAllTilesViaCallback ();
+		}
+	}
         
 
 	// Saving sub
@@ -376,12 +373,12 @@ public class WorldController : MonoBehaviour {
 		if (filePath != null) {
 			mySub.Save (filePath);
 		}
-        }
+	}
 
 	#endregion
 
-    public void QuitGame() {
-        Application.Quit();
-        }
+	public void QuitGame () {
+		Application.Quit ();
+	}
 
 }
