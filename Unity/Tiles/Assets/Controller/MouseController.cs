@@ -11,6 +11,10 @@ public class MouseController : MonoBehaviour {
 	public GameObject cursorBuilder;
 	public GameObject cursorDestroyer;
 
+	public GameObject scrollView_RoomButtons;
+	public GameObject scrollView_CrewButtons;
+	public GameObject scrollView_ItemButtons;
+
 	public Text UI_Room_Info_Text;
 	public Text UI_Information_Text;
 
@@ -35,64 +39,64 @@ public class MouseController : MonoBehaviour {
 	void Update () {
       
          
-            Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 
-            // move camera
-            if (Input.GetMouseButton(1)) { // Right mouse button is held down
-                Vector3 diff = prevMousePosition - currentMousePosition;
-                diff.y = 0;
-                Camera.main.transform.Translate(diff);
-                currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // get updated mouse position
-                }
-            prevMousePosition = currentMousePosition; // remember where the mouse was so we can detect dragging 
+		// move camera
+		if (Input.GetMouseButton (1)) { // Right mouse button is held down
+			Vector3 diff = prevMousePosition - currentMousePosition;
+			diff.y = 0;
+			Camera.main.transform.Translate (diff);
+			currentMousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition); // get updated mouse position
+		}
+		prevMousePosition = currentMousePosition; // remember where the mouse was so we can detect dragging 
 
 
-            if (world == null)  // sometimes the MouseController does an update before de World is created on start of the game
+		if (world == null)  // sometimes the MouseController does an update before de World is created on start of the game
                 world = WorldController.instance;
 
-            currentMousePosition.z = 0; // set Z to zero so mouse position isn't on the camera (and be clipped so it isn't visible)
+		currentMousePosition.z = 0; // set Z to zero so mouse position isn't on the camera (and be clipped so it isn't visible)
 
-            // get tile below mouse
-            Tile tileBelowMouse = world.GetTileAtWorldCoordinates(currentMousePosition);
+		// get tile below mouse
+		Tile tileBelowMouse = world.GetTileAtWorldCoordinates (currentMousePosition);
 
-            // update Cursor only when mouse is in other tile the previous.
-            if (tileBelowMouse != prevTileBelowMouse) {
-                // reset tile if title isn't build able 
-                if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
-                    tileBelowMouse = null;
+		// update Cursor only when mouse is in other tile the previous.
+		if (tileBelowMouse != prevTileBelowMouse) {
+			// reset tile if title isn't build able 
+			if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
+				tileBelowMouse = null;
 
-                if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
-                    Vector3 spaceBelowMouseCoordinates = new Vector3(tileBelowMouse.X, tileBelowMouse.Y, 0);
-                    if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
-                        cursorBuilder.transform.position = spaceBelowMouseCoordinates;
-                        cursorBuilder.SetActive(true);
-                        cursorDestroyer.SetActive(false);
-                        }
-                    else { // selected Empty room = show destroyer icon
-                        cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
-                        cursorBuilder.SetActive(false);
-                        cursorDestroyer.SetActive(true);
-                        }
-                    ShowRoomInformation(tileBelowMouse);
-                    }
-                else {
-                    // hide if cursor isn't on a tile
-                    cursorBuilder.SetActive(false);
-                    cursorDestroyer.SetActive(false);
-                    }
-                }
-            // remember previous tile below mouse so cursor and UI Information text is only updated where mouse is above an other tile
-            prevTileBelowMouse = tileBelowMouse;
+			if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
+				Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
+				if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
+					cursorBuilder.transform.position = spaceBelowMouseCoordinates;
+					cursorBuilder.SetActive (true);
+					cursorDestroyer.SetActive (false);
+				}
+				else { // selected Empty room = show destroyer icon
+					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
+					cursorBuilder.SetActive (false);
+					cursorDestroyer.SetActive (true);
+				}
+				ShowRoomInformation (tileBelowMouse);
+			}
+			else {
+				// hide if cursor isn't on a tile
+				cursorBuilder.SetActive (false);
+				cursorDestroyer.SetActive (false);
+			}
+		}
+		// remember previous tile below mouse so cursor and UI Information text is only updated where mouse is above an other tile
+		prevTileBelowMouse = tileBelowMouse;
 
-            // change title type = build or destroy room if clicked on (release left mouse)
-            if (Input.GetMouseButtonUp(0) && EventSystem.current.IsPointerOverGameObject()) {
-                if (tileBelowMouse != null) {//check were above a tile
-                    if (RoomTypeToBeBuild != RoomType.Empty)
-                        world.mySub.AddTileToRoom(tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);   // add
+		// change title type = build or destroy room if clicked on (release left mouse)
+		if (Input.GetMouseButtonUp (0) && EventSystem.current.IsPointerOverGameObject ()) {
+			if (tileBelowMouse != null) {//check were above a tile
+				if (RoomTypeToBeBuild != RoomType.Empty)
+					world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);   // add
                     else
-                        world.mySub.RemoveTileOfRoom(tileBelowMouse.X, tileBelowMouse.Y);                   // remove
-                    }
-                }
+					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove
+			}
+		}
             
 	}
 
@@ -144,7 +148,35 @@ public class MouseController : MonoBehaviour {
 		UI_Information_Text.text = info;
 	}
 
+	// Select between rooms - crew - items
+	public void SelectBuildingButtons () {
+		ToggleGroup toggleGroup_Rooms = GameObject.Find ("Panel_Building").GetComponent<ToggleGroup> ();
+		if (toggleGroup_Rooms != null) {
+			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
+			if (activeRoomToggle != null) {
+				switch (activeRoomToggle.name) {
+					case "Toggle_Rooms":
+						scrollView_RoomButtons.SetActive (true);
+						scrollView_CrewButtons.SetActive (false);
+						scrollView_ItemButtons.SetActive (false);
+						break;
+					case "Toggle_Crew":
+						scrollView_RoomButtons.SetActive (false);
+						scrollView_CrewButtons.SetActive (true);
+						scrollView_ItemButtons.SetActive (false);
+						break;
+					case "Toggle_Items":
+						scrollView_RoomButtons.SetActive (false);
+						scrollView_CrewButtons.SetActive (false);
+						scrollView_ItemButtons.SetActive (true);
+						break;
+					default:
+						throw new Exception ("Selected an unknow toggle in Panel building, check names");
 
+				}
+			}
+		}
+	}
 }
 	
 
