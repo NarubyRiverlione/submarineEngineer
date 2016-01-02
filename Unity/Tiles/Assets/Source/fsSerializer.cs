@@ -385,7 +385,7 @@ namespace FullSerializer {
 				"multiple fsConverters -- please construct a new instance for " + converter);
 			}
 
-			// TODO: wrap inside of a ConverterManager so we can control _converters and _cachedConverters lifetime
+			// : wrap inside of a ConverterManager so we can control _converters and _cachedConverters lifetime
 			if (converter is fsDirectConverter) {
 				var directConverter = (fsDirectConverter)converter;
 				_availableDirectConverters [directConverter.ModelType] = directConverter;
@@ -592,7 +592,7 @@ namespace FullSerializer {
 			//
 			// Note: We allow converters to request that we do *not* add type information.
 			if (storageType != instance.GetType () &&
-			             GetConverter (storageType, overrideConverterType).RequestInheritanceSupport (storageType)) {
+			    GetConverter (storageType, overrideConverterType).RequestInheritanceSupport (storageType)) {
 
 				// Add the inheritance metadata
 				EnsureDictionary (data);
@@ -701,7 +701,7 @@ namespace FullSerializer {
 
 				fsOption<fsVersionedType> versionedType = fsVersionManager.GetVersionedType (storageType);
 				if (versionedType.HasValue &&
-				                versionedType.Value.VersionString != version) {
+				    versionedType.Value.VersionString != version) {
 
 					// we have to do a migration
 					var deserializeResult = fsResult.Success;
@@ -718,7 +718,7 @@ namespace FullSerializer {
 					if (deserializeResult.Failed)
 						return deserializeResult;
 
-					// TODO: we probably should be invoking object processors all along this pipeline
+					// : we probably should be invoking object processors all along this pipeline
 					for (int i = 1; i < path.Count; ++i) {
 						result = path [i].Migrate (result);
 					}
@@ -746,7 +746,7 @@ namespace FullSerializer {
 			// We wait until here to actually Invoke_OnBeforeDeserialize because we do not
 			// have the correct set of processors to invoke until *after* we have resolved
 			// the proper type to use for deserialization.
-			// TODO: Consider if we want to use the objectType for fetching processors instead
+			// : Consider if we want to use the objectType for fetching processors instead
 			//       the type that the user passed in. If we move this check to also consider
 			//       the object type, then we have to handle the scenario where a processor is
 			//       recovering stale data and the object type lookup fails.

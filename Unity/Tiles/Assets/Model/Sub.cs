@@ -60,6 +60,7 @@ namespace Submarine.Model {
 		// Requirements of a room, can be more then 1 = List
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
 
+		//
 
 		#region SAVE / LOAD
 
@@ -368,17 +369,19 @@ namespace Submarine.Model {
 
 		#region Rooms
 
+
+
 		public int GetAllOutputOfUnit (Units outputUnit) {
 			int output = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
 				if (room.UnitOfOutput == outputUnit)
 					output += room.Output;
-				//TODO: add dedicated CrewTypes in bunks via UI, this is only too debug the design validation
-				if (room.TypeOfRoom == RoomType.Bunks && room.IsLayoutValid && // && room.ResourcesAvailable   &&
-				    (outputUnit == Units.Cook || outputUnit == Units.Watchstander || outputUnit == Units.Engineers || outputUnit == Units.Radioman || outputUnit == Units.Sonarman || outputUnit == Units.Torpedoman)) {
-					output += 4;
-				}
+//				TODO: add dedicated CrewTypes in bunks via UI, this is only too debug the design validation
+//				if (room.TypeOfRoom == RoomType.Bunks && room.IsLayoutValid && // && room.ResourcesAvailable   &&
+//				    (outputUnit == Units.Cook || outputUnit == Units.Watchstander || outputUnit == Units.Engineers || outputUnit == Units.Radioman || outputUnit == Units.Sonarman || outputUnit == Units.Torpedoman)) {
+//					output += 4;
+//				}
 			}
 			return output;
 		}

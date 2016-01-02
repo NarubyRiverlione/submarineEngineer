@@ -30,7 +30,7 @@ namespace Submarine.Model {
 					return new RadioRoom (type, inThisSub, getPropInt ("RadioRoom_Min", inThisSub), getPropInt ("RadioRoom_CapPerTile", inThisSub), getPropReqRes (RoomType.RadioRoom, inThisSub));
 				case RoomType.FuelTank:
 					return new FuelTank (type, inThisSub, getPropInt ("FuelTank_Min", inThisSub), getPropInt ("FuelTank_CapPerTile", inThisSub), getPropReqRes (RoomType.FuelTank, inThisSub));
-				case RoomType.PumpRoom: // TODO: make room creation button for pump room
+				case RoomType.PumpRoom: 
 					return new PumpRoom (type, inThisSub, getPropInt ("PumpRoom_Min", inThisSub), getPropInt ("PumpRoom_CapPerTile", inThisSub), getPropReqRes (RoomType.PumpRoom, inThisSub));
 				case RoomType.StorageRoom:
 					return new StorageRoom (type, inThisSub, getPropInt ("StorageRoom_Min", inThisSub), getPropInt ("StorageRoom_CapPerTile", inThisSub), getPropReqRes (RoomType.StorageRoom, inThisSub));

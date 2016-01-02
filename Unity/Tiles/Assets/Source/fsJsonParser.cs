@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 
 namespace FullSerializer {
-	// TODO: properly propagate warnings/etc for fsResult states
+	// : properly propagate warnings/etc for fsResult states
 
 	/// <summary>
 	/// A simple recursive descent parser for JSON.
@@ -18,7 +18,7 @@ namespace FullSerializer {
 			int length = Math.Min (50, _input.Length - start);
 
 			string error = "Error while parsing: " + message + "; context = <" +
-			                        _input.Substring (start, length) + ">";
+			               _input.Substring (start, length) + ">";
 			return fsResult.Fail (error);
 		}
 
@@ -173,9 +173,9 @@ namespace FullSerializer {
 				case 'u':
 					TryMoveNext ();
 					if (IsHex (Character (0))
-					                   && IsHex (Character (1))
-					                   && IsHex (Character (2))
-					                   && IsHex (Character (3))) {
+					    && IsHex (Character (1))
+					    && IsHex (Character (2))
+					    && IsHex (Character (3))) {
 
 						uint codePoint = ParseUnicode (Character (0), Character (1), Character (2), Character (3));
 
@@ -411,7 +411,7 @@ namespace FullSerializer {
 			SkipSpace ();
 
 			var result = new Dictionary<string, fsData> (
-				                      fsConfig.IsCaseSensitive ? StringComparer.CurrentCulture : StringComparer.CurrentCultureIgnoreCase);
+				             fsConfig.IsCaseSensitive ? StringComparer.CurrentCulture : StringComparer.CurrentCultureIgnoreCase);
 
 			while (HasValue () && Character () != '}') {
 				fsResult failure;
