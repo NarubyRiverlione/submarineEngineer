@@ -319,8 +319,21 @@ public class WorldController : MonoBehaviour {
 			if (resourceUnit != Units.None) { 
 				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
 				if (resourceGameObject != null) { // some Units are showed in UI Design Validation, not here
-					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
+					// AVAILABLE
+					int outputCount = 0;
+					if (resourceUnit != Units.Engineers && resourceUnit != Units.Cook &&
+					    resourceUnit != Units.Radioman && resourceUnit != Units.Sonarman &&
+					    resourceUnit != Units.Torpedoman && resourceUnit != Units.Watchstanders &&
+					    resourceUnit != Units.Officers)
+						// get non-crew count
+						outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
+					else
+						// get crew count
+						outputCount = mySub.AmountOfCrewType (resourceUnit);
+
+					// NEEDED
 					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
+
 					// show text (available / needed)
 					Text resourceText = resourceGameObject.GetComponent<Text> ();
 					resourceText.text = neededCount.ToString () + " / " + outputCount.ToString ();
@@ -410,4 +423,13 @@ public class WorldController : MonoBehaviour {
 		Application.Quit ();
 	}
 
+	public void AddCrew (string typeOfCrew) {
+		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
+		mySub.AddCrew (crewType);
+	}
+
+	public void RemoveCrew (string typeOfCrew) {
+		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
+		mySub.RemoveCrew (crewType);
+	}
 }

@@ -11,11 +11,11 @@ namespace Submarine.Model {
 		liters_balast,
 		food,
 		tins,
-		Crew,
+		Enlisted,
 		// needed for generic output of Bunks
 		Engineers,
 		Cook,
-		Watchstander,
+		Watchstanders,
 		Officers,
 		//Lookouts,
 		Sonarman,
