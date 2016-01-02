@@ -73,11 +73,6 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (mySub != null) { // don't update when sub isn't created yet
-			UpdateResourceLabels ();
-
-			UpdateDesignValidation ();
-		}
 		// if a filepath is requited (chooseFilePathNow==true) and FileBrowserWindow isn't visible (any more)
 		// the a file is chosen or cancel is pressed
 		if (!_uiFB.FileBrowserWindow.activeSelf && chooseFilePathNow) {
@@ -117,6 +112,15 @@ public class WorldController : MonoBehaviour {
 				// when action of the title is called, update the sprite
 				newTile.TileChangedActions += (tile => {
 					UpdateTileSprite (newTile, newTileSprite);
+				});
+				// Tile changed = room changes = rescources changed
+				// update Resource Panel
+				newTile.TileChangedActions += ((tile) => {
+					UpdateResourceLabels ();
+				});
+				// Update Design Validation Panel
+				newTile.TileChangedActions += ((tile) => {
+					UpdateDesignValidation ();
 				});
 
 			}
