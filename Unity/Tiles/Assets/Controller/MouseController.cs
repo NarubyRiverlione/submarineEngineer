@@ -177,6 +177,18 @@ public class MouseController : MonoBehaviour {
 			}
 		}
 	}
+
+	public void AddCrew (string typeOfCrew) {
+		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
+		world.mySub.AddCrew (crewType);
+		world.UpdateUIpanels ();
+	}
+
+	public void RemoveCrew (string typeOfCrew) {
+		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
+		world.mySub.RemoveCrew (crewType);
+		world.UpdateUIpanels ();
+	}
 }
 	
 

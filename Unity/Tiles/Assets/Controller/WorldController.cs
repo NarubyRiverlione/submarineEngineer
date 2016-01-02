@@ -73,6 +73,9 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		UpdateCrewFreeSpaces ();
+
 		// if a filepath is requited (chooseFilePathNow==true) and FileBrowserWindow isn't visible (any more)
 		// the a file is chosen or cancel is pressed
 		if (!_uiFB.FileBrowserWindow.activeSelf && chooseFilePathNow) {
@@ -313,14 +316,31 @@ public class WorldController : MonoBehaviour {
 
 	}
 
+	//  Update all UI panels (too be called from mouse controller)
+	public void UpdateUIpanels () {
+		UpdateResourceLabels ();
+		UpdateDesignValidation ();
+		UpdateCrewFreeSpaces ();
+	}
+
 	// Update UI Resources
 	void UpdateResourceLabels () {
 		foreach (Units resourceUnit in Enum.GetValues(typeof(Units))) {
 			if (resourceUnit != Units.None) { 
 				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
 				if (resourceGameObject != null) { // some Units are showed in UI Design Validation, not here
-					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
+					// AVAILABLE
+					int outputCount = 0;
+					if (mySub.isCrewType (resourceUnit))
+						// get crew count
+						outputCount = mySub.AmountOfCrewType (resourceUnit);
+					else
+						// get non-crew count
+						outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
+					
+					// NEEDED
 					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
+
 					// show text (available / needed)
 					Text resourceText = resourceGameObject.GetComponent<Text> ();
 					resourceText.text = neededCount.ToString () + " / " + outputCount.ToString ();
@@ -348,6 +368,7 @@ public class WorldController : MonoBehaviour {
 
 		validationCriteria = "Propulsion";
 		SetOrResetValidation (validationCriteria, mySub.ValidatePropulsion ());
+
 	}
 	// update 1 Validation Criteria
 	void SetOrResetValidation (string validationCriteria, bool ok) {
@@ -357,6 +378,20 @@ public class WorldController : MonoBehaviour {
 		}
 		else {
 			Debug.Log ("No validation checkbox for " + validationCriteria);
+		}
+	}
+
+	// update free slots in Add Crew Panel
+	void UpdateCrewFreeSpaces () {
+		if (GameObject.Find ("ScrollView_CrewButtons") != null) { // only when Crew panel is shown
+			GameObject.Find ("Officer place").GetComponent<Text> ().text = mySub.SpacesForOfficers.ToString ();
+
+			GameObject.Find ("Cook place").GetComponent<Text> ().text = mySub.SpacesForCooks.ToString ();
+
+			GameObject.Find ("SonarMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
+			GameObject.Find ("RadioMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
+			GameObject.Find ("TorpedoMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
+			GameObject.Find ("Engineer place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
 		}
 	}
 
@@ -409,5 +444,6 @@ public class WorldController : MonoBehaviour {
 	public void QuitGame () {
 		Application.Quit ();
 	}
+
 
 }

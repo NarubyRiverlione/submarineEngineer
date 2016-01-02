@@ -60,7 +60,27 @@ namespace Submarine.Model {
 		// Requirements of a room, can be more then 1 = List
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
 
-		//
+
+		// List of crew
+		public List<Crew> CrewList { get; private set; }
+
+		[UnityEngine.SerializeField]
+		int _nextCrewID = 1;
+
+
+
+		public int SpacesForOfficers  { get { return GetAllOutputOfUnit (Units.Officers) - AmountOfOfficers; } }
+
+		public int AmountOfOfficers { get { return AmountOfCrewType (Units.Officers); } }
+
+		// 1 cook / gallery
+		public int SpacesForCooks  { get { return AmountOfRoomOftype (RoomType.Gallery) - AmountOfCooks; } }
+
+		public int AmountOfCooks  { get { return AmountOfCrewType (Units.Cook); } }
+
+		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted; } }
+
+		public int AmountOfEnlisted  { get { return AmountOfCrewType (Units.Enlisted); } }
 
 		#region SAVE / LOAD
 
@@ -183,6 +203,9 @@ namespace Submarine.Model {
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
+			// initialize CrewList
+			CrewList = new List<Crew> ();
+
 			// set room properties 
 			SetRoomProperties ();
 			// set room resources needs
@@ -293,18 +316,23 @@ namespace Submarine.Model {
 				{ new Resource (Units.Engineers, 1) }
 			};
 			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000) } };
-			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstander, 2) } };
+
+			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstanders, 2) } };
+
 			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
 				{ new Resource (Units.tins, 40) },
 				{ new Resource (Units.Cook, 1) }
 			};
 			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 2) } };
+
 			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 8) } };
+
 			RoomPropertiesReqRes [RoomType.Conn] = new List<Resource> {
 				{ new Resource (Units.Officers, 2) },
-				{ new Resource (Units.Watchstander, 4) }
+				{ new Resource (Units.Watchstanders, 4) }
 			};
 			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1) } };
+
 			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1) } };
 	
 			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_balast, 1000) } };
@@ -347,6 +375,7 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateCrew () {
+			//TODO  check also crewList
 			bool bunksOk = ValidationCriteria (RoomType.Bunks);
 			bool cabinOk = ValidationCriteria (RoomType.Cabin);
 			bool escapeOk = ValidationCriteria (RoomType.EscapeHatch);
@@ -369,19 +398,12 @@ namespace Submarine.Model {
 
 		#region Rooms
 
-
-
 		public int GetAllOutputOfUnit (Units outputUnit) {
 			int output = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
 				if (room.UnitOfOutput == outputUnit)
 					output += room.Output;
-//				TODO: add dedicated CrewTypes in bunks via UI, this is only too debug the design validation
-//				if (room.TypeOfRoom == RoomType.Bunks && room.IsLayoutValid && // && room.ResourcesAvailable   &&
-//				    (outputUnit == Units.Cook || outputUnit == Units.Watchstander || outputUnit == Units.Engineers || outputUnit == Units.Radioman || outputUnit == Units.Sonarman || outputUnit == Units.Torpedoman)) {
-//					output += 4;
-//				}
 			}
 			return output;
 		}
@@ -394,6 +416,10 @@ namespace Submarine.Model {
 					required += room.GetResouceNeeded (reqUnit);
 			}
 			return required;
+		}
+
+		private int AmountOfRoomOftype (RoomType typeOfRoom) {
+			return rooms.Where (r => r.Value.TypeOfRoom == typeOfRoom).Count ();
 		}
 
 		private void AddRoomToSubmarine (Room addThisRoom) {
@@ -706,6 +732,69 @@ namespace Submarine.Model {
 	
 				}
 			}
+		}
+
+		#endregion
+
+		#region Crew
+
+		public void AddCrew (Units crewType) {
+			// Add officer
+			if (crewType == Units.Officers) {
+				// add only if there is enough spaces left
+				if (AmountOfOfficers < SpacesForOfficers) {
+					CrewList.Add (new Crew (crewType, _nextCrewID));
+					_nextCrewID++;
+				}
+			}
+			// Add cook (doesn't rest in Bunks because of loop: bunk needs food, food needs cook, cook needs bunk)
+			if (crewType == Units.Cook) {
+				// add only if there is enough spaces left
+				if (AmountOfCooks < SpacesForCooks) {
+					CrewList.Add (new Crew (crewType, _nextCrewID));
+					_nextCrewID++;
+				}
+			}
+			// Add normal crew (not Cooks)
+			if (isEnlisted (crewType)) {
+				// add only if there is enough spaces left (bunks have Enlisted as generic crew type)
+				if (AmountOfEnlisted < SpacesForEnlisted) {
+					CrewList.Add (new Crew (crewType, _nextCrewID));
+					_nextCrewID++;
+				}
+			}
+		}
+
+		public void RemoveCrew (Units crewType) {
+			int stillCrewAboard = AmountOfCrewType (crewType);
+			if (stillCrewAboard > 0) {
+				Crew foundCrew = CrewList.Where (c => c.Type == crewType).First ();
+				CrewList.Remove (foundCrew);
+			}
+		}
+
+		public int AmountOfCrewType (Units crewType) {
+			if (!isEnlisted (crewType))
+				return CrewList.Where (c => c.Type == crewType).Count ();
+			else {
+				int amount = 0;
+				amount += CrewList.Where (c => c.Type == Units.Engineers).Count ();
+				amount += CrewList.Where (c => c.Type == Units.Radioman).Count ();
+				amount += CrewList.Where (c => c.Type == Units.Sonarman).Count ();
+				amount += CrewList.Where (c => c.Type == Units.Torpedoman).Count ();
+				amount += CrewList.Where (c => c.Type == Units.Watchstanders).Count ();
+				return amount;
+			}
+		}
+
+		// enlisted = no officers (cabin), no cooks (gallery)
+		public  bool isEnlisted (Units crewType) {
+			return crewType == Units.Engineers || crewType == Units.Radioman || crewType == Units.Sonarman
+			|| crewType == Units.Torpedoman || crewType == Units.Watchstanders;
+		}
+
+		public bool isCrewType (Units crewType) {
+			return isEnlisted (crewType) || crewType == Units.Officers || crewType == Units.Cook;
 		}
 
 		#endregion

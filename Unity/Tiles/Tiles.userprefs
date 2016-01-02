@@ -1,24 +1,24 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Controller/WorldController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Sub.cs">
     <Files>
-      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="1" Column="1" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="394" Column="91" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="190" Column="23" />
+      <File FileName="Assets/Model/Sub.cs" Line="786" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="181" Column="34" />
       <File FileName="Assets/Model/RoomFactory.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Sub.cs" Line="275" Column="46" />
       <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="75" Column="18" />
+      <File FileName="Assets/Model/Crew.cs" Line="11" Column="12" />
+      <File FileName="Assets/Model/Resource.cs" Line="18" Column="3" />
+      <File FileName="Assets/Model/Rooms/Gallery.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
-    <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1034" offsetY="2057" expression="showTile.Y" liveUpdate="False" />
-    <Watch file="Assets/Controller/WorldController.cs" line="206" offsetX="1031" offsetY="2027" expression="showTile.X" liveUpdate="False" />
     <Watch file="Assets/Model/Submarine.cs" line="343" offsetX="810" offsetY="4486" expression="rebuildTile.Y" liveUpdate="False" />
     <Watch file="Assets/Model/Submarine.cs" line="343" offsetX="805" offsetY="4451" expression="rebuildTile.X" liveUpdate="False" />
-    <Watch file="Assets/Controller/WorldController.cs" line="159" offsetX="1054" offsetY="1900" expression="showTile.RoomID" liveUpdate="False" />
     <Watch file="Assets/Source/Converters/fsDictionaryConverter.cs" line="151" offsetX="727" offsetY="2293" expression="key" liveUpdate="False" />
     <Watch file="Assets/Model/Room.cs" line="148" offsetX="999" offsetY="1894" expression="coord.x" liveUpdate="False" />
     <Watch file="Assets/Model/Room.cs" line="148" offsetX="1050" offsetY="1920" expression="coord.y" liveUpdate="False" />

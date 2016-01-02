@@ -172,11 +172,22 @@ namespace Submarine.Model {
 			bool AllAvailable = true; // amuse all resources are available so 1 not available resource will detected in the for each search
 			if (NeededResources != null) {
 				foreach (Resource needResource in NeededResources) {
+					int resouceAvailable = 0;
+					// get available resouces
 					if (inSub != null && needResource.unit != Units.None) {
-						int resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
-						if (resouceAvailable < inSub.GetAllNeededResourcesOfUnit (needResource.unit))		// don't check needs of just this room but similar needs of all rooms (aka 2 bunks need together food)
-							AllAvailable = false;
+						if (inSub.isCrewType (needResource.unit)) {
+							// crew as needed resource, check CrewList
+							if (inSub.isEnlisted (needResource.unit))
+								resouceAvailable = inSub.AmountOfEnlisted;
+							else
+								resouceAvailable = inSub.AmountOfCrewType (needResource.unit);
+						}
+						else // no crew = normal resource
+							resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
 					}
+					// now available is know check it agains needs
+					if (resouceAvailable < inSub.GetAllNeededResourcesOfUnit (needResource.unit))		// don't check needs of just this room but similar needs of all rooms (aka 2 bunks need together food)
+						AllAvailable = false;
 				}
 			}
 			return AllAvailable;
