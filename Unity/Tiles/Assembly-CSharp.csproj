@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{AE87FD3C-B509-4F92-6F6A-56E5C77349C0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_0;UNITY_5_3;UNITY_5;UNITY_64;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_OSX;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_GAMECENTER;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_OSX</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Controller\HelpPanel_Animation.cs" />
+     <Compile Include="Assets\Controller\MouseController.cs" />
+     <Compile Include="Assets\Controller\WorldController.cs" />
+     <Compile Include="Assets\FileBrowser\Scripts\FileBrowser.cs" />
+     <Compile Include="Assets\FileBrowser\Scripts\ThumbnailsGenerator.cs" />
+     <Compile Include="Assets\FileBrowser\Scripts\UI_FileBrowser.cs" />
+     <Compile Include="Assets\FileBrowser\Test\TestInput.cs" />
+     <Compile Include="Assets\Model\Point.cs" />
+     <Compile Include="Assets\Model\Resource.cs" />
+     <Compile Include="Assets\Model\Room.cs" />
+     <Compile Include="Assets\Model\RoomFactory.cs" />
+     <Compile Include="Assets\Model\Rooms\Balasttank.cs" />
+     <Compile Include="Assets\Model\Rooms\Battery.cs" />
+     <Compile Include="Assets\Model\Rooms\Bridge.cs" />
+     <Compile Include="Assets\Model\Rooms\Bunks.cs" />
+     <Compile Include="Assets\Model\Rooms\Cabin.cs" />
+     <Compile Include="Assets\Model\Rooms\Conn.cs" />
+     <Compile Include="Assets\Model\Rooms\EmptyRoom.cs" />
+     <Compile Include="Assets\Model\Rooms\EngineRoom.cs" />
+     <Compile Include="Assets\Model\Rooms\EscapeHatch.cs" />
+     <Compile Include="Assets\Model\Rooms\FuelTank.cs" />
+     <Compile Include="Assets\Model\Rooms\Gallery.cs" />
+     <Compile Include="Assets\Model\Rooms\Generator.cs" />
+     <Compile Include="Assets\Model\Rooms\PumpRoom.cs" />
+     <Compile Include="Assets\Model\Rooms\RadioRoom.cs" />
+     <Compile Include="Assets\Model\Rooms\Sonar.cs" />
+     <Compile Include="Assets\Model\Rooms\Stairs.cs" />
+     <Compile Include="Assets\Model\Rooms\StorageRoom.cs" />
+     <Compile Include="Assets\Model\Rooms\TorpedoRoom.cs" />
+     <Compile Include="Assets\Model\Submarine.cs" />
+     <Compile Include="Assets\Model\Tile.cs" />
+     <Compile Include="Assets\Source\Converters\Unity\AnimationCurve_DirectConverter.cs" />
+     <Compile Include="Assets\Source\Converters\Unity\Bounds_DirectConverter.cs" />
+     <Compile Include="Assets\Source\Converters\Unity\Gradient_DirectConverter.cs" />
+     <Compile Include="Assets\Source\Converters\Unity\Keyframe_DirectConverter.cs" />
+     <Compile Include="Assets\Source\Converters\Unity\LayerMask_DirectConverter.cs" />
+     <Compile Include="Assets\Source\Converters\Unity\Rect_DirectConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsArrayConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsDateConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsDictionaryConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsEnumConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsForwardConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsGuidConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsIEnumerableConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsKeyValuePairConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsNullableConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsPrimitiveConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsReflectedConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsTypeConverter.cs" />
+     <Compile Include="Assets\Source\Converters\fsWeakReferenceConverter.cs" />
+     <Compile Include="Assets\Source\Internal\fsCyclicReferenceManager.cs" />
+     <Compile Include="Assets\Source\Internal\fsOption.cs" />
+     <Compile Include="Assets\Source\Internal\fsPortableReflection.cs" />
+     <Compile Include="Assets\Source\Internal\fsTypeExtensions.cs" />
+     <Compile Include="Assets\Source\Internal\fsVersionManager.cs" />
+     <Compile Include="Assets\Source\Internal\fsVersionedType.cs" />
+     <Compile Include="Assets\Source\Reflection\fsMetaProperty.cs" />
+     <Compile Include="Assets\Source\Reflection\fsMetaType.cs" />
+     <Compile Include="Assets\Source\Reflection\fsReflectionUtility.cs" />
+     <Compile Include="Assets\Source\Reflection\fsTypeLookup.cs" />
+     <Compile Include="Assets\Source\fsAotCompilationManager.cs" />
+     <Compile Include="Assets\Source\fsBaseConverter.cs" />
+     <Compile Include="Assets\Source\fsConfig.cs" />
+     <Compile Include="Assets\Source\fsContext.cs" />
+     <Compile Include="Assets\Source\fsConverter.cs" />
+     <Compile Include="Assets\Source\fsConverterRegistrar.cs" />
+     <Compile Include="Assets\Source\fsData.cs" />
+     <Compile Include="Assets\Source\fsDirectConverter.cs" />
+     <Compile Include="Assets\Source\fsExceptions.cs" />
+     <Compile Include="Assets\Source\fsISerializationCallbacks.cs" />
+     <Compile Include="Assets\Source\fsIgnoreAttribute.cs" />
+     <Compile Include="Assets\Source\fsJsonParser.cs" />
+     <Compile Include="Assets\Source\fsJsonPrinter.cs" />
+     <Compile Include="Assets\Source\fsMemberSerialization.cs" />
+     <Compile Include="Assets\Source\fsObjectAttribute.cs" />
+     <Compile Include="Assets\Source\fsObjectProcessor.cs" />
+     <Compile Include="Assets\Source\fsPropertyAttribute.cs" />
+     <Compile Include="Assets\Source\fsResult.cs" />
+     <Compile Include="Assets\Source\fsSerializer.cs" />
+     <None Include="Assets\FileBrowser\Readme.txt" />
+     <None Include="Assets\FileBrowser\version_1_1_1.txt" />
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Drawing">
+ <HintPath>/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/FileBrowser/Lib/System.Drawing.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>
