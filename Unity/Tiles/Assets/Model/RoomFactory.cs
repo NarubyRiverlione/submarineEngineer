@@ -38,7 +38,13 @@ namespace Submarine.Model {
 					return new EscapeHatch (type, inThisSub, getPropInt ("EscapeHatch_Min", inThisSub), getPropInt ("EscapeHatch_CapPerTile", inThisSub), getPropReqRes (RoomType.EscapeHatch, inThisSub));
 				case RoomType.TorpedoRoom:
 					return new TorpedoRoom (type, inThisSub, getPropInt ("TorpedoRoom_Min", inThisSub), getPropInt ("TorpedoRoom_CapPerTile", inThisSub), getPropReqRes (RoomType.TorpedoRoom, inThisSub));
-
+				
+				case RoomType.Stairs:
+					return new Stairs (type, inThisSub, getPropInt ("Stairs_Min", inThisSub), getPropInt ("Stairs_CapPerTile", inThisSub), getPropReqRes (RoomType.Stairs, inThisSub));
+				
+				case RoomType.BalastTank:
+					return new BalastTank (type, inThisSub, getPropInt ("Balasttank_Min", inThisSub), getPropInt ("Balasttank_CapPerTile", inThisSub), getPropReqRes (RoomType.BalastTank, inThisSub));
+				
 				case RoomType.Empty:
 					return new EmptyRoom (type, inThisSub, 0, 0, null);
 

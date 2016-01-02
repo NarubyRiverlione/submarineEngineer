@@ -21,31 +21,41 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_Generator;
 	public Sprite Tile_Battery;
 	public Sprite Tile_Gallery;
-	public Sprite Tile_Mess;
 	public Sprite Tile_Cabin;
 	public Sprite Tile_Bunks;
 	public Sprite Tile_Conn;
 	public Sprite Tile_Sonar;
 	public Sprite Tile_RadioRoom;
 	public Sprite Tile_FuelTank;
-	public Sprite Tile_PumpRoom;
+
 	public Sprite Tile_StorageRoom;
-	public Sprite Tile_EscapeHatch;
 	public Sprite Tile_TorpedoRoom;
+	public Sprite Tile_Stairs;
+	public Sprite Tile_Balasttank;
+	public Sprite Tile_PumpRoom;
+	public Sprite Tile_Escapehatch;
+
 
 	// Warning Sprites
 	public Sprite Warning_ToSmall;
 	public Sprite Waring_NoResources;
 
-	// Wall spritesheet (private, loaded in Start)
+	// Wall sprite sheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
 
+	// UI Panels
+	public GameObject Panel_Resources;
+	public GameObject Panel_Legenda;
+	public GameObject Panel_DesignValidation;
+
 	public UI_FileBrowser _uiFB;
-	public string filePath;
+	public string filePath = null;
 	private bool chooseFilePathNow = false;
 
 	private bool Loading = false;
-	// loading false = saving
+	string saveDir = "Saves";
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -57,7 +67,7 @@ public class WorldController : MonoBehaviour {
 		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
 
 		CreateAllTileGameObjects ();
-		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailible
+		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
 		ShowAllTilesViaCallback ();		// now show tiles (needed for empty tiles)
 	}
 	
@@ -68,9 +78,15 @@ public class WorldController : MonoBehaviour {
 
 			UpdateDesignValidation ();
 		}
-		// wait until filepath is know
-		if (_uiFB.GetPath () != null && chooseFilePathNow) {
-			Debug.Log ("Opened : " + _uiFB.GetPath ());
+		// if a filepath is requited (chooseFilePathNow==true) and FileBrowserWindow isn't visible (any more)
+		// the a file is chosen or cancel is pressed
+		if (!_uiFB.FileBrowserWindow.activeSelf && chooseFilePathNow) {
+			// show other panels for view
+			Panel_Resources.SetActive (true);
+			Panel_Legenda.SetActive (true);
+			Panel_DesignValidation.SetActive (true);
+			_uiFB.FileBrowserWindow.transform.parent.GetComponent<Image> ().raycastTarget = true;
+
 			filePath = _uiFB.GetPath ();
 			chooseFilePathNow = false;
 			if (Loading)
@@ -92,7 +108,7 @@ public class WorldController : MonoBehaviour {
 				GameObject newTileSprite = new GameObject ();
 				// set name of game object to see in Hierarchy
 				newTileSprite.name = "Tile_" + x + "/" + y;
-				// set WorldController as parten
+				// set WorldController as parent
 				newTileSprite.transform.SetParent (this.transform);
 				// set X, Y of game object
 				newTileSprite.transform.position = new Vector2 (newTile.X, newTile.Y);
@@ -147,11 +163,19 @@ public class WorldController : MonoBehaviour {
 			case RoomType.Empty:
 				renderer.sprite = Tile_Empty;
 				break;
-			case RoomType.Bridge:
-				renderer.sprite = Tile_Bridge;
+
+			case RoomType.Stairs:
+				renderer.sprite = Tile_Stairs;
 				break;
+			case RoomType.EscapeHatch:
+				renderer.sprite = Tile_Escapehatch;
+				break;
+			
 			case RoomType.EngineRoom:
 				renderer.sprite = Tile_EngineRoom;
+				break;
+			case RoomType.FuelTank:
+				renderer.sprite = Tile_FuelTank;
 				break;
 			case RoomType.Generator:
 				renderer.sprite = Tile_Generator;
@@ -159,6 +183,7 @@ public class WorldController : MonoBehaviour {
 			case RoomType.Battery:
 				renderer.sprite = Tile_Battery;
 				break;
+
 			case RoomType.Gallery:
 				renderer.sprite = Tile_Gallery;
 				break;
@@ -167,6 +192,13 @@ public class WorldController : MonoBehaviour {
 				break;
 			case RoomType.Bunks:
 				renderer.sprite = Tile_Bunks;
+				break;
+			case RoomType.StorageRoom:
+				renderer.sprite = Tile_StorageRoom;
+				break;
+
+			case RoomType.Bridge:
+				renderer.sprite = Tile_Bridge;
 				break;
 			case RoomType.Conn:
 				renderer.sprite = Tile_Conn;
@@ -177,18 +209,15 @@ public class WorldController : MonoBehaviour {
 			case RoomType.RadioRoom:
 				renderer.sprite = Tile_RadioRoom;
 				break;
-			case RoomType.FuelTank:
-				renderer.sprite = Tile_FuelTank;
+
+			case RoomType.BalastTank:
+				renderer.sprite = Tile_Balasttank;
 				break;
 			case RoomType.PumpRoom:
 				renderer.sprite = Tile_PumpRoom;
 				break;
-			case RoomType.StorageRoom:
-				renderer.sprite = Tile_StorageRoom;
-				break;
-			case RoomType.EscapeHatch:
-				renderer.sprite = Tile_EscapeHatch;
-				break;
+
+		
 			case RoomType.TorpedoRoom:
 				renderer.sprite = Tile_TorpedoRoom;
 				break;
@@ -222,7 +251,7 @@ public class WorldController : MonoBehaviour {
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sortingLayerName = "Warnings";
 			}
 			// now it's sure the Tile_Warning_ game object exist, update (or set) it's sprite
-			// Show warning if room cannot operate because lake of resouces
+			// Show warning if room cannot operate because lake of resources
 			bool resourceAvailable = mySub.IsTilePartOfRoomWithResources (showTile);
 			if (!resourceAvailable)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Waring_NoResources;
@@ -230,12 +259,12 @@ public class WorldController : MonoBehaviour {
 			bool layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
 			if (!layoutValid)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Warning_ToSmall;
-			// Show no warnings (remove prev.) if all is fine
+			// Show no warnings (remove previous) if all is fine
 			if (resourceAvailable && layoutValid)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
 			
 		}
-		else { // roomID = 0,  don't remove Warning game object but set sprite to transparant (removeing gives strange behaviour)
+		else { // roomID = 0,  don't remove Warning game object but set sprite to transparent (removing gives strange behavior)
 			if (checkIfWarningAlreadyOnScreen != null)
 				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
 		}
@@ -267,7 +296,7 @@ public class WorldController : MonoBehaviour {
 			// show above Title = on the Tile_Warning sorting layer  						
 			render.sortingLayerName = "Walls";
 		}
-		else { // roomID = 0,  don't remove Wall game object but set it to wall type 15 = show no walls (removeing wall type gives strange behaviour)
+		else { // roomID = 0,  don't remove Wall game object but set it to wall type 15 = show no walls (removing wall type gives strange behavior)
 			if (checkIfWallIsAlreadyOnScreen != null) {
 				SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
 				//set sprite from wall sprite sheet
@@ -280,20 +309,23 @@ public class WorldController : MonoBehaviour {
 
 	}
 
-	// Update UI Resouces
+	// Update UI Resources
 	void UpdateResourceLabels () {
 		foreach (Units resourceUnit in Enum.GetValues(typeof(Units))) {
-			if (resourceUnit != Units.None && resourceUnit != Units.liters_pump) { //TODO: make label for liter pump
+			if (resourceUnit != Units.None) { 
 				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
 				if (resourceGameObject != null) { // some Units are showed in UI Design Validation, not here
 					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
 					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
 					// show text (available / needed)
 					Text resourceText = resourceGameObject.GetComponent<Text> ();
-					resourceText.text = outputCount.ToString () + " / " + neededCount.ToString ();
+					resourceText.text = neededCount.ToString () + " / " + outputCount.ToString ();
 					// not enough resources = show text in red
 					resourceText.color = neededCount > outputCount ? Color.red : Color.white;
 				}
+//				else {
+//					Debug.Log ("No resource label for " + resourceUnit);
+//				}
 			}
 		}
 	}
@@ -303,12 +335,13 @@ public class WorldController : MonoBehaviour {
 		string validationCriteria;
 		validationCriteria = "Ops";
 		SetOrResetValidation (validationCriteria, mySub.ValidateOps ());
-		validationCriteria = "Radio";
-		SetOrResetValidation (validationCriteria, mySub.ValidateRadio ());
-		validationCriteria = "Sonar";
-		SetOrResetValidation (validationCriteria, mySub.ValidateSonar ());
+
+		validationCriteria = "Crew";
+		SetOrResetValidation (validationCriteria, mySub.ValidateCrew ());
+
 		validationCriteria = "Weapons";
 		SetOrResetValidation (validationCriteria, mySub.ValidateWeapons ());
+
 		validationCriteria = "Propulsion";
 		SetOrResetValidation (validationCriteria, mySub.ValidatePropulsion ());
 	}
@@ -318,7 +351,9 @@ public class WorldController : MonoBehaviour {
 		if (findCheckbox != null) {
 			findCheckbox.GetComponent<Toggle> ().isOn = ok;
 		}
-
+		else {
+			Debug.Log ("No validation checkbox for " + validationCriteria);
+		}
 	}
 
 	#endregion
@@ -326,9 +361,17 @@ public class WorldController : MonoBehaviour {
 
 	#region Load / Save
 
-	// Get filepath
+	// Get file path
 	public void GetFilePath (bool loading) {
-		_uiFB.Open (filePath);
+		// remove other panels for view
+		Panel_Resources.SetActive (false);
+		Panel_Legenda.SetActive (false);
+		Panel_DesignValidation.SetActive (false);
+
+        
+		_uiFB.Open (saveDir, loading);
+		//_uiFB.FileBrowserWindow.GetComponentInParent<Image>().raycastTarget = false;
+		_uiFB.FileBrowserWindow.transform.parent.GetComponent<Image> ().raycastTarget = false;
 		chooseFilePathNow = true; 
 		Loading = loading;
 	}
@@ -337,17 +380,18 @@ public class WorldController : MonoBehaviour {
 	private void LoadingSub () {
 		if (filePath != null) {
 			Loading = false;
-			// destroy all Tile game objects (and the wall, warning,.. childeren)
+			// destroy all Tile game objects (and the wall, warning,.. children)
 			// (maybe new loaded sub has other dimensions)
 			RemoveAllTileGameObjects ();
 			// load new Sub 
 			mySub.Load (filePath);
 			// add all tiles game objects 
-			CreateAllTileGameObjects (); 	// also subscript too the  .TileChangedActions with UpdateTileSprite 
-			// Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbore to updates it's warning or wall
+			CreateAllTileGameObjects ();     // also subscript too the  .TileChangedActions with UpdateTileSprite 
+			// Show Tiles AFTER they are ALL created: because else showing a tile can call it's not already created neighbor to updates it's warning or wall
 			ShowAllTilesViaCallback ();
 		}
 	}
+        
 
 	// Saving sub
 	private void SavingSub () {
@@ -357,5 +401,9 @@ public class WorldController : MonoBehaviour {
 	}
 
 	#endregion
+
+	public void QuitGame () {
+		Application.Quit ();
+	}
 
 }

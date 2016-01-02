@@ -8,6 +8,7 @@ namespace Submarine.Model {
 		AH,
 		liters_fuel,
 		liters_pump,
+		liters_balast,
 		food,
 		tins,
 		Crew,
