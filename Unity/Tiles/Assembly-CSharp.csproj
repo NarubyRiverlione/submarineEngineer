@@ -56,6 +56,7 @@
      <Compile Include="Assets\Model\Resource.cs" />
      <Compile Include="Assets\Model\Room.cs" />
      <Compile Include="Assets\Model\RoomFactory.cs" />
+     <Compile Include="Assets\Model\Rooms\Balasttank.cs" />
      <Compile Include="Assets\Model\Rooms\Battery.cs" />
      <Compile Include="Assets\Model\Rooms\Bridge.cs" />
      <Compile Include="Assets\Model\Rooms\Bunks.cs" />
@@ -70,6 +71,7 @@
      <Compile Include="Assets\Model\Rooms\PumpRoom.cs" />
      <Compile Include="Assets\Model\Rooms\RadioRoom.cs" />
      <Compile Include="Assets\Model\Rooms\Sonar.cs" />
+     <Compile Include="Assets\Model\Rooms\Stairs.cs" />
      <Compile Include="Assets\Model\Rooms\StorageRoom.cs" />
      <Compile Include="Assets\Model\Rooms\TorpedoRoom.cs" />
      <Compile Include="Assets\Model\Submarine.cs" />

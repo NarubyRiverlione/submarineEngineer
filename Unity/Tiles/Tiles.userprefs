@@ -1,13 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Controller/MouseController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Submarine.cs">
     <Files>
-      <File FileName="Assets/Controller/WorldController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Controller/MouseController.cs" Line="164" Column="48" />
-      <File FileName="Assets/Model/Submarine.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/RoomFactory.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="1" Column="1" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="168" Column="30" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="355" Column="13" />
+      <File FileName="Assets/Model/Submarine.cs" Line="345" Column="39" />
+      <File FileName="Assets/Model/RoomFactory.cs" Line="46" Column="171" />
+      <File FileName="Assets/Model/Room.cs" Line="171" Column="40" />
       <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Model/Rooms/Stairs.cs" Line="20" Column="23" />
+      <File FileName="Assets/Model/Rooms/Balasttank.cs" Line="8" Column="31" />
+      <File FileName="Assets/Model/Resource.cs" Line="11" Column="17" />
       <File FileName="Assets/FileBrowser/Scripts/UI_FileBrowser.cs" Line="217" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
@@ -30,5 +33,7 @@
     <Watch file="Assets/Model/Room.cs" line="151" offsetX="977" offsetY="2682" expression="warnTile.RoomID" liveUpdate="False" />
     <Watch file="Assets/Model/Submarine.cs" line="138" offsetX="545" offsetY="1666" expression="addTile.X" liveUpdate="False" />
     <Watch file="Assets/Model/Submarine.cs" line="138" offsetX="719" offsetY="1670" expression="addTile.Y" liveUpdate="False" />
+    <Watch file="Assets/Controller/WorldController.cs" line="337" offsetX="899" offsetY="3258" expression="ok" liveUpdate="False" />
+    <Watch file="Assets/Controller/WorldController.cs" line="338" offsetX="890" offsetY="3296" expression="validationCriteria" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

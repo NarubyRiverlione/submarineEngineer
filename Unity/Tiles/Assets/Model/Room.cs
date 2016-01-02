@@ -5,23 +5,24 @@ using FullSerializer;
 
 namespace Submarine.Model {
 	public enum RoomType {
-		Empty = 0,
-		EngineRoom = 1,
-		Generator = 2,
-		Battery = 3,
-		Bridge = 4,
-		Gallery = 5,
-		
-		Cabin = 7,
-		Bunks = 8,
-		Conn = 9,
-		Sonar = 10,
-		RadioRoom = 11,
-		FuelTank = 12,
-		PumpRoom = 13,
-		StorageRoom = 14,
-		EscapeHatch = 15,
-		TorpedoRoom = 16}
+		Empty,
+		EngineRoom,
+		Generator,
+		Battery,
+		Bridge,
+		Gallery,
+		Stairs,
+		Cabin,
+		Bunks,
+		Conn,
+		Sonar,
+		RadioRoom,
+		FuelTank,
+		PumpRoom,
+		BalastTank,
+		StorageRoom,
+		EscapeHatch,
+		TorpedoRoom}
 
 	;
 
@@ -64,7 +65,7 @@ namespace Submarine.Model {
 		// check is ALL resources are available, if change in availability is detected warn tile to be redraw via Action Callback
 		public bool ResourcesAvailable {
 			get {
-				bool newResAv = AllResourcesAreAvailable (); 
+				bool newResAv = AreAllResourcesAvailable (); 
 				if (prevResourcesAvailable != newResAv) {
 					prevResourcesAvailable = newResAv;
 					if (IsLayoutValid)
@@ -167,13 +168,13 @@ namespace Submarine.Model {
 			}
 		}
 
-		private bool AllResourcesAreAvailable () {
+		private bool AreAllResourcesAvailable () {
 			bool AllAvailable = true; // amuse all resources are available so 1 not available resource will detected in the for each search
 			if (NeededResources != null) {
-				foreach (Resource resource in NeededResources) {
-					if (inSub != null && resource.unit != Units.None) {
-						int resouceAvailable = inSub.GetAllOutputOfUnit (resource.unit);
-						if (resouceAvailable < resource.amount)
+				foreach (Resource needResource in NeededResources) {
+					if (inSub != null && needResource.unit != Units.None) {
+						int resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
+						if (resouceAvailable < inSub.GetAllNeededResourcesOfUnit (needResource.unit))		// don't check needs of just this room but similar needs of all rooms (aka 2 bunks need together food)
 							AllAvailable = false;
 					}
 				}

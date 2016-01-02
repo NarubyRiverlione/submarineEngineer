@@ -227,28 +227,34 @@ namespace Submarine.Model {
 		private void SetRoomProperties () {//TODO: read from config file for this submarine outline type
 			RoomPropertiesInt = new Dictionary<string, int> ();
 
+			RoomPropertiesInt ["Stairs_Min"] = 1;
+			RoomPropertiesInt ["Stairs_CapPerTile"] = 0;
+
+			RoomPropertiesInt ["Balasttank_Min"] = 6;
+			RoomPropertiesInt ["Balasttank_CapPerTile"] = 230;
+
 			RoomPropertiesInt ["EngineRoom_Min"] = 12;
-			RoomPropertiesInt ["EngineRoom_CapPerTile"] = 1000;
+			RoomPropertiesInt ["EngineRoom_CapPerTile"] = 123;
 
 			RoomPropertiesInt ["Generator_Min"] = 12;
-			RoomPropertiesInt ["Generator_CapPerTile"] = 500;
+			RoomPropertiesInt ["Generator_CapPerTile"] = 478;
 					
 			RoomPropertiesInt ["Battery_Min"] = 10;
-			RoomPropertiesInt ["Battery_CapPerTile"] = 50;
+			RoomPropertiesInt ["Battery_CapPerTile"] = 56;
 					
 			RoomPropertiesInt ["Bridge_Min"] = 4;
 			RoomPropertiesInt ["Bridge_CapPerTile"] = 0;
 
 			RoomPropertiesInt ["Gallery_Min"] = 6;
-			RoomPropertiesInt ["Gallery_CapPerTile"] = 5;
+			RoomPropertiesInt ["Gallery_CapPerTile"] = 4;
 					
 			RoomPropertiesInt ["Cabin_Min"] = 2;
 			RoomPropertiesInt ["Cabin_CapPerTile"] = 1;
 					
-			RoomPropertiesInt ["Bunks_Min"] = 6;
-			RoomPropertiesInt ["Bunks_CapPerTile"] = 2;
+			RoomPropertiesInt ["Bunks_Min"] = 8;
+			RoomPropertiesInt ["Bunks_CapPerTile"] = 1;
 
-			RoomPropertiesInt ["Conn_Min"] = 8;
+			RoomPropertiesInt ["Conn_Min"] = 10;
 			RoomPropertiesInt ["Conn_CapPerTile"] = 1;
 					
 			RoomPropertiesInt ["Sonar_Min"] = 4;
@@ -260,11 +266,11 @@ namespace Submarine.Model {
 			RoomPropertiesInt ["FuelTank_Min"] = 9;
 			RoomPropertiesInt ["FuelTank_CapPerTile"] = 1000;
 					
-			RoomPropertiesInt ["PumpRoom_Min"] = 6;
+			RoomPropertiesInt ["PumpRoom_Min"] = 9;
 			RoomPropertiesInt ["PumpRoom_CapPerTile"] = 1000;
 					
 			RoomPropertiesInt ["StorageRoom_Min"] = 4;
-			RoomPropertiesInt ["StorageRoom_CapPerTile"] = 100;
+			RoomPropertiesInt ["StorageRoom_CapPerTile"] = 27;
 				
 			RoomPropertiesInt ["EscapeHatch_Min"] = 2;
 			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 0;
@@ -282,28 +288,33 @@ namespace Submarine.Model {
 			};
 
 			RoomPropertiesReqRes [RoomType.Generator] = new List<Resource> {
-				{ new Resource (Units.pks, 2000) },
+				{ new Resource (Units.pks, 1400) },
 				{ new Resource (Units.Engineers, 1) }
 			};
-			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 1500) } };
+			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000) } };
 			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstander, 2) } };
 			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
-				{ new Resource (Units.tins, 30) },
+				{ new Resource (Units.tins, 40) },
 				{ new Resource (Units.Cook, 1) }
 			};
-			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 1) } };
-			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 6) } };
+			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 2) } };
+			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 8) } };
 			RoomPropertiesReqRes [RoomType.Conn] = new List<Resource> {
 				{ new Resource (Units.Officers, 2) },
 				{ new Resource (Units.Watchstander, 4) }
 			};
 			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1) } };
 			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1) } };
-			RoomPropertiesReqRes [RoomType.FuelTank] = new List<Resource> ();
-			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_pump, 100) } };
-			RoomPropertiesReqRes [RoomType.StorageRoom] = new List<Resource> ();
+	
+			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_balast, 1000) } };
+		
 			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { { new Resource (Units.Torpedoman, 4) } };
 
+			RoomPropertiesReqRes [RoomType.EscapeHatch] = new List<Resource> ();
+			RoomPropertiesReqRes [RoomType.Stairs] = new List<Resource> ();
+			RoomPropertiesReqRes [RoomType.BalastTank] = new List<Resource> ();
+			RoomPropertiesReqRes [RoomType.FuelTank] = new List<Resource> ();
+			RoomPropertiesReqRes [RoomType.StorageRoom] = new List<Resource> ();
 
 		}
 
@@ -328,16 +339,18 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateOps () {
-			return ValidationCriteria (RoomType.Conn);
+			bool connOk = ValidationCriteria (RoomType.Conn);
+			bool radioOk = ValidationCriteria (RoomType.RadioRoom);
+			bool sonarOk = ValidationCriteria (RoomType.Sonar);
+			return connOk && radioOk && sonarOk;
 		}
 
-		public bool ValidateRadio () {
-			return ValidationCriteria (RoomType.RadioRoom);
+		public bool ValidateCrew () {
+			bool bunksOk = ValidationCriteria (RoomType.Bunks);
+			bool cabinOk = ValidationCriteria (RoomType.Cabin);
+			return bunksOk && cabinOk;
 		}
 
-		public bool ValidateSonar () {
-			return ValidationCriteria (RoomType.Sonar);
-		}
 
 		public bool ValidateWeapons () {
 			//TODO: may be later also check missile deck
@@ -370,13 +383,13 @@ namespace Submarine.Model {
 		}
 
 		public int GetAllNeededResourcesOfUnit (Units reqUnit) {
-			int resource = 0;
+			int required = 0;
 			foreach (var roomPair in rooms) {
 				Room room = roomPair.Value;
 				if (room.NeededResources != null)
-					resource += room.GetResouceNeeded (reqUnit);
+					required += room.GetResouceNeeded (reqUnit);
 			}
-			return resource;
+			return required;
 		}
 
 		private void AddRoomToSubmarine (Room addThisRoom) {

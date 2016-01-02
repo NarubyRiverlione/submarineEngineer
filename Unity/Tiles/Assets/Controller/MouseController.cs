@@ -108,7 +108,7 @@ public class MouseController : MonoBehaviour {
 		}
 		else {
 			Camera.main.GetComponent<Camera> ().orthographicSize = 14 / zoomLevel;
-			//Camera.main.transform.Translate (new Vector3 (0, zoomLevel, 0));
+			Camera.main.transform.Translate (new Vector3 (0, -1, 0));
 		}
 	}
 
@@ -155,17 +155,17 @@ public class MouseController : MonoBehaviour {
 			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
 			if (activeRoomToggle != null) {
 				switch (activeRoomToggle.name) {
-					case "Toggle_Rooms":
+					case "Toggle_RoomButtons":
 						scrollView_RoomButtons.SetActive (true);
 						scrollView_CrewButtons.SetActive (false);
 						scrollView_ItemButtons.SetActive (false);
 						break;
-					case "Toggle_Crew":
+					case "Toggle_CrewButtons":
 						scrollView_RoomButtons.SetActive (false);
 						scrollView_CrewButtons.SetActive (true);
 						scrollView_ItemButtons.SetActive (false);
 						break;
-					case "Toggle_Items":
+					case "Toggle_ItemButtons":
 						scrollView_RoomButtons.SetActive (false);
 						scrollView_CrewButtons.SetActive (false);
 						scrollView_ItemButtons.SetActive (true);

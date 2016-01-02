@@ -27,11 +27,14 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_Sonar;
 	public Sprite Tile_RadioRoom;
 	public Sprite Tile_FuelTank;
-	public Sprite Tile_PumpRoom;
+
 	public Sprite Tile_StorageRoom;
 	public Sprite Tile_TorpedoRoom;
-	//	public Sprite Tile_Mess;
-	//	public Sprite Tile_EscapeHatch;
+	public Sprite Tile_Stairs;
+	public Sprite Tile_Balasttank;
+	public Sprite Tile_PumpRoom;
+	public Sprite Tile_Escapehatch;
+
 
 	// Warning Sprites
 	public Sprite Warning_ToSmall;
@@ -160,11 +163,19 @@ public class WorldController : MonoBehaviour {
 			case RoomType.Empty:
 				renderer.sprite = Tile_Empty;
 				break;
-			case RoomType.Bridge:
-				renderer.sprite = Tile_Bridge;
+
+			case RoomType.Stairs:
+				renderer.sprite = Tile_Stairs;
 				break;
+			case RoomType.EscapeHatch:
+				renderer.sprite = Tile_Escapehatch;
+				break;
+			
 			case RoomType.EngineRoom:
 				renderer.sprite = Tile_EngineRoom;
+				break;
+			case RoomType.FuelTank:
+				renderer.sprite = Tile_FuelTank;
 				break;
 			case RoomType.Generator:
 				renderer.sprite = Tile_Generator;
@@ -172,6 +183,7 @@ public class WorldController : MonoBehaviour {
 			case RoomType.Battery:
 				renderer.sprite = Tile_Battery;
 				break;
+
 			case RoomType.Gallery:
 				renderer.sprite = Tile_Gallery;
 				break;
@@ -180,6 +192,13 @@ public class WorldController : MonoBehaviour {
 				break;
 			case RoomType.Bunks:
 				renderer.sprite = Tile_Bunks;
+				break;
+			case RoomType.StorageRoom:
+				renderer.sprite = Tile_StorageRoom;
+				break;
+
+			case RoomType.Bridge:
+				renderer.sprite = Tile_Bridge;
 				break;
 			case RoomType.Conn:
 				renderer.sprite = Tile_Conn;
@@ -190,15 +209,15 @@ public class WorldController : MonoBehaviour {
 			case RoomType.RadioRoom:
 				renderer.sprite = Tile_RadioRoom;
 				break;
-			case RoomType.FuelTank:
-				renderer.sprite = Tile_FuelTank;
+
+			case RoomType.BalastTank:
+				renderer.sprite = Tile_Balasttank;
 				break;
 			case RoomType.PumpRoom:
 				renderer.sprite = Tile_PumpRoom;
 				break;
-			case RoomType.StorageRoom:
-				renderer.sprite = Tile_StorageRoom;
-				break;
+
+		
 			case RoomType.TorpedoRoom:
 				renderer.sprite = Tile_TorpedoRoom;
 				break;
@@ -293,17 +312,20 @@ public class WorldController : MonoBehaviour {
 	// Update UI Resources
 	void UpdateResourceLabels () {
 		foreach (Units resourceUnit in Enum.GetValues(typeof(Units))) {
-			if (resourceUnit != Units.None && resourceUnit != Units.liters_pump) { //TODO: make label for liter pump
+			if (resourceUnit != Units.None) { 
 				GameObject resourceGameObject = GameObject.Find ("Resource_" + resourceUnit);
 				if (resourceGameObject != null) { // some Units are showed in UI Design Validation, not here
 					int outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
 					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
 					// show text (available / needed)
 					Text resourceText = resourceGameObject.GetComponent<Text> ();
-					resourceText.text = outputCount.ToString () + " / " + neededCount.ToString ();
+					resourceText.text = neededCount.ToString () + " / " + outputCount.ToString ();
 					// not enough resources = show text in red
 					resourceText.color = neededCount > outputCount ? Color.red : Color.white;
 				}
+//				else {
+//					Debug.Log ("No resource label for " + resourceUnit);
+//				}
 			}
 		}
 	}
@@ -313,12 +335,13 @@ public class WorldController : MonoBehaviour {
 		string validationCriteria;
 		validationCriteria = "Ops";
 		SetOrResetValidation (validationCriteria, mySub.ValidateOps ());
-		validationCriteria = "Radio";
-		SetOrResetValidation (validationCriteria, mySub.ValidateRadio ());
-		validationCriteria = "Sonar";
-		SetOrResetValidation (validationCriteria, mySub.ValidateSonar ());
+
+		validationCriteria = "Crew";
+		SetOrResetValidation (validationCriteria, mySub.ValidateCrew ());
+
 		validationCriteria = "Weapons";
 		SetOrResetValidation (validationCriteria, mySub.ValidateWeapons ());
+
 		validationCriteria = "Propulsion";
 		SetOrResetValidation (validationCriteria, mySub.ValidatePropulsion ());
 	}
@@ -328,7 +351,9 @@ public class WorldController : MonoBehaviour {
 		if (findCheckbox != null) {
 			findCheckbox.GetComponent<Toggle> ().isOn = ok;
 		}
-
+		else {
+			Debug.Log ("No validation checkbox for " + validationCriteria);
+		}
 	}
 
 	#endregion
