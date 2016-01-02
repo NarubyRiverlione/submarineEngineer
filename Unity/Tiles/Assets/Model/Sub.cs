@@ -273,7 +273,7 @@ namespace Submarine.Model {
 			RoomPropertiesInt ["StorageRoom_CapPerTile"] = 27;
 				
 			RoomPropertiesInt ["EscapeHatch_Min"] = 2;
-			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 0;
+			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 1;
 					
 			RoomPropertiesInt ["TorpedoRoom_Min"] = 20;
 			RoomPropertiesInt ["TorpedoRoom_CapPerTile"] = 1;
@@ -348,7 +348,8 @@ namespace Submarine.Model {
 		public bool ValidateCrew () {
 			bool bunksOk = ValidationCriteria (RoomType.Bunks);
 			bool cabinOk = ValidationCriteria (RoomType.Cabin);
-			return bunksOk && cabinOk;
+			bool escapeOk = ValidationCriteria (RoomType.EscapeHatch);
+			return bunksOk && cabinOk && escapeOk;
 		}
 
 

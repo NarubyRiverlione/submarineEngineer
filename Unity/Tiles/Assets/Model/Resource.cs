@@ -25,6 +25,7 @@ namespace Submarine.Model {
 		Radio,
 		Sonar,
 		Ops,
+		Escape,
 		None}
 
 	;
