@@ -74,7 +74,7 @@
      <Compile Include="Assets\Model\Rooms\Stairs.cs" />
      <Compile Include="Assets\Model\Rooms\StorageRoom.cs" />
      <Compile Include="Assets\Model\Rooms\TorpedoRoom.cs" />
-     <Compile Include="Assets\Model\Submarine.cs" />
+     <Compile Include="Assets\Model\Sub.cs" />
      <Compile Include="Assets\Model\Tile.cs" />
      <Compile Include="Assets\Source\Converters\Unity\AnimationCurve_DirectConverter.cs" />
      <Compile Include="Assets\Source\Converters\Unity\Bounds_DirectConverter.cs" />

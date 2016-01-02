@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9037d8a9ff1955049a3411fac43e86ec
-timeCreated: 1450969960
+timeCreated: 1451745936
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -234,8 +234,8 @@ TextureImporter:
     - name: Walls_15
       rect:
         serializedVersion: 2
-        x: 65
-        y: 4
+        x: 64
+        y: 5
         width: 20
         height: 20
       alignment: 0
