@@ -78,9 +78,9 @@ namespace Submarine.Model {
 
 		public int AmountOfCooks  { get { return AmountOfCrewType (Units.Cook); } }
 
-		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted; } }
+		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted (); } }
 
-		public int AmountOfEnlisted  { get { return AmountOfCrewType (Units.Enlisted); } }
+		//		public int AmountOfEnlisted  { get { return AmountOfCrewType (Units.Enlisted); } }
 
 		#region SAVE / LOAD
 
@@ -742,27 +742,29 @@ namespace Submarine.Model {
 			// Add officer
 			if (crewType == Units.Officers) {
 				// add only if there is enough spaces left
-				if (AmountOfOfficers < SpacesForOfficers) {
-					CrewList.Add (new Crew (crewType, _nextCrewID));
-					_nextCrewID++;
+				if (SpacesForOfficers > 0) {
+					AddCrewToSub (crewType);
 				}
 			}
 			// Add cook (doesn't rest in Bunks because of loop: bunk needs food, food needs cook, cook needs bunk)
 			if (crewType == Units.Cook) {
 				// add only if there is enough spaces left
-				if (AmountOfCooks < SpacesForCooks) {
-					CrewList.Add (new Crew (crewType, _nextCrewID));
-					_nextCrewID++;
+				if (SpacesForCooks > 0) {
+					AddCrewToSub (crewType);
 				}
 			}
 			// Add normal crew (not Cooks)
 			if (isEnlisted (crewType)) {
 				// add only if there is enough spaces left (bunks have Enlisted as generic crew type)
-				if (AmountOfEnlisted < SpacesForEnlisted) {
-					CrewList.Add (new Crew (crewType, _nextCrewID));
-					_nextCrewID++;
+				if (SpacesForEnlisted > 0) {
+					AddCrewToSub (crewType);
 				}
 			}
+		}
+
+		private void AddCrewToSub (Units crewType) {
+			CrewList.Add (new Crew (crewType, _nextCrewID));
+			_nextCrewID++;
 		}
 
 		public void RemoveCrew (Units crewType) {
@@ -774,25 +776,25 @@ namespace Submarine.Model {
 		}
 
 		public int AmountOfCrewType (Units crewType) {
-			if (!isEnlisted (crewType))
-				return CrewList.Where (c => c.Type == crewType).Count ();
-			else {
-				int amount = 0;
-				amount += CrewList.Where (c => c.Type == Units.Engineers).Count ();
-				amount += CrewList.Where (c => c.Type == Units.Radioman).Count ();
-				amount += CrewList.Where (c => c.Type == Units.Sonarman).Count ();
-				amount += CrewList.Where (c => c.Type == Units.Torpedoman).Count ();
-				amount += CrewList.Where (c => c.Type == Units.Watchstanders).Count ();
-				return amount;
-			}
+			return CrewList.Where (c => c.Type == crewType).Count ();
+		}
+
+		public int AmountOfEnlisted () {
+			int amount = 0;
+			amount += CrewList.Where (c => c.Type == Units.Engineers).Count ();
+			amount += CrewList.Where (c => c.Type == Units.Radioman).Count ();
+			amount += CrewList.Where (c => c.Type == Units.Sonarman).Count ();
+			amount += CrewList.Where (c => c.Type == Units.Torpedoman).Count ();
+			amount += CrewList.Where (c => c.Type == Units.Watchstanders).Count ();
+			return amount;
 		}
 
 		// enlisted = no officers (cabin), no cooks (gallery)
 		public  bool isEnlisted (Units crewType) {
 			return crewType == Units.Engineers || crewType == Units.Radioman || crewType == Units.Sonarman
-			|| crewType == Units.Torpedoman || crewType == Units.Watchstanders;
+			|| crewType == Units.Torpedoman || crewType == Units.Watchstanders || crewType == Units.Enlisted;
 		}
-
+		// all crew types : enlisted + officers + cook
 		public bool isCrewType (Units crewType) {
 			return isEnlisted (crewType) || crewType == Units.Officers || crewType == Units.Cook;
 		}

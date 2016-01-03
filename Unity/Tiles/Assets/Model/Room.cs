@@ -177,10 +177,10 @@ namespace Submarine.Model {
 					if (inSub != null && needResource.unit != Units.None) {
 						if (inSub.isCrewType (needResource.unit)) {
 							// crew as needed resource, check CrewList
-							if (inSub.isEnlisted (needResource.unit))
-								resouceAvailable = inSub.AmountOfEnlisted;
-							else
-								resouceAvailable = inSub.AmountOfCrewType (needResource.unit);
+//							if (inSub.isEnlisted (needResource.unit))
+//								resouceAvailable = inSub.AmountOfEnlisted;
+//							else
+							resouceAvailable = inSub.AmountOfCrewType (needResource.unit);
 						}
 						else // no crew = normal resource
 							resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
