@@ -2,6 +2,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Sub.cs">
     <Files>
+<<<<<<< HEAD
       <File FileName="Assets/Controller/WorldController.cs" Line="394" Column="91" />
       <File FileName="Assets/Controller/MouseController.cs" Line="190" Column="23" />
       <File FileName="Assets/Model/Sub.cs" Line="786" Column="1" />
@@ -11,6 +12,16 @@
       <File FileName="Assets/Model/Crew.cs" Line="11" Column="12" />
       <File FileName="Assets/Model/Resource.cs" Line="18" Column="3" />
       <File FileName="Assets/Model/Rooms/Gallery.cs" Line="1" Column="1" />
+=======
+      <File FileName="Assets/Controller/WorldController.cs" Line="326" Column="81" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="124" Column="77" />
+      <File FileName="Assets/Model/Sub.cs" Line="722" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="158" Column="5" />
+      <File FileName="Assets/Model/RoomFactory.cs" Line="52" Column="6" />
+      <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Model/Crew.cs" Line="11" Column="4" />
+      <File FileName="Assets/Model/Resource.cs" Line="18" Column="16" />
+>>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

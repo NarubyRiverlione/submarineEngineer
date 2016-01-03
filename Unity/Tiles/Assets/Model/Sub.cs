@@ -60,6 +60,7 @@ namespace Submarine.Model {
 		// Requirements of a room, can be more then 1 = List
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
 
+<<<<<<< HEAD
 
 		// List of crew
 		public List<Crew> CrewList { get; private set; }
@@ -81,6 +82,10 @@ namespace Submarine.Model {
 		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted; } }
 
 		public int AmountOfEnlisted  { get { return AmountOfCrewType (Units.Enlisted); } }
+=======
+		// List of crew
+		public List<Crew> CrewList { get; private set; }
+>>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
 
 		#region SAVE / LOAD
 
@@ -316,9 +321,13 @@ namespace Submarine.Model {
 				{ new Resource (Units.Engineers, 1) }
 			};
 			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000) } };
+<<<<<<< HEAD
 
 			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstanders, 2) } };
 
+=======
+			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstanders, 2) } };
+>>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
 			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
 				{ new Resource (Units.tins, 40) },
 				{ new Resource (Units.Cook, 1) }
@@ -741,6 +750,7 @@ namespace Submarine.Model {
 		public void AddCrew (Units crewType) {
 			// Add officer
 			if (crewType == Units.Officers) {
+<<<<<<< HEAD
 				// add only if there is enough spaces left
 				if (AmountOfOfficers < SpacesForOfficers) {
 					CrewList.Add (new Crew (crewType, _nextCrewID));
@@ -761,6 +771,22 @@ namespace Submarine.Model {
 				if (AmountOfEnlisted < SpacesForEnlisted) {
 					CrewList.Add (new Crew (crewType, _nextCrewID));
 					_nextCrewID++;
+=======
+				int maxOfficers = GetAllOutputOfUnit (Units.Officers);
+				// add only if there is enough spaces left
+				if (AmountOfCrewType (Units.Officers) < maxOfficers) {
+					CrewList.Add (new Crew (crewType));
+				}
+			}
+			// Add normal crew
+			if (crewType == Units.Engineers || crewType == Units.Cook ||
+			    crewType == Units.Radioman || crewType == Units.Sonarman || crewType == Units.Torpedoman ||
+			    crewType == Units.Watchstanders) {
+				int maxEnlisted = GetAllOutputOfUnit (Units.Enlisted);
+				// add only if there is enough spaces left (bunks have Enlisted as generic crew type)
+				if (AmountOfCrewType (Units.Enlisted) < maxEnlisted) {
+					CrewList.Add (new Crew (crewType));
+>>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
 				}
 			}
 		}
@@ -774,6 +800,7 @@ namespace Submarine.Model {
 		}
 
 		public int AmountOfCrewType (Units crewType) {
+<<<<<<< HEAD
 			if (!isEnlisted (crewType))
 				return CrewList.Where (c => c.Type == crewType).Count ();
 			else {
@@ -795,6 +822,9 @@ namespace Submarine.Model {
 
 		public bool isCrewType (Units crewType) {
 			return isEnlisted (crewType) || crewType == Units.Officers || crewType == Units.Cook;
+=======
+			return CrewList.Where (c => c.Type == crewType).Count ();
+>>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
 		}
 
 		#endregion
