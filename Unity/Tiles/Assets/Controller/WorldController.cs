@@ -393,6 +393,45 @@ public class WorldController : MonoBehaviour {
 			GameObject.Find ("RadioMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
 			GameObject.Find ("TorpedoMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
 			GameObject.Find ("Engineer place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
+			GameObject.Find ("Watchstanders place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
+
+			// enable / disable Add buttons
+			Button button; 
+			button = GameObject.Find ("Officer_+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForOfficers > 0;
+
+			button = GameObject.Find ("Cook_+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForCooks > 0;
+
+			button = GameObject.Find ("Engineer+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForEnlisted > 0;
+			button = GameObject.Find ("SonarMan_+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForEnlisted > 0;
+			button = GameObject.Find ("RadioMan_+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForEnlisted > 0;
+			button = GameObject.Find ("TorpedoMan_+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForEnlisted > 0;
+			button = GameObject.Find ("Watchstanders_+").GetComponent<Button> ();
+			button.interactable = mySub.SpacesForEnlisted > 0;
+
+			// enable / disable Remove buttons
+			button = GameObject.Find ("Officer_-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfOfficers > 0;
+
+			button = GameObject.Find ("Cook_-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfCooks > 0;
+
+			button = GameObject.Find ("Engineer-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfEnlisted () > 0;
+			button = GameObject.Find ("SonarMan_-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfEnlisted () > 0;
+			button = GameObject.Find ("RadioMan_-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfEnlisted () > 0;
+			button = GameObject.Find ("TorpedoMan_-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfEnlisted () > 0;
+			button = GameObject.Find ("Watchstanders_-").GetComponent<Button> ();
+			button.interactable = mySub.AmountOfEnlisted () > 0;
+		
 		}
 	}
 
