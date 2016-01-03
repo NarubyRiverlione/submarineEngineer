@@ -331,7 +331,7 @@ public class WorldController : MonoBehaviour {
 				if (resourceGameObject != null) { // some Units are showed in UI Design Validation, not here
 					// AVAILABLE
 					int outputCount = 0;
-<<<<<<< HEAD
+
 					if (mySub.isCrewType (resourceUnit))
 						// get crew count
 						outputCount = mySub.AmountOfCrewType (resourceUnit);
@@ -339,18 +339,6 @@ public class WorldController : MonoBehaviour {
 						// get non-crew count
 						outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
 					
-=======
-					if (resourceUnit != Units.Engineers && resourceUnit != Units.Cook &&
-					    resourceUnit != Units.Radioman && resourceUnit != Units.Sonarman &&
-					    resourceUnit != Units.Torpedoman && resourceUnit != Units.Watchstanders &&
-					    resourceUnit != Units.Officers)
-						// get non-crew count
-						outputCount = mySub.GetAllOutputOfUnit (resourceUnit);
-					else
-						// get crew count
-						outputCount = mySub.AmountOfCrewType (resourceUnit);
-
->>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
 					// NEEDED
 					int neededCount = mySub.GetAllNeededResourcesOfUnit (resourceUnit);
 
@@ -458,9 +446,7 @@ public class WorldController : MonoBehaviour {
 		Application.Quit ();
 	}
 
-<<<<<<< HEAD
 
-=======
 	public void AddCrew (string typeOfCrew) {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
 		mySub.AddCrew (crewType);
@@ -470,5 +456,5 @@ public class WorldController : MonoBehaviour {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
 		mySub.RemoveCrew (crewType);
 	}
->>>>>>> 6aa99127d4653ca4e31a8d4a5401bf645e04b5bf
+
 }
