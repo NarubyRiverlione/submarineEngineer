@@ -137,8 +137,7 @@ public class MouseController : MonoBehaviour {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
 			#if DEBUG
-			//TODO: remove next line before production build
-			info += "\n DEBIG INFO:"
+			info += "\n DEBUG:"
 			+ " RoomID: " + tileBelowMouse.RoomID
 			+ " wall type: " + tileBelowMouse.WallType
 			+ " layout validate: " + room.IsLayoutValid

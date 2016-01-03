@@ -32,12 +32,22 @@ namespace Submarine.Model {
 	public class Resource {
 		public Units unit { get; set; }
 
-		public int amount { get; set; }
+		public float amount { get; set; }
 
-		public Resource (Units u, int a) {
+		public Resource (Units u, float a) {
 			unit = u;
 			amount = a;
 
+		}
+
+		// enlisted = no officers (cabin), no cooks (gallery)
+		static public  bool isEnlisted (Units crewType) {
+			return crewType == Units.Engineers || crewType == Units.Radioman || crewType == Units.Sonarman
+			|| crewType == Units.Torpedoman || crewType == Units.Watchstanders || crewType == Units.Enlisted;
+		}
+		// all crew types : enlisted + officers + cook
+		static public bool isCrewType (Units crewType) {
+			return isEnlisted (crewType) || crewType == Units.Officers || crewType == Units.Cook;
 		}
 	}
 }

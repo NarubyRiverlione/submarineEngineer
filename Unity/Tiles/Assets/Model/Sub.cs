@@ -55,7 +55,7 @@ namespace Submarine.Model {
 		int _nextRoomID = 1;
 
 		// Room properties: capacity / tile, min size (output unit is set in concrete classes)
-		public Dictionary<string,int> RoomPropertiesInt { get; private set; }
+		public Dictionary<string,float> RoomProperties { get; private set; }
 
 		// Requirements of a room, can be more then 1 = List
 		public Dictionary<RoomType, List<Resource>> RoomPropertiesReqRes { get; private set; }
@@ -146,7 +146,7 @@ namespace Submarine.Model {
 			_nextRoomID = loadedSub._nextRoomID;
 
 			// set to loaded dictionaries
-			RoomPropertiesInt = loadedSub.RoomPropertiesInt;
+			RoomProperties = loadedSub.RoomProperties;
 			RoomPropertiesReqRes = loadedSub.RoomPropertiesReqRes;
 
 			// load all tiles (2D array not supported,needs conversion)
@@ -168,6 +168,9 @@ namespace Submarine.Model {
 				Room room = roomPair.Value;
 				room.inSub = this; // set ref. point too this Submarine 
 			}
+
+			_nextCrewID = loadedSub._nextCrewID;
+			CrewList = loadedSub.CrewList;
 		}
 
 		#endregion
@@ -249,95 +252,96 @@ namespace Submarine.Model {
 
 		// set min tile size, capacity per tile and unit of capacity for each Room Type (output unit is set in concrete classes)
 		private void SetRoomProperties () {//TODO: read from config file for this submarine outline type
-			RoomPropertiesInt = new Dictionary<string, int> ();
+			RoomProperties = new Dictionary<string, float> ();
 
-			RoomPropertiesInt ["Stairs_Min"] = 1;
-			RoomPropertiesInt ["Stairs_CapPerTile"] = 0;
+			RoomProperties ["Stairs_Min"] = 1.0f;
+			RoomProperties ["Stairs_CapPerTile"] = 0;
 
-			RoomPropertiesInt ["Balasttank_Min"] = 6;
-			RoomPropertiesInt ["Balasttank_CapPerTile"] = 230;
+			RoomProperties ["Balasttank_Min"] = 6.0f;
+			RoomProperties ["Balasttank_CapPerTile"] = 230;
 
-			RoomPropertiesInt ["EngineRoom_Min"] = 12;
-			RoomPropertiesInt ["EngineRoom_CapPerTile"] = 123;
+			RoomProperties ["EngineRoom_Min"] = 12.0f;
+			RoomProperties ["EngineRoom_CapPerTile"] = 123;
 
-			RoomPropertiesInt ["Generator_Min"] = 12;
-			RoomPropertiesInt ["Generator_CapPerTile"] = 478;
+			RoomProperties ["Generator_Min"] = 12.0f;
+			RoomProperties ["Generator_CapPerTile"] = 478;
 					
-			RoomPropertiesInt ["Battery_Min"] = 10;
-			RoomPropertiesInt ["Battery_CapPerTile"] = 56;
+			RoomProperties ["Battery_Min"] = 8.0f;
+			RoomProperties ["Battery_CapPerTile"] = 5.6f;
 					
-			RoomPropertiesInt ["Bridge_Min"] = 4;
-			RoomPropertiesInt ["Bridge_CapPerTile"] = 0;
+			RoomProperties ["Bridge_Min"] = 4.0f;
+			RoomProperties ["Bridge_CapPerTile"] = 0;
 
-			RoomPropertiesInt ["Gallery_Min"] = 6;
-			RoomPropertiesInt ["Gallery_CapPerTile"] = 4;
+			RoomProperties ["Gallery_Min"] = 6.0f;
+			RoomProperties ["Gallery_CapPerTile"] = 4;
 					
-			RoomPropertiesInt ["Cabin_Min"] = 2;
-			RoomPropertiesInt ["Cabin_CapPerTile"] = 1;
+			RoomProperties ["Cabin_Min"] = 2.0f;
+			RoomProperties ["Cabin_CapPerTile"] = 1;
 					
-			RoomPropertiesInt ["Bunks_Min"] = 8;
-			RoomPropertiesInt ["Bunks_CapPerTile"] = 1;
+			RoomProperties ["Bunks_Min"] = 8.0f;
+			RoomProperties ["Bunks_CapPerTile"] = 1;
 
-			RoomPropertiesInt ["Conn_Min"] = 10;
-			RoomPropertiesInt ["Conn_CapPerTile"] = 1;
+			RoomProperties ["Conn_Min"] = 10.0f;
+			RoomProperties ["Conn_CapPerTile"] = 1;
 					
-			RoomPropertiesInt ["Sonar_Min"] = 4;
-			RoomPropertiesInt ["Sonar_CapPerTile"] = 1;
+			RoomProperties ["Sonar_Min"] = 4.0f;
+			RoomProperties ["Sonar_CapPerTile"] = 1;
 					
-			RoomPropertiesInt ["RadioRoom_Min"] = 4;
-			RoomPropertiesInt ["RadioRoom_CapPerTile"] = 1;
+			RoomProperties ["RadioRoom_Min"] = 4.0f;
+			RoomProperties ["RadioRoom_CapPerTile"] = 1;
 					
-			RoomPropertiesInt ["FuelTank_Min"] = 9;
-			RoomPropertiesInt ["FuelTank_CapPerTile"] = 1000;
+			RoomProperties ["FuelTank_Min"] = 9.0f;
+			RoomProperties ["FuelTank_CapPerTile"] = 1000;
 					
-			RoomPropertiesInt ["PumpRoom_Min"] = 9;
-			RoomPropertiesInt ["PumpRoom_CapPerTile"] = 1000;
+			RoomProperties ["PumpRoom_Min"] = 8.0f;
+			RoomProperties ["PumpRoom_CapPerTile"] = 1000;
 					
-			RoomPropertiesInt ["StorageRoom_Min"] = 4;
-			RoomPropertiesInt ["StorageRoom_CapPerTile"] = 27;
+			RoomProperties ["StorageRoom_Min"] = 1.0f;
+			RoomProperties ["StorageRoom_CapPerTile"] = 27;
 				
-			RoomPropertiesInt ["EscapeHatch_Min"] = 2;
-			RoomPropertiesInt ["EscapeHatch_CapPerTile"] = 1;
+			RoomProperties ["EscapeHatch_Min"] = 1.0f;
+			RoomProperties ["EscapeHatch_CapPerTile"] = 1;
 					
-			RoomPropertiesInt ["TorpedoRoom_Min"] = 20;
-			RoomPropertiesInt ["TorpedoRoom_CapPerTile"] = 1;
+			RoomProperties ["TorpedoRoom_Min"] = 16.0f;
+			RoomProperties ["TorpedoRoom_CapPerTile"] = 1;
 		}
 
 		private void SetRoomResoucresNeeds () {
 			RoomPropertiesReqRes = new Dictionary<RoomType,List<Resource>> ();
 
 			RoomPropertiesReqRes [RoomType.EngineRoom] = new List<Resource> {
-				{ new Resource (Units.liters_fuel, 1000) },
-				{ new Resource (Units.Engineers, 1) }
+				{ new Resource (Units.liters_fuel, 100) },
+				{ new Resource (Units.Engineers, 4.0f / RoomProperties ["EngineRoom_Min"]) }
 			};
 
 			RoomPropertiesReqRes [RoomType.Generator] = new List<Resource> {
-				{ new Resource (Units.pks, 1400) },
-				{ new Resource (Units.Engineers, 1) }
+				{ new Resource (Units.pks, 140) },
+				{ new Resource (Units.Engineers, 2.0f / RoomProperties ["Generator_Min"]) }
 			};
-			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000) } };
+			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000f / RoomProperties ["Battery_Min"]) } };
 
-			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> { { new Resource (Units.Watchstanders, 2) } };
+			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> (); 
+			// TODO: not sure if bridge needs crew (underwater) { { new Resource (Units.Watchstanders, 2) } };
 
 			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
-				{ new Resource (Units.tins, 40) },
-				{ new Resource (Units.Cook, 1) }
+				{ new Resource (Units.tins, 4.0f / RoomProperties ["Gallery_Min"]) },
+				{ new Resource (Units.Cook, 1.0f / RoomProperties ["Gallery_Min"]) }
 			};
 			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 2) } };
 
-			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 8) } };
+			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 8.0f / RoomProperties ["Bunks_Min"]) } };
 
 			RoomPropertiesReqRes [RoomType.Conn] = new List<Resource> {
-				{ new Resource (Units.Officers, 2) },
-				{ new Resource (Units.Watchstanders, 4) }
+				{ new Resource (Units.Officers, 2.0f /	RoomProperties ["Conn_Min"]) },
+				{ new Resource (Units.Watchstanders, 4.0f /	RoomProperties ["Conn_Min"]) }
 			};
-			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1) } };
+			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1.0f / RoomProperties ["Sonar_Min"]) } };
 
-			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1) } };
+			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1.0f / RoomProperties ["RadioRoom_Min"]) } };
 	
-			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_balast, 1000) } };
+			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_balast, 1.0f) } };
 		
-			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { { new Resource (Units.Torpedoman, 4) } };
+			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { { new Resource (Units.Torpedoman, 4.0f / RoomProperties ["TorpedoRoom_Min"]) } };
 
 			RoomPropertiesReqRes [RoomType.EscapeHatch] = new List<Resource> ();
 			RoomPropertiesReqRes [RoomType.Stairs] = new List<Resource> ();
@@ -367,7 +371,7 @@ namespace Submarine.Model {
 			return roomCount == validCount ? true : false;
 		}
 
-		public bool ValidateOps () {
+		public bool ValidateOps () { // Ops = Conn + Radio + Sonar
 			bool connOk = ValidationCriteria (RoomType.Conn);
 			bool radioOk = ValidationCriteria (RoomType.RadioRoom);
 			bool sonarOk = ValidationCriteria (RoomType.Sonar);
@@ -375,7 +379,7 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateCrew () {
-			//TODO  check also crewList
+			//TODO  check also crewList ? maybe not needed as crew is a requirment for other rooms to operate
 			bool bunksOk = ValidationCriteria (RoomType.Bunks);
 			bool cabinOk = ValidationCriteria (RoomType.Cabin);
 			bool escapeOk = ValidationCriteria (RoomType.EscapeHatch);
@@ -754,7 +758,7 @@ namespace Submarine.Model {
 				}
 			}
 			// Add normal crew (not Cooks)
-			if (isEnlisted (crewType)) {
+			if (Resource.isEnlisted (crewType)) {
 				// add only if there is enough spaces left (bunks have Enlisted as generic crew type)
 				if (SpacesForEnlisted > 0) {
 					AddCrewToSub (crewType);
@@ -787,16 +791,6 @@ namespace Submarine.Model {
 			amount += CrewList.Where (c => c.Type == Units.Torpedoman).Count ();
 			amount += CrewList.Where (c => c.Type == Units.Watchstanders).Count ();
 			return amount;
-		}
-
-		// enlisted = no officers (cabin), no cooks (gallery)
-		public  bool isEnlisted (Units crewType) {
-			return crewType == Units.Engineers || crewType == Units.Radioman || crewType == Units.Sonarman
-			|| crewType == Units.Torpedoman || crewType == Units.Watchstanders || crewType == Units.Enlisted;
-		}
-		// all crew types : enlisted + officers + cook
-		public bool isCrewType (Units crewType) {
-			return isEnlisted (crewType) || crewType == Units.Officers || crewType == Units.Cook;
 		}
 
 		#endregion

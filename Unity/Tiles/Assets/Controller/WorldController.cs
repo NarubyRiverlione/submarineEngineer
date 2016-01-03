@@ -332,7 +332,7 @@ public class WorldController : MonoBehaviour {
 					// AVAILABLE
 					int outputCount = 0;
 
-					if (mySub.isCrewType (resourceUnit))
+					if (Resource.isCrewType (resourceUnit))
 						// get crew count
 						outputCount = mySub.AmountOfCrewType (resourceUnit);
 					else

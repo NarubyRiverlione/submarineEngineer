@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using FullSerializer;
+using System;
 
 namespace Submarine.Model {
 	public enum RoomType {
@@ -113,7 +114,7 @@ namespace Submarine.Model {
 
 			if (NeededResources != null) {
 				foreach (Resource resouce in NeededResources) {
-					ValidationText += " and " + resouce.amount + " " + resouce.unit;
+					ValidationText += " and minimum " + resouce.amount * MinimimValidSize + " " + resouce.unit;
 				}
 				ValidationText += " to be operational";
 			}
@@ -175,11 +176,8 @@ namespace Submarine.Model {
 					int resouceAvailable = 0;
 					// get available resouces
 					if (inSub != null && needResource.unit != Units.None) {
-						if (inSub.isCrewType (needResource.unit)) {
+						if (Resource.isCrewType (needResource.unit)) {
 							// crew as needed resource, check CrewList
-//							if (inSub.isEnlisted (needResource.unit))
-//								resouceAvailable = inSub.AmountOfEnlisted;
-//							else
 							resouceAvailable = inSub.AmountOfCrewType (needResource.unit);
 						}
 						else // no crew = normal resource
@@ -195,7 +193,8 @@ namespace Submarine.Model {
 
 		public int GetResouceNeeded (Units reqUnit) {
 			Resource foundResource = NeededResources.Where (res => res.unit == reqUnit).FirstOrDefault ();
-			return foundResource != null ? foundResource.amount : 0;
+			// resource needed depence on size of room
+			return foundResource != null ? (int)Math.Floor (foundResource.amount * Size) : 0;
 		}
 	}
 }
