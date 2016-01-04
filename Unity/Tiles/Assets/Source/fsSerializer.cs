@@ -718,7 +718,7 @@ namespace FullSerializer {
 					if (deserializeResult.Failed)
 						return deserializeResult;
 
-					// : we probably should be invoking object processors all along this pipeline
+					// : we probably should be invoking object processors all along this Pipeline
 					for (int i = 1; i < path.Count; ++i) {
 						result = path [i].Migrate (result);
 					}

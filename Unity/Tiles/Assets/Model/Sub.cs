@@ -67,8 +67,6 @@ namespace Submarine.Model {
 		[UnityEngine.SerializeField]
 		int _nextCrewID = 1;
 
-
-
 		public int SpacesForOfficers  { get { return GetAllOutputOfUnit (Units.Officers) - AmountOfOfficers; } }
 
 		public int AmountOfOfficers { get { return AmountOfCrewType (Units.Officers); } }
@@ -80,7 +78,11 @@ namespace Submarine.Model {
 
 		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted (); } }
 
-		//		public int AmountOfEnlisted  { get { return AmountOfCrewType (Units.Enlisted); } }
+
+		public List<Carrier> ResourceCarriers {
+			get;
+			private set;
+		}
 
 		#region SAVE / LOAD
 
@@ -379,7 +381,6 @@ namespace Submarine.Model {
 		}
 
 		public bool ValidateCrew () {
-			//TODO  check also crewList ? maybe not needed as crew is a requirment for other rooms to operate
 			bool bunksOk = ValidationCriteria (RoomType.Bunks);
 			bool cabinOk = ValidationCriteria (RoomType.Cabin);
 			bool escapeOk = ValidationCriteria (RoomType.EscapeHatch);

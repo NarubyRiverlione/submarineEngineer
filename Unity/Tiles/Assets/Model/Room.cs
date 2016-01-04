@@ -52,7 +52,7 @@ namespace Submarine.Model {
 
 		public double CapacityPerTile { get; protected set; }
 
-		public int OutputCapacity {
+		int OutputCapacity {
 			get{ return (int)(Size * CapacityPerTile); }
 		}
 
@@ -93,7 +93,7 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) {    
+		protected Room (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) {    
 			TypeOfRoom = ofThisRoomType;
 			coordinatesOfTilesInRoom = new List<Point> ();
 			IsAccessable = true;	// default: room is accessible, if not change this in construction of concrete class 

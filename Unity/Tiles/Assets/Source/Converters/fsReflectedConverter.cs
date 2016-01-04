@@ -64,7 +64,7 @@ namespace FullSerializer.Internal {
 					// deserialization. However, this is bad for perf.
 					// : Find a way to avoid this call when we are not doing a partial deserialization
 					//       Maybe through a new property, ie, Serializer.IsPartialSerialization, which just
-					//       gets set when starting a new serialization? We cannot pipe the information
+					//       gets set when starting a new serialization? We cannot Pipe the information
 					//       through CreateInstance unfortunately.
 					if (property.CanRead) {
 						deserializedValue = property.Read (instance);
