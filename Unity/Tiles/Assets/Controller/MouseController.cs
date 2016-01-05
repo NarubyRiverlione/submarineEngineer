@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 public class MouseController : MonoBehaviour {
 
 	public GameObject cursorBuilder;
+	public GameObject cursorPiece;
 	public GameObject cursorDestroyer;
 
 	public GameObject scrollView_RoomButtons;
@@ -26,12 +27,15 @@ public class MouseController : MonoBehaviour {
 	// remember where the mouse was so we can detect dragging
 	Vector3 prevMousePosition;
 
+	PieceType PieceTypeToBeBuild = PieceType.None;
+	bool PieceWillBeConnection = false;
 
 	// Use this for initialization
 	void Start () {
 		// hide cursors
 		cursorBuilder.SetActive (false);
 		cursorDestroyer.SetActive (false);
+		cursorPiece.SetActive (false);
 		
 	}
 
@@ -65,16 +69,25 @@ public class MouseController : MonoBehaviour {
 			if (tileBelowMouse != null && !tileBelowMouse.canContainRoom)
 				tileBelowMouse = null;
 
+			// show correct cursor on tile
 			if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
 				Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
 				if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
 					cursorBuilder.transform.position = spaceBelowMouseCoordinates;
 					cursorBuilder.SetActive (true);
 					cursorDestroyer.SetActive (false);
+					cursorPiece.SetActive (false);
+				}
+				if (PieceTypeToBeBuild != PieceType.None) { // selected a piece to be build = show piece icon
+					cursorPiece.transform.position = spaceBelowMouseCoordinates;
+					cursorPiece.SetActive (true);
+					cursorBuilder.SetActive (false);
+					cursorDestroyer.SetActive (false);
 				}
 				else { // selected Empty room = show destroyer icon
 					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
 					cursorBuilder.SetActive (false);
+					cursorPiece.SetActive (false);
 					cursorDestroyer.SetActive (true);
 				}
 				ShowRoomInformation (tileBelowMouse);
@@ -83,6 +96,7 @@ public class MouseController : MonoBehaviour {
 				// hide if cursor isn't on a tile
 				cursorBuilder.SetActive (false);
 				cursorDestroyer.SetActive (false);
+				cursorPiece.SetActive (false);
 			}
 		}
 		// remember previous tile below mouse so cursor and UI Information text is only updated where mouse is above an other tile
@@ -132,11 +146,29 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
+	// Set piece type to be build
+	public void SetPieceTypeToBeBuild (string pieceType) {
+		PieceTypeToBeBuild = Piece.FindPieceTypeFormString (pieceType);
+		PieceWillBeConnection = false;
+	}
+
+	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
+		PieceTypeToBeBuild = Piece.FindPieceTypeFormString (pieceType);
+		PieceWillBeConnection = true;
+	}
+
 	void ShowRoomInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
+			foreach (Piece piece in tileBelowMouse.pieces) {
+				info += " contains piece " + piece.Type + " is connection: " + piece.IsConnection
+				+ " has input " + piece.Input + " " + piece.UnitOfContent
+				+ " witch is part of carrier (" + piece.partOfCarrier.ID + ")"
+				+ " containing " + piece.partOfCarrier.UnitOfContent;
+
+			}
 			#if DEBUG
 			info += "\n DEBUG:"
 			+ " RoomID: " + tileBelowMouse.RoomID
@@ -174,6 +206,8 @@ public class MouseController : MonoBehaviour {
 						throw new Exception ("Selected an unknow toggle in Panel building, check names");
 
 				}
+				// reset pieceType so a selection can be made
+				PieceTypeToBeBuild = PieceType.None;
 			}
 		}
 	}

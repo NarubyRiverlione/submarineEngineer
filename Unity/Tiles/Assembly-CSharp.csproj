@@ -57,9 +57,6 @@
      <Compile Include="Assets\Model\Carriers\FuelPipe.cs" />
      <Compile Include="Assets\Model\Crew.cs" />
      <Compile Include="Assets\Model\Piece.cs" />
-     <Compile Include="Assets\Model\Pieces\Pipe.cs" />
-     <Compile Include="Assets\Model\Pieces\Shaft.cs" />
-     <Compile Include="Assets\Model\Pieces\Wire.cs" />
      <Compile Include="Assets\Model\Point.cs" />
      <Compile Include="Assets\Model\Resource.cs" />
      <Compile Include="Assets\Model\Room.cs" />

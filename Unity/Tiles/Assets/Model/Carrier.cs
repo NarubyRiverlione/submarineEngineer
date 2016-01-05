@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Submarine.Model
-{
+namespace Submarine.Model {
 	// Carrier is generic class for collection of pieces: FuelPipe contains Pipes, ChargingCable contains Wire
-	abstract public class Carrier
-	{
-		public int ID {
-			get;
-			private set;
-		}
+	abstract public class Carrier {
+		public int ID { get; private set; }
 
-		public List<Piece> Pieces{
-			get;
-			private set;
-		}
+		public List<Piece> Pieces { get; private set; }
 
 		public int Content {
-			get{ int _content = 0;
+			get {
+				int _content = 0;
 				foreach (Piece piece  in Pieces) {
 					// only add correct unit to carrier
 					// Ex. only add fuel as input (end of fuel pipe will be connected to Engine Room witch has pks as output, don't add pks as fuel pipe content)
@@ -28,7 +21,7 @@ namespace Submarine.Model
 			}
 		}
 
-		public Units UnitOfContent { get;private set;}
+		public Units UnitOfContent { get; private set; }
 
 
 
@@ -38,20 +31,21 @@ namespace Submarine.Model
 
 		}
 
-		static public Carrier CreateCarrier(Units unit, int id){
+		static public Carrier CreateCarrier (Units unit, int id) {
 			switch (unit) {
-			case Units.liters_fuel:
-				return new FuelPipe (id,unit);
-			case Units.AH:
-				return new ChargeCable (id,unit);
+				case Units.liters_fuel:
+					return new FuelPipe (id, unit);
+				case Units.AH:
+					return new ChargeCable (id, unit);
 
-			default: 
-				throw new Exception ("unknow carrier for unit "+unit);
+				default: 
+					throw new Exception ("unknow carrier for unit " + unit);
 			}
 
 		}
 
 		abstract public void AddPiece (Piece piece);
+
 		abstract public void RemovePiece (Piece piece);
 
 	}

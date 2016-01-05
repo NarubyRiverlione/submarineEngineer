@@ -41,18 +41,15 @@ namespace Submarine.Model {
 		}
 
 		// a Tile can contain 2 items
-		public Piece[] items {
-			get;
-			private set;
-		}
+		public Piece[] pieces { get; private set; }
 
-		int _maxItems =2;
+		static public int MaxItems = 2;
 
 		public Tile (int x, int y) {
 			_coord = new Point (x, y);
 			Reset ();
 			canContainRoom = true;
-			items = new Piece [_maxItems]; 	// a Tile can contain 2 items
+			pieces = new Piece [MaxItems]; 	// a Tile can contain 2 items
 		}
 
 		public void Reset () {
@@ -60,16 +57,17 @@ namespace Submarine.Model {
 			WallType = 0;
 		}
 
-		public void AddItem(Piece itemToAdd){
-			if (items.Length < _maxItems)
-				items [items.Length] = itemToAdd;
-			}
-		public void RemoveItem(Piece itemToRemove){
-			int index = Array.IndexOf (items, itemToRemove);
-			if(index != -1) 
-				Array.Clear (items,index,1);
+		public void AddItem (Piece itemToAdd) {
+			if (pieces.Length < MaxItems)
+				pieces [pieces.Length] = itemToAdd;
+		}
+
+		public void RemoveItem (Piece itemToRemove) {
+			int index = Array.IndexOf (pieces, itemToRemove);
+			if (index != -1)
+				Array.Clear (pieces, index, 1);
 			else
-				throw new Exception("No " +itemToRemove + " on tile ("+X+","+Y+")");
+				throw new Exception ("No " + itemToRemove + " on tile (" + X + "," + Y + ")");
 		}
 	}
 }
