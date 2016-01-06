@@ -5,7 +5,8 @@ namespace Submarine.Model {
 		Pipe,
 		Wire,
 		Shaft,
-		None}
+		None,
+		Remove}
 
 	;
 
@@ -80,8 +81,9 @@ namespace Submarine.Model {
 		}
 
 
-		public Piece (Units units, Tile tile, Sub sub, bool isconnection) {
-			Type = FindPieceType (units);
+		// CONSTRUCTOR
+		public Piece (PieceType typeOfPiece, Tile tile, Sub sub, bool isconnection) {
+			Type = typeOfPiece;
 			NeighboreCount = 0;
 			OnTile = tile;
 			inSub = sub;

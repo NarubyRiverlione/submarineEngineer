@@ -32,15 +32,15 @@ namespace Submarine.Model {
 
 		}
 
-		static public Carrier CreateCarrier (Units unit, int id) {
-			switch (unit) {
-				case Units.liters_fuel:
-					return new FuelPipe (id, unit);
-				case Units.AH:
-					return new ChargeCable (id, unit);
+		static public Carrier CreateCarrier (PieceType typeOfPiece, int id) {
+			switch (typeOfPiece) {
+				case PieceType.Pipe:
+					return new FuelPipe (id, Units.liters_fuel);
+				case PieceType.Wire:
+					return new ChargeCable (id, Units.MWs);
 
 				default: 
-					throw new Exception ("unknow carrier for unit " + unit);
+					throw new Exception ("unknow carrier for piece type: " + typeOfPiece);
 			}
 
 		}

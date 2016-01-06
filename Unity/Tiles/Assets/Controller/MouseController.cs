@@ -27,7 +27,7 @@ public class MouseController : MonoBehaviour {
 	// remember where the mouse was so we can detect dragging
 	Vector3 prevMousePosition;
 
-	Units PieceUnitsToBeBuild = Units.None;
+	PieceType PieceTypeToBeBuild = PieceType.None;
 	bool PieceWillBeConnection = false;
 
 	// Use this for initialization
@@ -85,14 +85,14 @@ public class MouseController : MonoBehaviour {
 					cursorPiece.SetActive (false);
 				} 
 				// selected a piece to be build = show piece icon
-				if (PieceUnitsToBeBuild != Units.None && PieceUnitsToBeBuild != Units.Remove) {
+				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove) {
 					cursorPiece.transform.position = spaceBelowMouseCoordinates;
 					cursorPiece.SetActive (true);
 					cursorBuilder.SetActive (false);
 					cursorDestroyer.SetActive (false);
 				}
 				// selected Empty room = show destroyer icon
-				if (PieceUnitsToBeBuild == Units.Remove || RoomTypeToBeBuild == RoomType.Remove) { 
+				if (PieceTypeToBeBuild == PieceType.Remove || RoomTypeToBeBuild == RoomType.Remove) { 
 					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
 					cursorBuilder.SetActive (false);
 					cursorPiece.SetActive (false);
@@ -113,9 +113,9 @@ public class MouseController : MonoBehaviour {
 				if (RoomTypeToBeBuild == RoomType.Remove)
 					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove tile form room
 
-				if (PieceUnitsToBeBuild != Units.None && PieceUnitsToBeBuild != Units.Remove)
-					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceUnitsToBeBuild, PieceWillBeConnection);
-				if (PieceUnitsToBeBuild == Units.Remove) {
+				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove)
+					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild, PieceWillBeConnection);
+				if (PieceTypeToBeBuild == PieceType.Remove) {
 					// TODO remove piece
 				}
 			
@@ -158,14 +158,14 @@ public class MouseController : MonoBehaviour {
 	}
 
 	// Set piece type to be build
-	public void SetPieceUnitsToBeBuild (string pieceUnits) {
-		PieceUnitsToBeBuild = (Units)Enum.Parse (typeof(Units), pieceUnits);
+	public void SetPieceUnitsToBeBuild (string pieceType) {
+		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
 
 		PieceWillBeConnection = false;
 	}
 
-	public void SetConnectionPieceTypeToBeBuild (string pieceUnits) {
-		PieceUnitsToBeBuild = (Units)Enum.Parse (typeof(Units), pieceUnits);
+	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
+		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
 
 		PieceWillBeConnection = true;
 	}
@@ -222,7 +222,7 @@ public class MouseController : MonoBehaviour {
 
 				}
 				// reset RoomTypeToBeBuild & PieceUnitsToBeBuild so a selection can be made
-				PieceUnitsToBeBuild = Units.None;
+				PieceTypeToBeBuild = PieceType.None;
 				RoomTypeToBeBuild = RoomType.Empty;
 			}
 		}
