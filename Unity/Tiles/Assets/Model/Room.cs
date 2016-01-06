@@ -7,6 +7,7 @@ using System;
 namespace Submarine.Model {
 	public enum RoomType {
 		Empty,
+		Remove,
 		EngineRoom,
 		Generator,
 		Battery,

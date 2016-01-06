@@ -1,10 +1,25 @@
 fileFormatVersion: 2
 guid: 2d1ad27c636a941d197619f7343eeac0
-timeCreated: 1452021524
+timeCreated: 1452097037
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Pipes_Empty_0
+    21300002: Pipes_Empty_1
+    21300004: Pipes_Empty_2
+    21300006: Pipes_Empty_3
+    21300008: Pipes_Empty_4
+    21300010: Pipes_Empty_5
+    21300012: Pipes_Empty_6
+    21300014: Pipes_Empty_7
+    21300016: Pipes_Empty_8
+    21300018: Pipes_Empty_9
+    21300020: Pipes_Empty_10
+    21300022: Pipes_Empty_11
+    21300024: Pipes_Empty_12
+    21300026: Pipes_Empty_13
+    21300028: Pipes_Empty_14
+    21300030: Pipes_Empty_15
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -30,7 +45,7 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 1
+    filterMode: 0
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -56,6 +71,171 @@ TextureImporter:
         serializedVersion: 2
         x: 1
         y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_1
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_4
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_5
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_6
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_9
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_10
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_11
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_12
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_13
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_14
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_15
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 6
         width: 20
         height: 20
       alignment: 6

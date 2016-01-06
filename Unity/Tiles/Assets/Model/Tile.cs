@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 
 namespace Submarine.Model {
@@ -41,7 +42,7 @@ namespace Submarine.Model {
 		}
 
 		// a Tile can contain 2 items
-		public Piece[] pieces { get; private set; }
+		public List<Piece> Pieces { get; private set; }
 
 		static public int MaxItems = 2;
 
@@ -49,7 +50,8 @@ namespace Submarine.Model {
 			_coord = new Point (x, y);
 			Reset ();
 			canContainRoom = true;
-			pieces = new Piece [MaxItems]; 	// a Tile can contain 2 items
+			Pieces = new List<Piece> (); 	
+
 		}
 
 		public void Reset () {
@@ -58,16 +60,16 @@ namespace Submarine.Model {
 		}
 
 		public void AddItem (Piece itemToAdd) {
-			if (pieces.Length < MaxItems)
-				pieces [pieces.Length] = itemToAdd;
+			if (Pieces.Count < MaxItems) // a Tile can contain MaxItems
+				Pieces.Add (itemToAdd);
+			if (TileChangedActions != null)
+				TileChangedActions (this);
 		}
 
 		public void RemoveItem (Piece itemToRemove) {
-			int index = Array.IndexOf (pieces, itemToRemove);
-			if (index != -1)
-				Array.Clear (pieces, index, 1);
-			else
-				throw new Exception ("No " + itemToRemove + " on tile (" + X + "," + Y + ")");
+			Pieces.Remove (itemToRemove);
+			if (TileChangedActions != null)
+				TileChangedActions (this);
 		}
 	}
 }

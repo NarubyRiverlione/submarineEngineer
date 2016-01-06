@@ -18,6 +18,22 @@ namespace Submarine.Model {
 
 		public Carrier partOfCarrier { get; set; }
 
+		int neigboreCount;
+
+		public int NeighboreCount {
+			get { return neigboreCount; }
+			set {
+				neigboreCount = value;
+				isConnection = false;
+				if (OnTile != null && OnTile.TileChangedActions != null)
+					OnTile.TileChangedActions (OnTile);
+			}
+		}
+
+		// functions can registered via this Action to be informed when tile is changed
+		//		public Action PieceChangedActions { get; set; }
+
+
 		// an item can only be connected to a room, not in an empty tile
 		bool isConnection;
 
@@ -31,6 +47,8 @@ namespace Submarine.Model {
 				// remove connection
 				if (!value)
 					isConnection = false;
+				if (OnTile != null && OnTile.TileChangedActions != null)
+					OnTile.TileChangedActions (OnTile);
 			}
 		}
 
@@ -64,7 +82,7 @@ namespace Submarine.Model {
 
 		public Piece (Units units, Tile tile, Sub sub, bool isconnection) {
 			Type = FindPieceType (units);
-
+			NeighboreCount = 0;
 			OnTile = tile;
 			inSub = sub;
 			isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room

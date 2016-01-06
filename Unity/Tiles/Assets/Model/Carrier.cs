@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Submarine.Model {
-	// Carrier is generic class for collection of pieces: FuelPipe contains Pipes, ChargingCable contains Wire
+	// Carrier is generic class for collection of Pieces: FuelPipe contains Pipes, ChargingCable contains Wire
 	abstract public class Carrier {
 		public int ID { get; private set; }
 
@@ -28,6 +28,7 @@ namespace Submarine.Model {
 		protected Carrier (int id, Units unit) {
 			ID = id;
 			UnitOfContent = unit;
+			Pieces = new List<Piece> ();
 
 		}
 

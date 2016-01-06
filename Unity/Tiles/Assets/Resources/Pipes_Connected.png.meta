@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 1f8f619983fc2479184d8efc4629b9d8
-timeCreated: 1452021535
+guid: 8681e1cce3ff04b9890d01531429bbbd
+timeCreated: 1452088041
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Pipes_Empty_Connected_0
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -30,7 +29,7 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 1
+    filterMode: 0
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -39,10 +38,10 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
+  alignment: 6
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 20
@@ -50,18 +49,7 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites:
-    - name: Pipes_Empty_Connected_0
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 69
-        width: 20
-        height: 20
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
+    sprites: []
     outline: []
   spritePackingTag: 
   userData: 

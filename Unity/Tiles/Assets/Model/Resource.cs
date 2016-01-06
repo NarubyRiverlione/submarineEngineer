@@ -25,7 +25,8 @@ namespace Submarine.Model {
 		Sonar,
 		Ops,
 		Escape,
-		None}
+		None,
+Remove}
 
 	;
 

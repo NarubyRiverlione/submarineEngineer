@@ -47,6 +47,8 @@ namespace Submarine.Model {
 				
 				case RoomType.Empty:
 					return new EmptyRoom (type, inThisSub, 0, 0, null);
+				case RoomType.Remove:
+					return new EmptyRoom (type, inThisSub, 0, 0, null);
 
 				default:
 					throw new NotImplementedException ("ERROR: Room type " + type + "isn't implemented yet.");

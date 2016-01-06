@@ -173,6 +173,9 @@ namespace Submarine.Model {
 
 			_nextCrewID = loadedSub._nextCrewID;
 			CrewList = loadedSub.CrewList;
+
+			ResourceCarriers = loadedSub.ResourceCarriers;
+			_nextCarrierID = loadedSub._nextCarrierID;
 		}
 
 		#endregion
@@ -208,8 +211,11 @@ namespace Submarine.Model {
 			// instantiate rooms
 			rooms = new Dictionary<int, Room> ();
 
-			// initialize CrewList
+			// instantiate CrewList
 			CrewList = new List<Crew> ();
+
+			// instantiate ResourceCarriers
+			ResourceCarriers = new List<Carrier> ();
 
 			// set room properties 
 			SetRoomProperties ();
@@ -796,7 +802,7 @@ namespace Submarine.Model {
 
 		#endregion
 
-		#region Carrier / pieces
+		#region Carrier / Pieces
 
 		public void AddPieceToTile (int x, int y, Units unitOfContent, bool isConnection) {
 			Tile onTile = GetTileAt (x, y);
@@ -804,7 +810,7 @@ namespace Submarine.Model {
 				UnityEngine.Debug.LogError ("ERROR: cannot a an Piece on a not existing Tile");
 			}
 			else {
-				if (onTile.pieces.Length == Tile.MaxItems) {
+				if (onTile.Pieces.Count == Tile.MaxItems) {
 					UnityEngine.Debug.Log ("Already in the " + Tile.MaxItems + " items on tile (" + x + "," + y + ")");
 				}
 				else {
@@ -819,45 +825,45 @@ namespace Submarine.Model {
 
 					// get info of Tile North
 					checkTile = GetTileAt (x, y + 1);
-					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, onTile, checkTile);
+					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, checkTile);
 
 					if (foundSameCarrierType != null) {
 						remember1found = remember1found || true;
 						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-						//		onTile.WallType += 1;		// add wall type for North
+						newPiece.NeighboreCount += 1;		// add wall type for North
 						//		BuildWallsAroundTile (checkTile);	// rebuild wall of neighborer
 					}
 					// get info of Tile East
 					checkTile = GetTileAt (x + 1, y);
-					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, onTile, checkTile);
+					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, checkTile);
 
 					if (foundSameCarrierType != null) {
 						remember1found = remember1found || true;
 						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-//							onTile.WallType += 2; // add wall type for East
+						newPiece.NeighboreCount += 2; // add wall type for East
 //							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 					}
 					// get info of Tile South
 					checkTile = GetTileAt (x, y - 1);
-					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, onTile, checkTile);
+					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, checkTile);
 					if (foundSameCarrierType != null) {
 						remember1found = remember1found || true;
 						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-//							onTile.WallType += 4; // add wall type for South
+						newPiece.NeighboreCount += 4; // add wall type for South
 //							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 					}
 					// get info of Tile West
 					checkTile = GetTileAt (x - 1, y);
-					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, onTile, checkTile);
+					foundSameCarrierType = CheckNeigborSameCarrierType (unitOfContent, checkTile);
 
 					if (foundSameCarrierType != null) {
 						remember1found = remember1found || true;
 						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-//							onTile.WallType += 8; // add wall type for West
+						newPiece.NeighboreCount += 8; // add wall type for West
 //							BuildWallsAroundTile (checkTile);// rebuild wall of neighborer
 					}
 
-					//UnityEngine.Debug.Log ("New tile has wall type: " + newRoomTile.WallType);
+					//UnityEngine.Debug.Log ("New tile has wall type: " + newRoomTile.NeighboreCount);
 
 					if (remember1found == false) { // not found in any neigbores
 						//  start a new Carrier with this piece
@@ -868,7 +874,7 @@ namespace Submarine.Model {
 
 						UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece is part of a carrier with contains " + unitOfContent
 						+ ", so started a new Carrier " + newCarrier.ID);
-						//+ ", wall type is " + newRoomTile.WallType);
+						//+ ", wall type is " + newRoomTile.NeighboreCount);
 
 					}
 				}
@@ -876,20 +882,25 @@ namespace Submarine.Model {
 		}
 
 
-		private Carrier CheckNeigborSameCarrierType (Units unitOfContent, Tile onTile, Tile checkTile) {
-			PieceType searchPieceType = Piece.FindPieceType (unitOfContent);
+		private Carrier CheckNeigborSameCarrierType (Units unitOfContent, Tile checkTile) {
 			Carrier foundCarrier = null;
-			foreach (Piece piece in onTile.pieces) {
-				if (piece.Type == searchPieceType)		// found same piece type
+			// if builing on a tile at the edge of the outline then the N/E/S/W check will try to check a tile that's outside the submarine
+			// so check if tile exists
+			if (checkTile != null) {
+				PieceType searchPieceType = Piece.FindPieceType (unitOfContent);
+				foreach (Piece piece in checkTile.Pieces) {
+					if (piece.Type == searchPieceType)		// found same piece type
 					foundCarrier = piece.partOfCarrier; // get carrier of found piece
+				}
 			}
+			
 			return foundCarrier;
 		}
 
 		private void AddToOrMergeCarrier (Piece piece, Carrier neigboreCarrier) {
 			if (piece.partOfCarrier == null) {
 				// piece is not part of carrier yet, add it to neigbore
-				UnityEngine.Debug.Log ("New piece is not part of carrier yet, add it to neigbore carrier");
+				UnityEngine.Debug.Log ("New  " + piece.Type + " is not part of carrier yet, add it to neigbore carrier: " + neigboreCarrier.ID);
 				piece.partOfCarrier = neigboreCarrier;
 				neigboreCarrier.AddPiece (piece);
 			}

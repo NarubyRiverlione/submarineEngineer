@@ -20,14 +20,14 @@ public class MouseController : MonoBehaviour {
 	public Text UI_Information_Text;
 
 	WorldController world;
-	// TODO: potential problem as default = Destroy
+
 	RoomType RoomTypeToBeBuild = RoomType.Empty;
 	// remember previous tile below mouse so cursor and UI Information text is only updated where mouse is above an other tile
 	Tile prevTileBelowMouse;
 	// remember where the mouse was so we can detect dragging
 	Vector3 prevMousePosition;
 
-	PieceType PieceTypeToBeBuild = PieceType.None;
+	Units PieceUnitsToBeBuild = Units.None;
 	bool PieceWillBeConnection = false;
 
 	// Use this for initialization
@@ -70,33 +70,35 @@ public class MouseController : MonoBehaviour {
 				tileBelowMouse = null;
 
 			// show correct cursor on tile
+			// default: hide all cursors 
+			cursorBuilder.SetActive (false);
+			cursorDestroyer.SetActive (false);
+			cursorPiece.SetActive (false);
+
 			if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
 				Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
-				if (RoomTypeToBeBuild != RoomType.Empty) { // selected a room = show builder icon
+				// selected a room = show builder icon
+				if (RoomTypeToBeBuild != RoomType.Empty && RoomTypeToBeBuild != RoomType.Remove) {
 					cursorBuilder.transform.position = spaceBelowMouseCoordinates;
 					cursorBuilder.SetActive (true);
 					cursorDestroyer.SetActive (false);
 					cursorPiece.SetActive (false);
-				}
-				if (PieceTypeToBeBuild != PieceType.None) { // selected a piece to be build = show piece icon
+				} 
+				// selected a piece to be build = show piece icon
+				if (PieceUnitsToBeBuild != Units.None && PieceUnitsToBeBuild != Units.Remove) {
 					cursorPiece.transform.position = spaceBelowMouseCoordinates;
 					cursorPiece.SetActive (true);
 					cursorBuilder.SetActive (false);
 					cursorDestroyer.SetActive (false);
 				}
-				else { // selected Empty room = show destroyer icon
+				// selected Empty room = show destroyer icon
+				if (PieceUnitsToBeBuild == Units.Remove || RoomTypeToBeBuild == RoomType.Remove) { 
 					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
 					cursorBuilder.SetActive (false);
 					cursorPiece.SetActive (false);
 					cursorDestroyer.SetActive (true);
 				}
-				ShowRoomInformation (tileBelowMouse);
-			}
-			else {
-				// hide if cursor isn't on a tile
-				cursorBuilder.SetActive (false);
-				cursorDestroyer.SetActive (false);
-				cursorPiece.SetActive (false);
+				ShowCursorInformation (tileBelowMouse);
 			}
 		}
 		// remember previous tile below mouse so cursor and UI Information text is only updated where mouse is above an other tile
@@ -105,10 +107,19 @@ public class MouseController : MonoBehaviour {
 		// change title type = build or destroy room if clicked on (release left mouse)
 		if (Input.GetMouseButtonUp (0) && EventSystem.current.IsPointerOverGameObject ()) {
 			if (tileBelowMouse != null) {//check were above a tile
-				if (RoomTypeToBeBuild != RoomType.Empty)
-					world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);   // add
-                    else
-					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove
+
+				if (RoomTypeToBeBuild != RoomType.Empty && RoomTypeToBeBuild != RoomType.Remove)
+					world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);   // add tile to room
+				if (RoomTypeToBeBuild == RoomType.Remove)
+					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove tile form room
+
+				if (PieceUnitsToBeBuild != Units.None && PieceUnitsToBeBuild != Units.Remove)
+					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceUnitsToBeBuild, PieceWillBeConnection);
+				if (PieceUnitsToBeBuild == Units.Remove) {
+					// TODO remove piece
+				}
+			
+
 			}
 		}
             
@@ -147,27 +158,31 @@ public class MouseController : MonoBehaviour {
 	}
 
 	// Set piece type to be build
-	public void SetPieceTypeToBeBuild (string pieceType) {
-		PieceTypeToBeBuild = Piece.FindPieceTypeFormString (pieceType);
+	public void SetPieceUnitsToBeBuild (string pieceUnits) {
+		PieceUnitsToBeBuild = (Units)Enum.Parse (typeof(Units), pieceUnits);
+
 		PieceWillBeConnection = false;
 	}
 
-	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
-		PieceTypeToBeBuild = Piece.FindPieceTypeFormString (pieceType);
+	public void SetConnectionPieceTypeToBeBuild (string pieceUnits) {
+		PieceUnitsToBeBuild = (Units)Enum.Parse (typeof(Units), pieceUnits);
+
 		PieceWillBeConnection = true;
 	}
 
-	void ShowRoomInformation (Tile tileBelowMouse) {
+	void ShowCursorInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
-			foreach (Piece piece in tileBelowMouse.pieces) {
-				info += " contains piece " + piece.Type + " is connection: " + piece.IsConnection
-				+ " has input " + piece.Input + " " + piece.UnitOfContent
-				+ " witch is part of carrier (" + piece.partOfCarrier.ID + ")"
-				+ " containing " + piece.partOfCarrier.UnitOfContent;
-
+			foreach (Piece piece in tileBelowMouse.Pieces) {
+				if (piece != null) {
+					info += " contains piece " + piece.Type + " is connection: " + piece.IsConnection
+					+ " neigbore count = " + piece.NeighboreCount
+					+ " has input " + piece.Input + " " + piece.UnitOfContent
+					+ " wich is part of carrier (" + piece.partOfCarrier.ID + ")"
+					+ " containing " + piece.partOfCarrier.UnitOfContent;
+				}
 			}
 			#if DEBUG
 			info += "\n DEBUG:"
@@ -206,8 +221,9 @@ public class MouseController : MonoBehaviour {
 						throw new Exception ("Selected an unknow toggle in Panel building, check names");
 
 				}
-				// reset pieceType so a selection can be made
-				PieceTypeToBeBuild = PieceType.None;
+				// reset RoomTypeToBeBuild & PieceUnitsToBeBuild so a selection can be made
+				PieceUnitsToBeBuild = Units.None;
+				RoomTypeToBeBuild = RoomType.Empty;
 			}
 		}
 	}

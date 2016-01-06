@@ -42,6 +42,8 @@ public class WorldController : MonoBehaviour {
 
 	// Wall sprite sheet (private, loaded in Start)
 	Sprite[] WallSpriteSheet;
+	Sprite[] PipeSpriteSheet;
+	Sprite[] FuelSpriteSheet;
 
 	// UI Panels
 	public GameObject Panel_Resources;
@@ -65,6 +67,10 @@ public class WorldController : MonoBehaviour {
 	
 		// loading Wall sprites from sheet
 		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
+		// loading Pipes sprites from sheet
+		PipeSpriteSheet = Resources.LoadAll<Sprite> ("Pipes_Empty");
+		// loading Fuel sprites from sheet
+		FuelSpriteSheet = Resources.LoadAll<Sprite> ("FuelPipe_Content");
 
 		CreateAllTileGameObjects ();
 		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
@@ -311,6 +317,57 @@ public class WorldController : MonoBehaviour {
 				render.sprite = WallSpriteSheet [15]; // no room = no walls
 			}
 			
+		}
+		#endregion
+
+		#region Pieces
+		// show Pieces game object
+		Piece pipe = null, wire = null, shaft = null;
+
+		foreach (Piece piece in showTile.Pieces) {
+			if (piece != null) {
+				// is there a pipe on this tile ?
+				if (piece.Type == PieceType.Pipe)
+					pipe = piece;
+				if (piece.Type == PieceType.Wire)
+					wire = piece;
+				if (piece.Type == PieceType.Shaft)
+					shaft = piece;
+			}
+		}
+		GameObject checkIfPiecesAlreadyOnScreen = GameObject.Find ("Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+
+		// Show Pipe
+		if (pipe != null) {
+			// only create GameObject when need to show a wall
+			if (checkIfPiecesAlreadyOnScreen == null) { 
+				// add Pieces now		
+				checkIfPiecesAlreadyOnScreen = new GameObject ();
+				// set name of game object to see in Hierarchy
+				checkIfPiecesAlreadyOnScreen.name = "Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				// set parent of warning GameObject to the Title game object
+				checkIfPiecesAlreadyOnScreen.transform.SetParent (gameObjectOfTitle.transform);
+				// set X, Y of game object
+				checkIfPiecesAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+				// add Sprite Renderer
+				checkIfPiecesAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+			}
+			// now it's sure the Pieces game object exist, update (or set) it's sprite
+			SpriteRenderer render = checkIfPiecesAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			//set sprite from Pieces sprite sheet
+			Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe sprite " + pipe.NeighboreCount);
+			render.sprite = PipeSpriteSheet [pipe.NeighboreCount];
+			// show above Title = on the Tile_Warning sorting layer  						
+			render.sortingLayerName = "Pieces";
+		}
+	
+
+		if (checkIfPiecesAlreadyOnScreen != null && pipe == null && wire == null && shaft == null) { 
+			// no Pieces on tile a(ny more),  don't remove Wall game object but set it to wall type 15 = show no walls (removing wall type gives strange behavior
+			SpriteRenderer render = checkIfPiecesAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			//set sprite from wall sprite sheet
+			Debug.Log ("Removed all piecs in  (" + showTile.X + "," + showTile.Y + ")");
+			render.sprite = Tile_Transparent; // no pices = show transparant
 		}
 		#endregion
 

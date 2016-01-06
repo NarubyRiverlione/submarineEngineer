@@ -1,0 +1,249 @@
+fileFormatVersion: 2
+guid: e1c3c79ad433c427ea1ac9253f9e3267
+timeCreated: 1452088169
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: FuelPipe_Content_0
+    21300002: FuelPipe_Content_1
+    21300004: FuelPipe_Content_2
+    21300006: FuelPipe_Content_3
+    21300008: FuelPipe_Content_4
+    21300010: FuelPipe_Content_5
+    21300012: FuelPipe_Content_6
+    21300014: FuelPipe_Content_7
+    21300016: FuelPipe_Content_8
+    21300018: FuelPipe_Content_9
+    21300020: FuelPipe_Content_10
+    21300022: FuelPipe_Content_11
+    21300024: FuelPipe_Content_12
+    21300026: FuelPipe_Content_13
+    21300028: FuelPipe_Content_14
+    21300030: FuelPipe_Content_15
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 6
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 20
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: FuelPipe_Content_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 69
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_1
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 69
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 69
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 69
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_4
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 48
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_5
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 48
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_6
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 48
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 48
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 27
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_9
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 27
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_10
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 27
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_11
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 27
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_12
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 6
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_13
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 6
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_14
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 6
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: FuelPipe_Content_15
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 6
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
