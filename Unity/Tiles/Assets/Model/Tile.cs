@@ -71,5 +71,17 @@ namespace Submarine.Model {
 			if (TileChangedActions != null)
 				TileChangedActions (this);
 		}
+
+
+		public bool IsWalkable () {
+			bool walkable = true;
+			// tiles that hold a piece isn't walkable any more
+			if (Pieces.Count > 0)
+				walkable = false;
+
+			//TODO: only lowest Tiles of a room are walkable
+
+			return walkable;
+		}
 	}
 }
