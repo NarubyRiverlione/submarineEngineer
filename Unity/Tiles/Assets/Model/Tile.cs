@@ -50,13 +50,12 @@ namespace Submarine.Model {
 			_coord = new Point (x, y);
 			Reset ();
 			canContainRoom = true;
-			Pieces = new List<Piece> (); 	
-
 		}
 
 		public void Reset () {
 			RoomID = 0;
 			WallType = 0;
+			Piece = new List<Piece> ();
 		}
 
 		public void AddItem (Piece itemToAdd) {

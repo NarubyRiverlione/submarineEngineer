@@ -11,6 +11,7 @@ public class MouseController : MonoBehaviour {
 	public GameObject cursorBuilder;
 	public GameObject cursorPiece;
 	public GameObject cursorDestroyer;
+	public GameObject cursorRemovePieces;
 
 	public GameObject scrollView_RoomButtons;
 	public GameObject scrollView_CrewButtons;
@@ -36,6 +37,7 @@ public class MouseController : MonoBehaviour {
 		cursorBuilder.SetActive (false);
 		cursorDestroyer.SetActive (false);
 		cursorPiece.SetActive (false);
+		cursorRemovePieces.SetActive (false);
 		
 	}
 
@@ -83,6 +85,7 @@ public class MouseController : MonoBehaviour {
 					cursorBuilder.SetActive (true);
 					cursorDestroyer.SetActive (false);
 					cursorPiece.SetActive (false);
+					cursorRemovePieces.SetActive (false);
 				} 
 				// selected a piece to be build = show piece icon
 				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove) {
@@ -90,14 +93,25 @@ public class MouseController : MonoBehaviour {
 					cursorPiece.SetActive (true);
 					cursorBuilder.SetActive (false);
 					cursorDestroyer.SetActive (false);
+					cursorRemovePieces.SetActive (false);
 				}
 				// selected Empty room = show destroyer icon
-				if (PieceTypeToBeBuild == PieceType.Remove || RoomTypeToBeBuild == RoomType.Remove) { 
+				if (RoomTypeToBeBuild == RoomType.Remove) { 
 					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
 					cursorBuilder.SetActive (false);
 					cursorPiece.SetActive (false);
 					cursorDestroyer.SetActive (true);
+					cursorRemovePieces.SetActive (false);
 				}
+				if (PieceTypeToBeBuild == PieceType.Remove) {
+					cursorRemovePieces.transform.position = spaceBelowMouseCoordinates;
+					cursorBuilder.SetActive (false);
+					cursorPiece.SetActive (false);
+					cursorDestroyer.SetActive (false);
+					cursorRemovePieces.SetActive (true);
+				
+				}
+
 				ShowCursorInformation (tileBelowMouse);
 			}
 		}
@@ -117,6 +131,7 @@ public class MouseController : MonoBehaviour {
 					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild, PieceWillBeConnection);
 				if (PieceTypeToBeBuild == PieceType.Remove) {
 					// TODO remove piece
+					world.mySub.RemovePiecesFromTile (tileBelowMouse.X, tileBelowMouse.Y);
 				}
 			
 

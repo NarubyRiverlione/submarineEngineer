@@ -879,6 +879,49 @@ namespace Submarine.Model {
 			}
 		}
 
+		public void RemovePiecesFromTile (int x, int y) {
+			Tile onTile = GetTileAt (x, y);
+			if (onTile != null) {
+				do {
+					Piece piece = onTile.Pieces.First ();
+					piece.partOfCarrier.RemovePiece (piece); // remove piece form carrier
+					onTile.RemoveItem (piece);				// remove piece form tile
+
+					// recalculate neigbores
+					Tile checkTile;
+					Carrier foundSameCarrierType;
+					PieceType typeOfPiece = piece.Type;
+					bool remember1found;
+
+					// get info of Tile North
+					checkTile = GetTileAt (x, y + 1);
+					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
+					if (foundSameCarrierType != null)
+						RecalculatedNeighboreCount (checkTile);
+					
+					// get info of Tile East
+					checkTile = GetTileAt (x + 1, y);
+					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
+					if (foundSameCarrierType != null)
+						RecalculatedNeighboreCount (checkTile);
+					
+					// get info of Tile South
+					checkTile = GetTileAt (x, y - 1);
+					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
+					if (foundSameCarrierType != null)
+						RecalculatedNeighboreCount (checkTile);
+					
+					// get info of Tile West
+					checkTile = GetTileAt (x - 1, y);
+					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
+					if (foundSameCarrierType != null)
+						RecalculatedNeighboreCount (checkTile);
+
+
+				}
+				while (onTile.Pieces.Count > 1);
+			}
+		}
 
 		private Carrier GetSameNeighboreCarrier (PieceType searchPieceType, Tile checkTile) {
 			Carrier foundCarrier = null;
