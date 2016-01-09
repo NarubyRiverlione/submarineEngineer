@@ -92,6 +92,7 @@ namespace Submarine.Model {
 						UnityEngine.Debug.Log ("!!!! Cannot find room of item: roomId=" + OnTile.RoomID + " disconnecting piece now");
 						// room doesn't exist (any more), disconnect piece
 						IsConnection = false;
+						return Units.None;
 					}
 					return roomOfItem.UnitOfOutput;
 

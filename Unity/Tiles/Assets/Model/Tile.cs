@@ -47,6 +47,9 @@ namespace Submarine.Model {
 
 		static public int MaxItems = 2;
 
+		public Tile () {
+		}
+		// default constructor needs for initiating List<Tile) when loading sub
 		public Tile (int x, int y) {
 			_coord = new Point (x, y);
 			Reset ();
