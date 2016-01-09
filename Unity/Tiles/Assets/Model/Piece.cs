@@ -13,57 +13,63 @@ namespace Submarine.Model {
 	public class Piece {
 		public Tile OnTile { get; private set; }
 
+		[UnityEngine.SerializeField]
 		Sub inSub;
 
 		public PieceType Type { get; private set; }
 
 		public Carrier partOfCarrier { get; set; }
 
+		[UnityEngine.SerializeField]
 		int neigboreCount;
 
 		public int NeighboreCount {
 			get { return neigboreCount; }
 			set {
 				neigboreCount = value;
-				isConnection = false;
+				_isConnection = false;
 				if (OnTile != null && OnTile.TileChangedActions != null)
 					OnTile.TileChangedActions (OnTile);
 			}
 		}
 
-		// functions can registered via this Action to be informed when tile is changed
-		//		public Action PieceChangedActions { get; set; }
-
-
 		// an item can only be connected to a room, not in an empty tile
-		bool isConnection;
+		[UnityEngine.SerializeField]
+		bool _isConnection = false;
 
 		public bool IsConnection {
-			get{ return isConnection; }
+			get{ return _isConnection; }
 			set {
 				if (OnTile.RoomID == 0 && value == true)
 					UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
 				else
-					isConnection = true;
+					_isConnection = true;
 				// remove connection
 				if (!value)
-					isConnection = false;
-				if (OnTile != null && OnTile.TileChangedActions != null)
-					OnTile.TileChangedActions (OnTile);
+					_isConnection = false;
+//				if (OnTile != null && OnTile.TileChangedActions != null)
+//					OnTile.TileChangedActions (OnTile);
+				partOfCarrier.WarnAllPiecesOfCarrier ();
 			}
 		}
 
 		// only if an item is connected to a Room it can have input
+		[UnityEngine.SerializeField]
+		int _prevInput = 0;
+
 		public int Input {
-			get { 
+			get {
+				int newInput = 0;
 				if (IsConnection) {
 					Room roomOfItem = inSub.GetRoom (OnTile.RoomID);
 					if (roomOfItem == null)
 						throw new Exception ("Cannot find room of item: roomId=" + OnTile.RoomID);
-					return roomOfItem.Output;
-
+					newInput = roomOfItem.Output;
+//					if (_prevInput != newInput)
+//						partOfCarrier.WarnAllPiecesOfCarrier (); // input changed, warn all pieces
 				}
-				return 0;
+				_prevInput = newInput;
+				return newInput;
 			}
 		}
 
@@ -71,8 +77,11 @@ namespace Submarine.Model {
 			get { 
 				if (IsConnection) {
 					Room roomOfItem = inSub.GetRoom (OnTile.RoomID);
-					if (roomOfItem == null)
-						throw new Exception ("Cannot find room of item: roomId=" + OnTile.RoomID);
+					if (roomOfItem == null) {
+						UnityEngine.Debug.Log ("!!!! Cannot find room of item: roomId=" + OnTile.RoomID + " disconnecting piece now");
+						// room doesn't exist (any more), disconnect piece
+						IsConnection = false;
+					}
 					return roomOfItem.UnitOfOutput;
 
 				}
@@ -82,40 +91,40 @@ namespace Submarine.Model {
 
 
 		// CONSTRUCTOR
-		public Piece (PieceType typeOfPiece, Tile tile, Sub sub, bool isconnection) {
+		public Piece (PieceType typeOfPiece, Tile tile, Sub sub) {
 			Type = typeOfPiece;
 			NeighboreCount = 0;
 			OnTile = tile;
 			inSub = sub;
-			isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room
+			//isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room
 		}
 
 
-		public static PieceType FindPieceType (Units units) {
-			switch (units) {
-				case Units.MWs:
-					return PieceType.Wire;
-				case Units.liters_fuel:
-					return PieceType.Pipe;
-				case Units.pks:
-					return PieceType.Shaft;
-				default:
-					throw new Exception ("Unknow item type for unit: " + units);
-			}
-		}
-
-		public static PieceType FindPieceTypeFormString (string unitAsString) {
-			switch (unitAsString) {
-				case "ChargeCable":
-					return PieceType.Wire;
-				case "FuelPipe":
-					return PieceType.Pipe;
-				case "Shaft":
-					return PieceType.Shaft;
-				default:
-					throw new Exception ("Unknow item type for unit: " + unitAsString);
-			}
-		}
+		//		public static PieceType FindPieceType (Units units) {
+		//			switch (units) {
+		//				case Units.MWs:
+		//					return PieceType.Wire;
+		//				case Units.liters_fuel:
+		//					return PieceType.Pipe;
+		//				case Units.pks:
+		//					return PieceType.Shaft;
+		//				default:
+		//					throw new Exception ("Unknow item type for unit: " + units);
+		//			}
+		//		}
+		//
+		//		public static PieceType FindPieceTypeFormString (string unitAsString) {
+		//			switch (unitAsString) {
+		//				case "ChargeCable":
+		//					return PieceType.Wire;
+		//				case "FuelPipe":
+		//					return PieceType.Pipe;
+		//				case "Shaft":
+		//					return PieceType.Shaft;
+		//				default:
+		//					throw new Exception ("Unknow item type for unit: " + unitAsString);
+		//			}
+		//		}
 	}
 }
 

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e1c3c79ad433c427ea1ac9253f9e3267
-timeCreated: 1452088169
+timeCreated: 1452334213
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -73,7 +73,7 @@ TextureImporter:
         y: 69
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -84,7 +84,7 @@ TextureImporter:
         y: 69
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -95,7 +95,7 @@ TextureImporter:
         y: 69
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -106,7 +106,7 @@ TextureImporter:
         y: 69
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -117,7 +117,7 @@ TextureImporter:
         y: 48
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -128,7 +128,7 @@ TextureImporter:
         y: 48
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -139,7 +139,7 @@ TextureImporter:
         y: 48
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -150,7 +150,7 @@ TextureImporter:
         y: 48
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -161,8 +161,8 @@ TextureImporter:
         y: 27
         width: 20
         height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: FuelPipe_Content_9
@@ -172,7 +172,7 @@ TextureImporter:
         y: 27
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -183,7 +183,7 @@ TextureImporter:
         y: 27
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -194,8 +194,8 @@ TextureImporter:
         y: 27
         width: 20
         height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: FuelPipe_Content_12
@@ -205,7 +205,7 @@ TextureImporter:
         y: 6
         width: 20
         height: 20
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -216,8 +216,8 @@ TextureImporter:
         y: 6
         width: 20
         height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: FuelPipe_Content_14
@@ -227,8 +227,8 @@ TextureImporter:
         y: 6
         width: 20
         height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: FuelPipe_Content_15
@@ -238,8 +238,8 @@ TextureImporter:
         y: 6
         width: 20
         height: 20
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

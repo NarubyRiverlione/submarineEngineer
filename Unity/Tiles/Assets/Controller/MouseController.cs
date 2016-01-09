@@ -128,7 +128,11 @@ public class MouseController : MonoBehaviour {
 					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove tile form room
 
 				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove)
-					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild, PieceWillBeConnection);
+				if (PieceWillBeConnection == false)
+					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
+				else
+					world.mySub.AddConnectionToPieceOnTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
+				
 				if (PieceTypeToBeBuild == PieceType.Remove) {
 					// TODO remove piece
 					world.mySub.RemovePiecesFromTile (tileBelowMouse.X, tileBelowMouse.Y);
@@ -175,13 +179,11 @@ public class MouseController : MonoBehaviour {
 	// Set piece type to be build
 	public void SetPieceUnitsToBeBuild (string pieceType) {
 		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
-
 		PieceWillBeConnection = false;
 	}
 
 	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
 		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
-
 		PieceWillBeConnection = true;
 	}
 
@@ -192,20 +194,25 @@ public class MouseController : MonoBehaviour {
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
 			foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
 				if (piece != null) {
-					info += " contains piece " + piece.Type + " is connection: " + piece.IsConnection
+					string connectedString = piece.IsConnection ? " IS " : " is NOT ";
+					string inputString = piece.Input == 0 ? " has NO input " : " has " + piece.Input + " " + piece.UnitOfContent + " input";
+					string contentString = piece.partOfCarrier.Content == 0 ? " has NO content" : " has " + piece.partOfCarrier.Content + " " + piece.partOfCarrier.UnitOfContent + " content";
+
+					info += " contains piece " + piece.Type
+					+ connectedString + " connection"
 					+ " neigbore count = " + piece.NeighboreCount
-					+ " has input " + piece.Input + " " + piece.UnitOfContent
-					+ " wich is part of carrier (" + piece.partOfCarrier.ID + ")"
-					+ " containing " + piece.partOfCarrier.UnitOfContent;
+					+ inputString
+					+ contentString
+					+ " wich is part of " + piece.partOfCarrier.UnitOfContent + " carrier (" + piece.partOfCarrier.ID + ")";
 				}
 			}
-			#if DEBUG
-			info += "\n DEBUG:"
-			+ " RoomID: " + tileBelowMouse.RoomID
-			+ " wall type: " + tileBelowMouse.WallType
-			+ " layout validate: " + room.IsLayoutValid
-			+ " resources available " + room.ResourcesAvailable;
-			#endif
+//			#if DEBUG
+//			info += "\n DEBUG:"
+//			+ " RoomID: " + tileBelowMouse.RoomID
+//			+ " wall type: " + tileBelowMouse.WallType
+//			+ " layout validate: " + room.IsLayoutValid
+//			+ " resources available " + room.ResourcesAvailable;
+//			#endif
 		}
 		UI_Information_Text.text = info;
 	}

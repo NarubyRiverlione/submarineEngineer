@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Submarine.Model {
@@ -69,6 +70,10 @@ namespace Submarine.Model {
 			PiecesOnTile.Remove (itemToRemove);
 			if (TileChangedActions != null)
 				TileChangedActions (this);
+		}
+
+		public Piece FindPieceOfTypeOnTile (PieceType type) {
+			return PiecesOnTile.Where (p => p.Type == type).FirstOrDefault ();
 		}
 
 

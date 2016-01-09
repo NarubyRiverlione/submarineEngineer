@@ -27,14 +27,12 @@ public class WorldController : MonoBehaviour {
 	public Sprite Tile_Sonar;
 	public Sprite Tile_RadioRoom;
 	public Sprite Tile_FuelTank;
-
 	public Sprite Tile_StorageRoom;
 	public Sprite Tile_TorpedoRoom;
 	public Sprite Tile_Stairs;
 	public Sprite Tile_Balasttank;
 	public Sprite Tile_PumpRoom;
 	public Sprite Tile_Escapehatch;
-
 
 	// Warning Sprites
 	public Sprite Warning_ToSmall;
@@ -45,15 +43,18 @@ public class WorldController : MonoBehaviour {
 	Sprite[] PipeSpriteSheet;
 	Sprite[] FuelSpriteSheet;
 
+	// Connections
+	public Sprite Sprite_PipeConnection;
+
 	// UI Panels
 	public GameObject Panel_Resources;
 	public GameObject Panel_Legenda;
 	public GameObject Panel_DesignValidation;
 
+	// FileBrowser Browser
 	public UI_FileBrowser _uiFB;
 	public string filePath = null;
 	private bool chooseFilePathNow = false;
-
 	private bool Loading = false;
 	string saveDir = "Saves";
 
@@ -75,6 +76,31 @@ public class WorldController : MonoBehaviour {
 		CreateAllTileGameObjects ();
 		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
 		ShowAllTilesViaCallback ();		// now show tiles (needed for empty tiles)
+
+		#if DEBUG
+		// create fuel tank
+		mySub.AddTileToRoom (10, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (11, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (12, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (13, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (10, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (11, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (12, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (13, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (10, 2, RoomType.FuelTank);
+		mySub.AddTileToRoom (11, 2, RoomType.FuelTank);
+		mySub.AddTileToRoom (12, 2, RoomType.FuelTank);
+		mySub.AddTileToRoom (13, 2, RoomType.FuelTank);
+
+		// create fuel pipe
+		mySub.AddPieceToTile (10, 1, PieceType.Pipe);
+		mySub.AddPieceToTile (11, 1, PieceType.Pipe);
+		mySub.AddPieceToTile (11, 2, PieceType.Pipe);
+		mySub.AddPieceToTile (12, 2, PieceType.Pipe);
+		mySub.AddPieceToTile (13, 2, PieceType.Pipe);
+		mySub.AddPieceToTile (13, 1, PieceType.Pipe);
+		mySub.AddPieceToTile (12, 3, PieceType.Pipe);
+		#endif
 	}
 	
 	// Update is called once per frame
@@ -335,13 +361,17 @@ public class WorldController : MonoBehaviour {
 					shaft = piece;
 			}
 		}
-		GameObject checkIfPiecesAlreadyOnScreen = GameObject.Find ("Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
 
-		// Show Pipe
+
+		GameObject checkIfPiecesAlreadyOnScreen = GameObject.Find ("Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+		GameObject checkIfPieceConnectionAlreadyOnScreen = GameObject.Find ("PiecesConnection_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+		GameObject checkIfPieceContentAlreadyOnScreen = GameObject.Find ("PiecesContent_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+
+
 		if (pipe != null) {
-			// only create GameObject when need to show a wall
+			// Show Pipe outline
 			if (checkIfPiecesAlreadyOnScreen == null) { 
-				// add Pieces now		
+				// add Pip now		
 				checkIfPiecesAlreadyOnScreen = new GameObject ();
 				// set name of game object to see in Hierarchy
 				checkIfPiecesAlreadyOnScreen.name = "Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
@@ -359,8 +389,63 @@ public class WorldController : MonoBehaviour {
 			render.sprite = PipeSpriteSheet [pipe.NeighboreCount];
 			// show above Title = on the Tile_Warning sorting layer  						
 			render.sortingLayerName = "Pieces";
+			render.sortingOrder = 0;
+
+			//Show Connection
+			if (pipe.IsConnection == true) {
+				if (checkIfPieceConnectionAlreadyOnScreen == null) { 
+					// add Connection GameObject now		
+					checkIfPieceConnectionAlreadyOnScreen = new GameObject ();
+					// set name of game object to see in Hierarchy
+					checkIfPieceConnectionAlreadyOnScreen.name = "PiecesConnection_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+					// set parent of warning GameObject to the Pieces game object
+					checkIfPieceConnectionAlreadyOnScreen.transform.SetParent (checkIfPiecesAlreadyOnScreen.transform);
+					// set X, Y of game object
+					checkIfPieceConnectionAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+					// add Sprite Renderer
+					checkIfPieceConnectionAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+				}
+				// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
+				SpriteRenderer renderConnection = checkIfPieceConnectionAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+				//set sprite from Pieces sprite sheet
+				Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
+				renderConnection.sprite = pipe.IsConnection ? Sprite_PipeConnection : Tile_Transparent;
+
+				// show above Title = on the Tile_Warning sorting layer  						
+				renderConnection.sortingLayerName = "Pieces";
+				renderConnection.sortingOrder = 10;
+			}
+
+			//Show Content
+			if (checkIfPieceContentAlreadyOnScreen == null) { 
+				// add Contet GameObject now		
+				checkIfPieceContentAlreadyOnScreen = new GameObject ();
+				// set name of game object to see in Hierarchy
+				checkIfPieceContentAlreadyOnScreen.name = "PiecesContent_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				// set parent of warning GameObject to the Pieces game object
+				checkIfPieceContentAlreadyOnScreen.transform.SetParent (checkIfPiecesAlreadyOnScreen.transform);
+				// set X, Y of game object
+				checkIfPieceContentAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+				// add Sprite Renderer
+				checkIfPieceContentAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+			}
+			// now it's sure the Pieces Content game object exist, update (or set) it's sprite
+			SpriteRenderer renderContent = checkIfPieceContentAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			//set sprite from Pieces sprite sheet
+			Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONTENT sprite " + pipe.IsConnection);
+			if (pipe.partOfCarrier != null && pipe.partOfCarrier.Content > 0) // this update Tile will be called when adding an pipe too the title, before the pipe is added to a carrier
+				renderContent.sprite = FuelSpriteSheet [pipe.NeighboreCount];
+			else
+				renderContent.sprite = Tile_Transparent;
+
+			// show above Title = on the Tile_Warning sorting layer  						
+			renderContent.sortingLayerName = "Pieces";
+			renderContent.sortingOrder = 2;
+
 		}
 	
+
+
 
 		if (checkIfPiecesAlreadyOnScreen != null && pipe == null && wire == null && shaft == null) { 
 			// no Pieces on tile a(ny more),  don't remove Wall game object but set it to wall type 15 = show no walls (removing wall type gives strange behavior

@@ -810,10 +810,10 @@ namespace Submarine.Model {
 
 		#region Carrier / Pieces
 
-		public void AddPieceToTile (int x, int y, PieceType typeOfPiece, bool isConnection) {
+		public void AddPieceToTile (int x, int y, PieceType typeOfPiece) {
 			Tile onTile = GetTileAt (x, y);
 			if (onTile == null) {
-				UnityEngine.Debug.LogError ("ERROR: cannot a an Piece on a not existing Tile");
+				UnityEngine.Debug.LogError ("ERROR: cannot add an Piece on a not existing Tile");
 			}
 			else {
 				if (onTile.PiecesOnTile.Count == Tile.MaxItems) {
@@ -821,8 +821,8 @@ namespace Submarine.Model {
 				}
 				else {
 					// create new piece according unit
-					Piece newPiece = new Piece (typeOfPiece, onTile, this, isConnection);
-					// add to tile
+					Piece newPiece = new Piece (typeOfPiece, onTile, this);
+					// add to tile, will call TileChanged Action to update UI
 					onTile.AddItem (newPiece);
 
 					Tile checkTile;
@@ -938,6 +938,18 @@ namespace Submarine.Model {
 
 		}
 
+		public void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
+			Tile onTile = GetTileAt (x, y);
+			if (onTile == null) {
+				UnityEngine.Debug.LogError ("ERROR: cannot add an connection on a not existing Tile");
+			}
+			else {
+				Piece addToPiece = onTile.FindPieceOfTypeOnTile (typeOfPiece);
+				addToPiece.IsConnection = true;
+		
+			}
+		}
+
 		private Carrier GetSameNeighboreCarrier (PieceType searchPieceType, Tile checkTile) {
 			Carrier foundCarrier = null;
 			// if builing on a tile at the edge of the outline then the N/E/S/W check will try to check a tile that's outside the submarine
@@ -1039,7 +1051,7 @@ namespace Submarine.Model {
 
 			// rebuild carrier
 			foreach (Piece piece in rememberPieces) {
-				AddPieceToTile (piece.OnTile.X, piece.OnTile.Y, rebuiltPieceType, piece.IsConnection); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
+				AddPieceToTile (piece.OnTile.X, piece.OnTile.Y, rebuiltPieceType); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
 			}
 //			}
 		}
