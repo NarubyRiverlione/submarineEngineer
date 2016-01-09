@@ -491,12 +491,14 @@ namespace Submarine.Model {
 				RoomType rebuildRoomType = rooms [roomID].TypeOfRoom;
 
 				List<Point> remeberCoordinatesOfTiles = rooms [roomID].coordinatesOfTilesInRoom;
-
+				List<Piece> remeberPieces = new List<Piece> ();
 				// remove tiles in the old room (does also reset tile)
 				foreach (Point coordTeRemove in remeberCoordinatesOfTiles) {
 					Tile rebuildTile = GetTileAt (coordTeRemove.x, coordTeRemove.y);
-					//rooms [roomID].RemoveTile (rebuildTile);
-					rebuildTile.Reset ();
+					foreach (Piece piece in rebuildTile.PiecesOnTile) {
+						remeberPieces.Add (piece);
+					}
+					rebuildTile.Reset ();	// also destroys all pieces on tile, rebuild carrier when done !
 				}
 
 				// remove the room so it can be rebuild
@@ -507,6 +509,17 @@ namespace Submarine.Model {
 					Tile rebuildTile = GetTileAt (coordToAdd.x, coordToAdd.y);
 					AddTileToRoom (rebuildTile.X, rebuildTile.Y, rebuildRoomType);
 				}
+
+				// rebuild carriers in this new room
+				List<int> rebuiledCarriers = new List<int> ();
+				foreach (Piece piece in remeberPieces) {
+					int carrierID = piece.partOfCarrier.ID;
+					if (rebuiledCarriers.Contains (carrierID) == false) {	// only rebuild each carrier in this room 1 time
+						RebuildCarrier (carrierID);
+						rebuiledCarriers.Add (carrierID);
+					}
+				}
+
 
 				// room is rebuilt, get new roomID
 				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in sub
@@ -614,6 +627,9 @@ namespace Submarine.Model {
 				UnityEngine.Debug.LogError ("ERROR cannot remove Tile that doesn't exists");
 			}
 			else {
+				// remove all pieces form tile
+				RemovePiecesFromTile (x, y);
+
 				// remove Tile of room
 				int roomID = TileToBeRemoved.RoomID;
 				Room removeFromThisRoom = GetRoom (roomID);
@@ -821,7 +837,7 @@ namespace Submarine.Model {
 				}
 				else {
 					// create new piece according unit
-					Piece newPiece = new Piece (typeOfPiece, onTile, this);
+					Piece newPiece = new Piece (typeOfPiece, new Point (x, y), this);
 					// add to tile, will call TileChanged Action to update UI
 					onTile.AddItem (newPiece);
 
@@ -992,8 +1008,8 @@ namespace Submarine.Model {
 
 		private void RecalculatedNeighboreCount (Tile checkTile) {
 			foreach (Piece checkPiece in checkTile.PiecesOnTile) {
-				int x = checkPiece.OnTile.X;
-				int y = checkPiece.OnTile.Y;
+				int x = checkPiece.coord.x;
+				int y = checkPiece.coord.y;
 				PieceType typeOfPiece = checkPiece.Type;
 				Carrier foundSameCarrierType;
 				// reset count
@@ -1030,30 +1046,30 @@ namespace Submarine.Model {
 		}
 
 		private void RebuildCarrier (int carrierID) {
-//			if (ResourceCarriers.ContainsKey (carrierID) == false) {
-//				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a carrier that doesn't exist, carrierID:" + carrierID);
-//				return null;
-//			}
-//			else {
-			PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
-			List<Piece> rememberPieces = ResourceCarriers [carrierID].Pieces;
-
-			// remove pieces in the old carrier (does also reset tile)
-			foreach (Piece piece in rememberPieces) {
-				piece.NeighboreCount = 0;
-				piece.partOfCarrier = null;
-				piece.OnTile.RemoveItem (piece); // remove form tile
+			if (ResourceCarriers.ContainsKey (carrierID) == false) {
+				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a carrier that doesn't exist, carrierID:" + carrierID);
 			}
+			else {
+				PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
+				List<Piece> rememberPieces = ResourceCarriers [carrierID].Pieces;
 
-			// remove the carrier so it can be rebuild
-			Carrier oldCarrier = ResourceCarriers [carrierID];
-			ResourceCarriers.Remove (oldCarrier.ID);
+				// remove pieces in the old carrier (does also reset tile)
+				foreach (Piece piece in rememberPieces) {
+					piece.NeighboreCount = 0;
+					piece.partOfCarrier = null;
+					Tile onTile = GetTileAt (piece.coord.x, piece.coord.y);
+					onTile.RemoveItem (piece); // remove form tile
+				}
 
-			// rebuild carrier
-			foreach (Piece piece in rememberPieces) {
-				AddPieceToTile (piece.OnTile.X, piece.OnTile.Y, rebuiltPieceType); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
+				// remove the carrier so it can be rebuild
+				Carrier oldCarrier = ResourceCarriers [carrierID];
+				ResourceCarriers.Remove (oldCarrier.ID);
+
+				// rebuild carrier
+				foreach (Piece piece in rememberPieces) {
+					AddPieceToTile (piece.coord.x, piece.coord.y, rebuiltPieceType); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
+				}
 			}
-//			}
 		}
 
 		#endregion

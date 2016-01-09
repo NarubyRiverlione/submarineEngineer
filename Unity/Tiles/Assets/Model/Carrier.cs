@@ -47,6 +47,7 @@ namespace Submarine.Model {
 
 		public void WarnAllPiecesOfCarrier () {
 			foreach (Piece piece in Pieces) {
+		 
 				if (piece.OnTile.TileChangedActions != null)
 					piece.OnTile.TileChangedActions (piece.OnTile);
 			}

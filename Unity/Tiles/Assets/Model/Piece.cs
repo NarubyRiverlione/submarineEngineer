@@ -11,7 +11,9 @@ namespace Submarine.Model {
 	;
 
 	public class Piece {
-		public Tile OnTile { get; private set; }
+		public Point coord { get; protected set; }
+
+		public Tile OnTile { get { return inSub.GetTileAt (coord.x, coord.y); } }
 
 		[UnityEngine.SerializeField]
 		Sub inSub;
@@ -91,11 +93,14 @@ namespace Submarine.Model {
 
 
 		// CONSTRUCTOR
-		public Piece (PieceType typeOfPiece, Tile tile, Sub sub) {
+		public Piece (PieceType typeOfPiece, Point onCoord, Sub sub) {
+			inSub = sub;
+			coord = onCoord;
+
 			Type = typeOfPiece;
 			NeighboreCount = 0;
-			OnTile = tile;
-			inSub = sub;
+		
+
 			//isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room
 		}
 
