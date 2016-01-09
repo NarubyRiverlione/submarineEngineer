@@ -324,7 +324,7 @@ public class WorldController : MonoBehaviour {
 		// show Pieces game object
 		Piece pipe = null, wire = null, shaft = null;
 
-		foreach (Piece piece in showTile.Pieces) {
+		foreach (Piece piece in showTile.PiecesOnTile) {
 			if (piece != null) {
 				// is there a pipe on this tile ?
 				if (piece.Type == PieceType.Pipe)

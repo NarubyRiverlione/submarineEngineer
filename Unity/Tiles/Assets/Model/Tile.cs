@@ -42,7 +42,7 @@ namespace Submarine.Model {
 		}
 
 		// a Tile can contain 2 items
-		public List<Piece> Pieces { get; private set; }
+		public List<Piece> PiecesOnTile { get; private set; }
 
 		static public int MaxItems = 2;
 
@@ -55,18 +55,18 @@ namespace Submarine.Model {
 		public void Reset () {
 			RoomID = 0;
 			WallType = 0;
-			Piece = new List<Piece> ();
+			PiecesOnTile = new List<Piece> ();
 		}
 
 		public void AddItem (Piece itemToAdd) {
-			if (Pieces.Count < MaxItems) // a Tile can contain MaxItems
-				Pieces.Add (itemToAdd);
+			if (PiecesOnTile.Count < MaxItems) // a Tile can contain MaxItems
+				PiecesOnTile.Add (itemToAdd);
 			if (TileChangedActions != null)
 				TileChangedActions (this);
 		}
 
 		public void RemoveItem (Piece itemToRemove) {
-			Pieces.Remove (itemToRemove);
+			PiecesOnTile.Remove (itemToRemove);
 			if (TileChangedActions != null)
 				TileChangedActions (this);
 		}
@@ -75,7 +75,7 @@ namespace Submarine.Model {
 		public bool IsWalkable () {
 			bool walkable = true;
 			// tiles that hold a piece isn't walkable any more
-			if (Pieces.Count > 0)
+			if (PiecesOnTile.Count > 0)
 				walkable = false;
 
 			//TODO: only lowest Tiles of a room are walkable

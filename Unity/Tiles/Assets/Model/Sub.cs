@@ -810,7 +810,7 @@ namespace Submarine.Model {
 				UnityEngine.Debug.LogError ("ERROR: cannot a an Piece on a not existing Tile");
 			}
 			else {
-				if (onTile.Pieces.Count == Tile.MaxItems) {
+				if (onTile.PiecesOnTile.Count == Tile.MaxItems) {
 					UnityEngine.Debug.Log ("Already in the " + Tile.MaxItems + " items on tile (" + x + "," + y + ")");
 				}
 				else {
@@ -881,9 +881,9 @@ namespace Submarine.Model {
 
 		public void RemovePiecesFromTile (int x, int y) {
 			Tile onTile = GetTileAt (x, y);
-			if (onTile != null) {
+			if (onTile != null && onTile.PiecesOnTile.Count > 0) {
 				do {
-					Piece piece = onTile.Pieces.First ();
+					Piece piece = onTile.PiecesOnTile.First ();
 					piece.partOfCarrier.RemovePiece (piece); // remove piece form carrier
 					onTile.RemoveItem (piece);				// remove piece form tile
 
@@ -891,35 +891,39 @@ namespace Submarine.Model {
 					Tile checkTile;
 					Carrier foundSameCarrierType;
 					PieceType typeOfPiece = piece.Type;
-					bool remember1found;
+
 
 					// get info of Tile North
 					checkTile = GetTileAt (x, y + 1);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-					if (foundSameCarrierType != null)
+					if (foundSameCarrierType != null) {
 						RecalculatedNeighboreCount (checkTile);
+					}
 					
 					// get info of Tile East
 					checkTile = GetTileAt (x + 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-					if (foundSameCarrierType != null)
+					if (foundSameCarrierType != null) {
 						RecalculatedNeighboreCount (checkTile);
+					}
 					
 					// get info of Tile South
 					checkTile = GetTileAt (x, y - 1);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-					if (foundSameCarrierType != null)
+					if (foundSameCarrierType != null) {
 						RecalculatedNeighboreCount (checkTile);
+					}
 					
 					// get info of Tile West
 					checkTile = GetTileAt (x - 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-					if (foundSameCarrierType != null)
+					if (foundSameCarrierType != null) {
 						RecalculatedNeighboreCount (checkTile);
+					}
 
 
 				}
-				while (onTile.Pieces.Count > 1);
+				while (onTile.PiecesOnTile.Count > 1);
 			}
 		}
 
@@ -929,7 +933,7 @@ namespace Submarine.Model {
 			// so check if tile exists
 			if (checkTile != null) {
 				//	PieceType searchPieceType = Piece.FindPieceType (unitOfContent);
-				foreach (Piece piece in checkTile.Pieces) {
+				foreach (Piece piece in checkTile.PiecesOnTile) {
 					if (piece.Type == searchPieceType)		// found same piece type
 					foundCarrier = piece.partOfCarrier; // get carrier of found piece
 				}
@@ -947,8 +951,11 @@ namespace Submarine.Model {
 			}
 			else {
 				// piece is already part of carrier, merge carriers
-				UnityEngine.Debug.Log ("New piece is already part of carrier, merge neighbore carrier");
-				MergeCarriers (piece.partOfCarrier, neigboreCarrier);
+				if (piece.partOfCarrier != neigboreCarrier) {
+					// only merge if piece is in other carrier (create a loop with pieces)
+					UnityEngine.Debug.Log ("New piece is already part of carrier, merge neighbore carrier");
+					MergeCarriers (piece.partOfCarrier, neigboreCarrier);
+				}
 			}
 		}
 
@@ -961,12 +968,10 @@ namespace Submarine.Model {
 		}
 
 		private void RecalculatedNeighboreCount (Tile checkTile) {
-			foreach (Piece checkPiece in checkTile.Pieces) {
+			foreach (Piece checkPiece in checkTile.PiecesOnTile) {
 				int x = checkPiece.OnTile.X;
 				int y = checkPiece.OnTile.Y;
 				PieceType typeOfPiece = checkPiece.Type;
-
-				bool remember1found = false;
 				Carrier foundSameCarrierType;
 				// reset count
 				checkPiece.NeighboreCount = 0;

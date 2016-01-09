@@ -190,7 +190,7 @@ public class MouseController : MonoBehaviour {
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
-			foreach (Piece piece in tileBelowMouse.Pieces) {
+			foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
 				if (piece != null) {
 					info += " contains piece " + piece.Type + " is connection: " + piece.IsConnection
 					+ " neigbore count = " + piece.NeighboreCount
