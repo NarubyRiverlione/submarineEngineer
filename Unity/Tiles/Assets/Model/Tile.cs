@@ -51,19 +51,20 @@ namespace Submarine.Model {
 			_coord = new Point (x, y);
 			Reset ();
 			canContainRoom = true;
+			PiecesOnTile = new List<Piece> ();
 		}
 
 		public void Reset () {
 			RoomID = 0;
 			WallType = 0;
-			PiecesOnTile = new List<Piece> ();
+
 		}
 
 		public void AddItem (Piece itemToAdd) {
 			if (PiecesOnTile.Count < MaxItems) // a Tile can contain MaxItems
 				PiecesOnTile.Add (itemToAdd);
-			if (TileChangedActions != null)
-				TileChangedActions (this);
+//			if (TileChangedActions != null)
+//				TileChangedActions (this);
 		}
 
 		public void RemoveItem (Piece itemToRemove) {

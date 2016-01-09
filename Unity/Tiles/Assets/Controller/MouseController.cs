@@ -8,9 +8,9 @@ using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour {
 
-	public GameObject cursorBuilder;
+	public GameObject cursorRoomBuilder;
 	public GameObject cursorPiece;
-	public GameObject cursorDestroyer;
+	public GameObject cursorRoomDestroyer;
 	public GameObject cursorRemovePieces;
 
 	public GameObject scrollView_RoomButtons;
@@ -34,8 +34,8 @@ public class MouseController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// hide cursors
-		cursorBuilder.SetActive (false);
-		cursorDestroyer.SetActive (false);
+		cursorRoomBuilder.SetActive (false);
+		cursorRoomDestroyer.SetActive (false);
 		cursorPiece.SetActive (false);
 		cursorRemovePieces.SetActive (false);
 		
@@ -73,17 +73,17 @@ public class MouseController : MonoBehaviour {
 
 			// show correct cursor on tile
 			// default: hide all cursors 
-			cursorBuilder.SetActive (false);
-			cursorDestroyer.SetActive (false);
+			cursorRoomBuilder.SetActive (false);
+			cursorRoomDestroyer.SetActive (false);
 			cursorPiece.SetActive (false);
 
 			if (tileBelowMouse != null) { // only show builder icon if mouse is above a tile
 				Vector3 spaceBelowMouseCoordinates = new Vector3 (tileBelowMouse.X, tileBelowMouse.Y, 0);
 				// selected a room = show builder icon
 				if (RoomTypeToBeBuild != RoomType.Empty && RoomTypeToBeBuild != RoomType.Remove) {
-					cursorBuilder.transform.position = spaceBelowMouseCoordinates;
-					cursorBuilder.SetActive (true);
-					cursorDestroyer.SetActive (false);
+					cursorRoomBuilder.transform.position = spaceBelowMouseCoordinates;
+					cursorRoomBuilder.SetActive (true);
+					cursorRoomDestroyer.SetActive (false);
 					cursorPiece.SetActive (false);
 					cursorRemovePieces.SetActive (false);
 				} 
@@ -91,23 +91,23 @@ public class MouseController : MonoBehaviour {
 				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove) {
 					cursorPiece.transform.position = spaceBelowMouseCoordinates;
 					cursorPiece.SetActive (true);
-					cursorBuilder.SetActive (false);
-					cursorDestroyer.SetActive (false);
+					cursorRoomBuilder.SetActive (false);
+					cursorRoomDestroyer.SetActive (false);
 					cursorRemovePieces.SetActive (false);
 				}
 				// selected Empty room = show destroyer icon
 				if (RoomTypeToBeBuild == RoomType.Remove) { 
-					cursorDestroyer.transform.position = spaceBelowMouseCoordinates;
-					cursorBuilder.SetActive (false);
+					cursorRoomDestroyer.transform.position = spaceBelowMouseCoordinates;
+					cursorRoomBuilder.SetActive (false);
 					cursorPiece.SetActive (false);
-					cursorDestroyer.SetActive (true);
+					cursorRoomDestroyer.SetActive (true);
 					cursorRemovePieces.SetActive (false);
 				}
 				if (PieceTypeToBeBuild == PieceType.Remove) {
 					cursorRemovePieces.transform.position = spaceBelowMouseCoordinates;
-					cursorBuilder.SetActive (false);
+					cursorRoomBuilder.SetActive (false);
 					cursorPiece.SetActive (false);
-					cursorDestroyer.SetActive (false);
+					cursorRoomDestroyer.SetActive (false);
 					cursorRemovePieces.SetActive (true);
 				
 				}
@@ -134,7 +134,6 @@ public class MouseController : MonoBehaviour {
 					world.mySub.AddConnectionToPieceOnTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
 				
 				if (PieceTypeToBeBuild == PieceType.Remove) {
-					// TODO remove piece
 					world.mySub.RemovePiecesFromTile (tileBelowMouse.X, tileBelowMouse.Y);
 				}
 			
@@ -194,16 +193,17 @@ public class MouseController : MonoBehaviour {
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
 			foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
 				if (piece != null) {
+					Carrier partOfCarrier = world.mySub.ResourceCarriers [piece.carrierID];
 					string connectedString = piece.IsConnection ? " IS " : " is NOT ";
 					string inputString = piece.Input == 0 ? " has NO input " : " has " + piece.Input + " " + piece.UnitOfContent + " input";
-					string contentString = piece.partOfCarrier.Content == 0 ? " has NO content" : " has " + piece.partOfCarrier.Content + " " + piece.partOfCarrier.UnitOfContent + " content";
+					string contentString = partOfCarrier.Content == 0 ? " has NO content" : " has " + partOfCarrier.Content + " " + partOfCarrier.UnitOfContent + " content";
 
 					info += " contains piece " + piece.Type
 					+ connectedString + " connection"
 					+ " neigbore count = " + piece.NeighboreCount
 					+ inputString
 					+ contentString
-					+ " wich is part of " + piece.partOfCarrier.UnitOfContent + " carrier (" + piece.partOfCarrier.ID + ")";
+					+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
 				}
 			}
 //			#if DEBUG

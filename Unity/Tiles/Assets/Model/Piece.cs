@@ -20,7 +20,16 @@ namespace Submarine.Model {
 
 		public PieceType Type { get; private set; }
 
-		public Carrier partOfCarrier { get; set; }
+		Carrier partOfCarrier { 
+			get { 
+				if (inSub.ResourceCarriers.ContainsKey (carrierID))
+					return inSub.ResourceCarriers [carrierID];
+				else
+					throw new Exception ("Carrier : " + carrierID + " unknown in sub");
+			}
+		}
+
+		public int carrierID { get; set; }
 
 		[UnityEngine.SerializeField]
 		int neigboreCount;
@@ -29,7 +38,7 @@ namespace Submarine.Model {
 			get { return neigboreCount; }
 			set {
 				neigboreCount = value;
-				_isConnection = false;
+				//_isConnection = false;
 				if (OnTile != null && OnTile.TileChangedActions != null)
 					OnTile.TileChangedActions (OnTile);
 			}
@@ -104,6 +113,7 @@ namespace Submarine.Model {
 			//isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room
 		}
 
+	
 
 		//		public static PieceType FindPieceType (Units units) {
 		//			switch (units) {

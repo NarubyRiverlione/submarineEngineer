@@ -194,153 +194,154 @@ public class WorldController : MonoBehaviour {
 	}
 
 	// Update Tile (RoomType, Warnings, Wall)
-	void UpdateTileSprite (Tile showTile, GameObject gameObjectOfTitle) {
-		SpriteRenderer renderer = gameObjectOfTitle.GetComponent<SpriteRenderer> ();
+	void UpdateTileSprite (Tile showTile, GameObject tile_GameObj) {
+		SpriteRenderer tile_renderer = tile_GameObj.GetComponent<SpriteRenderer> ();
 		#region Room Type
 		// Update Room Type Sprite
 		switch (mySub.GetRoomTypeOfTile (showTile)) {
 			case RoomType.Empty:
-				renderer.sprite = Tile_Empty;
+				tile_renderer.sprite = Tile_Empty;
 				break;
 
 			case RoomType.Stairs:
-				renderer.sprite = Tile_Stairs;
+				tile_renderer.sprite = Tile_Stairs;
 				break;
 			case RoomType.EscapeHatch:
-				renderer.sprite = Tile_Escapehatch;
+				tile_renderer.sprite = Tile_Escapehatch;
 				break;
 			
 			case RoomType.EngineRoom:
-				renderer.sprite = Tile_EngineRoom;
+				tile_renderer.sprite = Tile_EngineRoom;
 				break;
 			case RoomType.FuelTank:
-				renderer.sprite = Tile_FuelTank;
+				tile_renderer.sprite = Tile_FuelTank;
 				break;
 			case RoomType.Generator:
-				renderer.sprite = Tile_Generator;
+				tile_renderer.sprite = Tile_Generator;
 				break;
 			case RoomType.Battery:
-				renderer.sprite = Tile_Battery;
+				tile_renderer.sprite = Tile_Battery;
 				break;
 
 			case RoomType.Gallery:
-				renderer.sprite = Tile_Gallery;
+				tile_renderer.sprite = Tile_Gallery;
 				break;
 			case RoomType.Cabin:
-				renderer.sprite = Tile_Cabin;
+				tile_renderer.sprite = Tile_Cabin;
 				break;
 			case RoomType.Bunks:
-				renderer.sprite = Tile_Bunks;
+				tile_renderer.sprite = Tile_Bunks;
 				break;
 			case RoomType.StorageRoom:
-				renderer.sprite = Tile_StorageRoom;
+				tile_renderer.sprite = Tile_StorageRoom;
 				break;
 
 			case RoomType.Bridge:
-				renderer.sprite = Tile_Bridge;
+				tile_renderer.sprite = Tile_Bridge;
 				break;
 			case RoomType.Conn:
-				renderer.sprite = Tile_Conn;
+				tile_renderer.sprite = Tile_Conn;
 				break;
 			case RoomType.Sonar:
-				renderer.sprite = Tile_Sonar;
+				tile_renderer.sprite = Tile_Sonar;
 				break;
 			case RoomType.RadioRoom:
-				renderer.sprite = Tile_RadioRoom;
+				tile_renderer.sprite = Tile_RadioRoom;
 				break;
 
 			case RoomType.BalastTank:
-				renderer.sprite = Tile_Balasttank;
+				tile_renderer.sprite = Tile_Balasttank;
 				break;
 			case RoomType.PumpRoom:
-				renderer.sprite = Tile_PumpRoom;
+				tile_renderer.sprite = Tile_PumpRoom;
 				break;
 
 		
 			case RoomType.TorpedoRoom:
-				renderer.sprite = Tile_TorpedoRoom;
+				tile_renderer.sprite = Tile_TorpedoRoom;
 				break;
 			default:
-				renderer.sprite = Tile_Unknown;
+				tile_renderer.sprite = Tile_Unknown;
 				break;
 		}
 
 		// cannot be build on = outside sub = show transparent
 		if (showTile != null && !showTile.canContainRoom) {
-			renderer.sprite = Tile_Transparent;
+			tile_renderer.sprite = Tile_Transparent;
 		}
 		#endregion
 
 		#region Warnings
 		// check for warnings (valid layout)
-		GameObject checkIfWarningAlreadyOnScreen = GameObject.Find ("Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+		GameObject tileWarning_GameObj = GameObject.Find ("Tile_Warning_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 		if (showTile.RoomID != 0) {
-			if (checkIfWarningAlreadyOnScreen == null) {
+			if (tileWarning_GameObj == null) {
 				// create warning game object now		
-				checkIfWarningAlreadyOnScreen = new GameObject ();
+				tileWarning_GameObj = new GameObject ();
 				// set name of game object to see in Hierarchy
-				checkIfWarningAlreadyOnScreen.name = "Tile_Warning_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				tileWarning_GameObj.name = "Tile_Warning_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
 				// set parent of warning GameObject to the Title game object
-				checkIfWarningAlreadyOnScreen.transform.SetParent (gameObjectOfTitle.transform);
+				tileWarning_GameObj.transform.SetParent (tile_GameObj.transform);
 				// set X, Y of game object
-				checkIfWarningAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+				tileWarning_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
 				// add Sprite component
-				checkIfWarningAlreadyOnScreen.AddComponent<SpriteRenderer> ();	
+				tileWarning_GameObj.AddComponent<SpriteRenderer> ();	
 				// show above Title = on the Tile_Warning sorting layer  						
-				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sortingLayerName = "Warnings";
+				tileWarning_GameObj.GetComponent<SpriteRenderer> ().sortingLayerName = "Warnings";
 			}
 			// now it's sure the Tile_Warning_ game object exist, update (or set) it's sprite
 			// Show warning if room cannot operate because lake of resources
 			bool resourceAvailable = mySub.IsTilePartOfRoomWithResources (showTile);
+			SpriteRenderer tileWarning_renderer = tileWarning_GameObj.GetComponent<SpriteRenderer> ();
 			if (!resourceAvailable)
-				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Waring_NoResources;
+				tileWarning_renderer.sprite = Waring_NoResources;
 			// Show warning if room layout is invalid
 			bool layoutValid = mySub.IsTilePartOfValidRoomLayout (showTile);
 			if (!layoutValid)
-				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Warning_ToSmall;
+				tileWarning_renderer.sprite = Warning_ToSmall;
 			// Show no warnings (remove previous) if all is fine
 			if (resourceAvailable && layoutValid)
-				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
+				tileWarning_renderer.sprite = Tile_Transparent;
 			
 		}
 		else { // roomID = 0,  don't remove Warning game object but set sprite to transparent (removing gives strange behavior)
-			if (checkIfWarningAlreadyOnScreen != null)
-				checkIfWarningAlreadyOnScreen.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
+			if (tileWarning_GameObj != null)
+				tileWarning_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent;
 		}
 		#endregion
 
 		#region Wall
 		// add wall type
-		GameObject checkIfWallIsAlreadyOnScreen = GameObject.Find ("Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+		GameObject tileWall_GameObj = GameObject.Find ("Wall_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 		if (showTile.RoomID != 0) {
 			// only create GameObject when need to show a wall
-			if (checkIfWallIsAlreadyOnScreen == null) { 
+			if (tileWall_GameObj == null) { 
 				// add Wall now		
-				checkIfWallIsAlreadyOnScreen = new GameObject ();
+				tileWall_GameObj = new GameObject ();
 				// set name of game object to see in Hierarchy
-				checkIfWallIsAlreadyOnScreen.name = "Wall_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				tileWall_GameObj.name = "Wall_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
 				// set parent of warning GameObject to the Title game object
-				checkIfWallIsAlreadyOnScreen.transform.SetParent (gameObjectOfTitle.transform);
+				tileWall_GameObj.transform.SetParent (tile_GameObj.transform);
 				// set X, Y of game object
-				checkIfWallIsAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+				tileWall_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
 				// add Sprite Renderer
-				checkIfWallIsAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+				tileWall_GameObj.AddComponent<SpriteRenderer> ();
 
 			}
 			// now it's sure the Wall game object exist, update (or set) it's sprite
-			SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			SpriteRenderer tileWall_renderer = tileWall_GameObj.GetComponent<SpriteRenderer> ();
 			//set sprite from wall sprite sheet
 			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show wall type " + showTile.WallType);
-			render.sprite = WallSpriteSheet [showTile.WallType];
+			tileWall_renderer.sprite = WallSpriteSheet [showTile.WallType];
 			// show above Title = on the Tile_Warning sorting layer  						
-			render.sortingLayerName = "Walls";
+			tileWall_renderer.sortingLayerName = "Walls";
 		}
 		else { // roomID = 0,  don't remove Wall game object but set it to wall type 15 = show no walls (removing wall type gives strange behavior)
-			if (checkIfWallIsAlreadyOnScreen != null) {
-				SpriteRenderer render = checkIfWallIsAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			if (tileWall_GameObj != null) {
+				SpriteRenderer tileWall_renderer = tileWall_GameObj.GetComponent<SpriteRenderer> ();
 				//set sprite from wall sprite sheet
 				//Debug.Log ("Remove all walls for  (" + showTile.X + "," + showTile.Y + ")");
-				render.sprite = WallSpriteSheet [15]; // no room = no walls
+				tileWall_renderer.sprite = WallSpriteSheet [15]; // no room = no walls
 			}
 			
 		}
@@ -362,97 +363,94 @@ public class WorldController : MonoBehaviour {
 			}
 		}
 
-
-		GameObject checkIfPiecesAlreadyOnScreen = GameObject.Find ("Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
-		GameObject checkIfPieceConnectionAlreadyOnScreen = GameObject.Find ("PiecesConnection_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
-		GameObject checkIfPieceContentAlreadyOnScreen = GameObject.Find ("PiecesContent_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y);
+		GameObject piece_GameObj = GameObject.Find ("Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
+		GameObject pieceConnection_GameObj = GameObject.Find ("PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
+		GameObject pieceContent_GameObj = GameObject.Find ("PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 
 
 		if (pipe != null) {
 			// Show Pipe outline
-			if (checkIfPiecesAlreadyOnScreen == null) { 
+			if (piece_GameObj == null) { 
 				// add Pip now		
-				checkIfPiecesAlreadyOnScreen = new GameObject ();
+				piece_GameObj = new GameObject ();
 				// set name of game object to see in Hierarchy
-				checkIfPiecesAlreadyOnScreen.name = "Pieces_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				piece_GameObj.name = "Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
 				// set parent of warning GameObject to the Title game object
-				checkIfPiecesAlreadyOnScreen.transform.SetParent (gameObjectOfTitle.transform);
+				piece_GameObj.transform.SetParent (tile_GameObj.transform);
 				// set X, Y of game object
-				checkIfPiecesAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+				piece_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
 				// add Sprite Renderer
-				checkIfPiecesAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+				piece_GameObj.AddComponent<SpriteRenderer> ();
 			}
 			// now it's sure the Pieces game object exist, update (or set) it's sprite
-			SpriteRenderer render = checkIfPiecesAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			SpriteRenderer render = piece_GameObj.GetComponent<SpriteRenderer> ();
 			//set sprite from Pieces sprite sheet
-			Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe sprite " + pipe.NeighboreCount);
+			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe sprite " + pipe.NeighboreCount);
 			render.sprite = PipeSpriteSheet [pipe.NeighboreCount];
-			// show above Title = on the Tile_Warning sorting layer  						
+			// show above Title = on the Pieces sorting layer  						
 			render.sortingLayerName = "Pieces";
 			render.sortingOrder = 0;
 
-			//Show Connection
-			if (pipe.IsConnection == true) {
-				if (checkIfPieceConnectionAlreadyOnScreen == null) { 
-					// add Connection GameObject now		
-					checkIfPieceConnectionAlreadyOnScreen = new GameObject ();
-					// set name of game object to see in Hierarchy
-					checkIfPieceConnectionAlreadyOnScreen.name = "PiecesConnection_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
-					// set parent of warning GameObject to the Pieces game object
-					checkIfPieceConnectionAlreadyOnScreen.transform.SetParent (checkIfPiecesAlreadyOnScreen.transform);
-					// set X, Y of game object
-					checkIfPieceConnectionAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
-					// add Sprite Renderer
-					checkIfPieceConnectionAlreadyOnScreen.AddComponent<SpriteRenderer> ();
-				}
-				// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
-				SpriteRenderer renderConnection = checkIfPieceConnectionAlreadyOnScreen.GetComponent<SpriteRenderer> ();
-				//set sprite from Pieces sprite sheet
-				Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
-				renderConnection.sprite = pipe.IsConnection ? Sprite_PipeConnection : Tile_Transparent;
 
-				// show above Title = on the Tile_Warning sorting layer  						
-				renderConnection.sortingLayerName = "Pieces";
-				renderConnection.sortingOrder = 10;
+			//Show Connection
+			if (pieceConnection_GameObj == null) { 
+				// add Connection GameObject now		
+				pieceConnection_GameObj = new GameObject ();
+				// set name of game object to see in Hierarchy
+				pieceConnection_GameObj.name = "PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+				// set parent of warning GameObject to the Pieces game object
+				pieceConnection_GameObj.transform.SetParent (piece_GameObj.transform);
+				// set X, Y of game object
+				pieceConnection_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
+				// add Sprite Renderer
+				pieceConnection_GameObj.AddComponent<SpriteRenderer> ();
 			}
+			// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
+			SpriteRenderer renderConnection = pieceConnection_GameObj.GetComponent<SpriteRenderer> ();
+			//set sprite from Pieces sprite sheet
+			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
+			renderConnection.sprite = pipe.IsConnection ? Sprite_PipeConnection : Tile_Transparent;
+			// show above piece outline & conten 					
+			renderConnection.sortingLayerName = "Pieces";
+			renderConnection.sortingOrder = 10;
+
 
 			//Show Content
-			if (checkIfPieceContentAlreadyOnScreen == null) { 
+			if (pieceContent_GameObj == null) { 
 				// add Contet GameObject now		
-				checkIfPieceContentAlreadyOnScreen = new GameObject ();
+				pieceContent_GameObj = new GameObject ();
 				// set name of game object to see in Hierarchy
-				checkIfPieceContentAlreadyOnScreen.name = "PiecesContent_" + gameObjectOfTitle.transform.position.x + "/" + gameObjectOfTitle.transform.position.y;
+				pieceContent_GameObj.name = "PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
 				// set parent of warning GameObject to the Pieces game object
-				checkIfPieceContentAlreadyOnScreen.transform.SetParent (checkIfPiecesAlreadyOnScreen.transform);
+				pieceContent_GameObj.transform.SetParent (piece_GameObj.transform);
 				// set X, Y of game object
-				checkIfPieceContentAlreadyOnScreen.transform.position = new Vector2 (gameObjectOfTitle.transform.position.x, gameObjectOfTitle.transform.position.y);
+				pieceContent_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
 				// add Sprite Renderer
-				checkIfPieceContentAlreadyOnScreen.AddComponent<SpriteRenderer> ();
+				pieceContent_GameObj.AddComponent<SpriteRenderer> ();
 			}
 			// now it's sure the Pieces Content game object exist, update (or set) it's sprite
-			SpriteRenderer renderContent = checkIfPieceContentAlreadyOnScreen.GetComponent<SpriteRenderer> ();
+			SpriteRenderer renderContent = pieceContent_GameObj.GetComponent<SpriteRenderer> ();
 			//set sprite from Pieces sprite sheet
-			Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONTENT sprite " + pipe.IsConnection);
-			if (pipe.partOfCarrier != null && pipe.partOfCarrier.Content > 0) // this update Tile will be called when adding an pipe too the title, before the pipe is added to a carrier
+			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONTENT sprite " + pipe.IsConnection);
+			if (pipe.carrierID != 0 && mySub.ResourceCarriers [pipe.carrierID].Content > 0) // this update Tile will be called when adding an pipe too the title, before the pipe is added to a carrier
 				renderContent.sprite = FuelSpriteSheet [pipe.NeighboreCount];
 			else
 				renderContent.sprite = Tile_Transparent;
-
-			// show above Title = on the Tile_Warning sorting layer  						
+			// show above Title = on the Pieces sorting layer  						
 			renderContent.sortingLayerName = "Pieces";
 			renderContent.sortingOrder = 2;
 
 		}
-	
 
-
-
-		if (checkIfPiecesAlreadyOnScreen != null && pipe == null && wire == null && shaft == null) { 
-			// no Pieces on tile a(ny more),  don't remove Wall game object but set it to wall type 15 = show no walls (removing wall type gives strange behavior
-			SpriteRenderer render = checkIfPiecesAlreadyOnScreen.GetComponent<SpriteRenderer> ();
-			//set sprite from wall sprite sheet
-			Debug.Log ("Removed all piecs in  (" + showTile.X + "," + showTile.Y + ")");
-			render.sprite = Tile_Transparent; // no pices = show transparant
+		// no Pieces on tile a(ny more), set outline & content & connection to transparant 
+		if (showTile.PiecesOnTile.Count == 0) { 
+			Debug.Log ("No pieces = no sprites in  (" + showTile.X + "," + showTile.Y + ")");
+			if (piece_GameObj != null)
+				piece_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
+			if (pieceConnection_GameObj != null)
+				pieceConnection_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
+			if (pieceContent_GameObj != null)
+				pieceContent_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
 		}
 		#endregion
 

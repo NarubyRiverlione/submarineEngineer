@@ -513,10 +513,9 @@ namespace Submarine.Model {
 				// rebuild carriers in this new room
 				List<int> rebuiledCarriers = new List<int> ();
 				foreach (Piece piece in remeberPieces) {
-					int carrierID = piece.partOfCarrier.ID;
-					if (rebuiledCarriers.Contains (carrierID) == false) {	// only rebuild each carrier in this room 1 time
-						RebuildCarrier (carrierID);
-						rebuiledCarriers.Add (carrierID);
+					if (rebuiledCarriers.Contains (piece.carrierID) == false) {	// only rebuild each carrier in this room 1 time
+						RebuildCarrier (piece.carrierID);
+						rebuiledCarriers.Add (piece.carrierID);
 					}
 				}
 
@@ -848,23 +847,23 @@ namespace Submarine.Model {
 					// get info of Tile North
 					checkTile = GetTileAt (x, y + 1);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-
 					if (foundSameCarrierType != null) {
 						remember1found = remember1found || true;
 						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
 						newPiece.NeighboreCount += 1;		
 						RecalculatedNeighboreCount (checkTile);	
 					}
+
 					// get info of Tile East
 					checkTile = GetTileAt (x + 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-
 					if (foundSameCarrierType != null) {
 						remember1found = remember1found || true;
 						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
 						newPiece.NeighboreCount += 2; 
 						RecalculatedNeighboreCount (checkTile);	
 					}
+
 					// get info of Tile South
 					checkTile = GetTileAt (x, y - 1);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
@@ -874,6 +873,7 @@ namespace Submarine.Model {
 						newPiece.NeighboreCount += 4;
 						RecalculatedNeighboreCount (checkTile);	
 					}
+
 					// get info of Tile West
 					checkTile = GetTileAt (x - 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
@@ -889,14 +889,15 @@ namespace Submarine.Model {
 						//  start a new Carrier with this piece
 						Carrier newCarrier = Carrier.CreateCarrier (typeOfPiece, _nextCarrierID); // create concrete carrier
 						ResourceCarriers [_nextCarrierID] = newCarrier;	// add new carrier to submarine
+						newPiece.carrierID = _nextCarrierID;			// add carrier to piece
 						_nextCarrierID++;		
-						newPiece.partOfCarrier = newCarrier;			// add carrier to piece
+					
 						newCarrier.AddPiece (newPiece);					// add piece to carreier
 						UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece has a " + typeOfPiece
 						+ ", so started a new Carrier " + newCarrier.ID);
 						//+ ", wall type is " + newRoomTile.NeighboreCount);
-
 					}
+
 				}
 			}
 		}
@@ -906,9 +907,12 @@ namespace Submarine.Model {
 			if (onTile != null && onTile.PiecesOnTile.Count > 0) {
 				do {
 					Piece piece = onTile.PiecesOnTile.First ();
-					int oldCarrierID = piece.partOfCarrier.ID;
-					piece.partOfCarrier.RemovePiece (piece); 	// remove piece form carrier
-					onTile.RemoveItem (piece);					// remove piece form tile
+					int oldCarrierID = piece.carrierID;
+					;
+					// remove piece form carrier
+					ResourceCarriers [piece.carrierID].RemovePiece (piece); 	
+					// remove piece form tile
+					onTile.RemoveItem (piece);					
 
 					// recalculate neigbores
 					Tile checkTile;
@@ -962,7 +966,6 @@ namespace Submarine.Model {
 			else {
 				Piece addToPiece = onTile.FindPieceOfTypeOnTile (typeOfPiece);
 				addToPiece.IsConnection = true;
-		
 			}
 		}
 
@@ -974,7 +977,7 @@ namespace Submarine.Model {
 				//	PieceType searchPieceType = Piece.FindPieceType (unitOfContent);
 				foreach (Piece piece in checkTile.PiecesOnTile) {
 					if (piece.Type == searchPieceType)		// found same piece type
-					foundCarrier = piece.partOfCarrier; // get carrier of found piece
+					foundCarrier = ResourceCarriers [piece.carrierID]; // get carrier of found piece
 				}
 			}
 			
@@ -982,25 +985,25 @@ namespace Submarine.Model {
 		}
 
 		private void AddToOrMergeCarrier (Piece piece, Carrier neigboreCarrier) {
-			if (piece.partOfCarrier == null) {
+			if (piece.carrierID == 0) {
 				// piece is not part of carrier yet, add it to neigbore
 				UnityEngine.Debug.Log ("New  " + piece.Type + " is not part of carrier yet, add it to neigbore carrier: " + neigboreCarrier.ID);
-				piece.partOfCarrier = neigboreCarrier;
+				piece.carrierID = neigboreCarrier.ID;
 				neigboreCarrier.AddPiece (piece);
 			}
 			else {
 				// piece is already part of carrier, merge carriers
-				if (piece.partOfCarrier != neigboreCarrier) {
+				if (piece.carrierID != neigboreCarrier.ID) {
 					// only merge if piece is in other carrier (create a loop with pieces)
 					UnityEngine.Debug.Log ("New piece is already part of carrier, merge neighbore carrier");
-					MergeCarriers (piece.partOfCarrier, neigboreCarrier);
+					MergeCarriers (ResourceCarriers [piece.carrierID], neigboreCarrier);
 				}
 			}
 		}
 
 		private void MergeCarriers (Carrier oldCarrier, Carrier newCarrier) {
 			foreach (Piece piece in oldCarrier.Pieces) {
-				piece.partOfCarrier = newCarrier;	// set other carrier in each piece
+				piece.carrierID = newCarrier.ID;	// set other carrier in each piece
 				newCarrier.AddPiece (piece);		// add piece to new carrier
 			}
 			ResourceCarriers.Remove (oldCarrier.ID);
@@ -1056,7 +1059,7 @@ namespace Submarine.Model {
 				// remove pieces in the old carrier (does also reset tile)
 				foreach (Piece piece in rememberPieces) {
 					piece.NeighboreCount = 0;
-					piece.partOfCarrier = null;
+					piece.carrierID = 0;
 					Tile onTile = GetTileAt (piece.coord.x, piece.coord.y);
 					onTile.RemoveItem (piece); // remove form tile
 				}
@@ -1068,6 +1071,8 @@ namespace Submarine.Model {
 				// rebuild carrier
 				foreach (Piece piece in rememberPieces) {
 					AddPieceToTile (piece.coord.x, piece.coord.y, rebuiltPieceType); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
+					if (piece.IsConnection)
+						AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, rebuiltPieceType);
 				}
 			}
 		}
