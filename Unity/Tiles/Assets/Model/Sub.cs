@@ -79,7 +79,8 @@ namespace Submarine.Model {
 		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted (); } }
 
 
-		public List<Carrier> ResourceCarriers { get; private set; }
+
+		public Dictionary<int,Carrier> ResourceCarriers { get; private set; }
 
 		[UnityEngine.SerializeField]
 		int _nextCarrierID = 1;
@@ -174,7 +175,12 @@ namespace Submarine.Model {
 			_nextCrewID = loadedSub._nextCrewID;
 			CrewList = loadedSub.CrewList;
 
+			ResourceCarriers = new Dictionary<int, Carrier> ();
 			ResourceCarriers = loadedSub.ResourceCarriers;
+//			foreach(var carrierPair in loadedSub.ResourceCarriers){
+//				ResourceCarriers [carrierPair.Key] = carrierPair.Value;
+//			}
+
 			_nextCarrierID = loadedSub._nextCarrierID;
 		}
 
@@ -215,7 +221,7 @@ namespace Submarine.Model {
 			CrewList = new List<Crew> ();
 
 			// instantiate ResourceCarriers
-			ResourceCarriers = new List<Carrier> ();
+			ResourceCarriers = new  Dictionary<int, Carrier> ();
 
 			// set room properties 
 			SetRoomProperties ();
@@ -866,10 +872,10 @@ namespace Submarine.Model {
 					if (remember1found == false) { // not found in any neigbores
 						//  start a new Carrier with this piece
 						Carrier newCarrier = Carrier.CreateCarrier (typeOfPiece, _nextCarrierID); // create concrete carrier
-						ResourceCarriers.Add (newCarrier);	// add new carrier to submarine
+						ResourceCarriers [_nextCarrierID] = newCarrier;	// add new carrier to submarine
 						_nextCarrierID++;		
-						newPiece.partOfCarrier = newCarrier;	// set carrier in new piece
-
+						newPiece.partOfCarrier = newCarrier;			// add carrier to piece
+						newCarrier.AddPiece (newPiece);					// add piece to carreier
 						UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece has a " + typeOfPiece
 						+ ", so started a new Carrier " + newCarrier.ID);
 						//+ ", wall type is " + newRoomTile.NeighboreCount);
@@ -884,8 +890,9 @@ namespace Submarine.Model {
 			if (onTile != null && onTile.PiecesOnTile.Count > 0) {
 				do {
 					Piece piece = onTile.PiecesOnTile.First ();
-					piece.partOfCarrier.RemovePiece (piece); // remove piece form carrier
-					onTile.RemoveItem (piece);				// remove piece form tile
+					int oldCarrierID = piece.partOfCarrier.ID;
+					piece.partOfCarrier.RemovePiece (piece); 	// remove piece form carrier
+					onTile.RemoveItem (piece);					// remove piece form tile
 
 					// recalculate neigbores
 					Tile checkTile;
@@ -921,10 +928,14 @@ namespace Submarine.Model {
 						RecalculatedNeighboreCount (checkTile);
 					}
 
+					// rebuild carrier, can be split now into 2 not connected carriers
+					RebuildCarrier (oldCarrierID);
 
 				}
 				while (onTile.PiecesOnTile.Count > 1);
 			}
+
+
 		}
 
 		private Carrier GetSameNeighboreCarrier (PieceType searchPieceType, Tile checkTile) {
@@ -964,7 +975,7 @@ namespace Submarine.Model {
 				piece.partOfCarrier = newCarrier;	// set other carrier in each piece
 				newCarrier.AddPiece (piece);		// add piece to new carrier
 			}
-			ResourceCarriers.Remove (oldCarrier);
+			ResourceCarriers.Remove (oldCarrier.ID);
 		}
 
 		private void RecalculatedNeighboreCount (Tile checkTile) {
@@ -1004,6 +1015,33 @@ namespace Submarine.Model {
 					checkPiece.NeighboreCount += 8;
 				
 			}
+		}
+
+		private void RebuildCarrier (int carrierID) {
+//			if (ResourceCarriers.ContainsKey (carrierID) == false) {
+//				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a carrier that doesn't exist, carrierID:" + carrierID);
+//				return null;
+//			}
+//			else {
+			PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
+			List<Piece> rememberPieces = ResourceCarriers [carrierID].Pieces;
+
+			// remove pieces in the old carrier (does also reset tile)
+			foreach (Piece piece in rememberPieces) {
+				piece.NeighboreCount = 0;
+				piece.partOfCarrier = null;
+				piece.OnTile.RemoveItem (piece); // remove form tile
+			}
+
+			// remove the carrier so it can be rebuild
+			Carrier oldCarrier = ResourceCarriers [carrierID];
+			ResourceCarriers.Remove (oldCarrier.ID);
+
+			// rebuild carrier
+			foreach (Piece piece in rememberPieces) {
+				AddPieceToTile (piece.OnTile.X, piece.OnTile.Y, rebuiltPieceType, piece.IsConnection); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
+			}
+//			}
 		}
 
 		#endregion
