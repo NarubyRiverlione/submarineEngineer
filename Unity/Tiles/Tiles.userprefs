@@ -1,18 +1,26 @@
 ﻿<Properties GitUserInfo="UsingMD" StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Piece.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Sub.cs">
     <Files>
-      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="527" Column="134" />
-      <File FileName="Assets/Model/Sub.cs" Line="181" Column="3" />
-      <File FileName="Assets/Model/Piece.cs" Line="100" Column="23" />
-      <File FileName="Assets/Model/Carrier.cs" Line="10" Column="3" />
-      <File FileName="Assets/Model/Carriers/FuelPipe.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Tile.cs" Line="52" Column="74" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="184" Column="4" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="80" Column="3" />
+      <File FileName="Assets/Model/Sub.cs" Line="334" Column="35" />
+      <File FileName="Assets/Model/Piece.cs" Line="92" Column="7" />
+      <File FileName="Assets/Model/Carrier.cs" Line="60" Column="3" />
+      <File FileName="Assets/Model/Tile.cs" Line="69" Column="34" />
+      <File FileName="Assets/Model/Carriers/FuelPipe.cs" Line="5" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="84" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="71" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="81" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="78" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="66" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="62" column="1" />
+      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="73" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets/Model/Resource.cs" line="39" offsetX="509" offsetY="681" expression="a" liveUpdate="False" />
@@ -35,5 +43,11 @@
     <Watch file="Assets/Model/Sub.cs" line="515" offsetX="1093" offsetY="3256" expression="piece.coord.y" liveUpdate="False" />
     <Watch file="Assets/Model/Sub.cs" line="515" offsetX="921" offsetY="3283" expression="piece.IsConnection" liveUpdate="False" />
     <Watch file="Assets/Model/Sub.cs" line="499" offsetX="950" offsetY="3002" expression="remeberPieces" liveUpdate="False" />
+    <Watch file="Assets/Model/Piece.cs" line="71" offsetX="1012" offsetY="1190" expression="_isConnection" liveUpdate="False" />
+    <Watch file="Assets/Model/Piece.cs" line="62" offsetX="1012" offsetY="1158" expression="prev" liveUpdate="False" />
+    <Watch file="Assets/Model/Piece.cs" line="14" offsetX="934" offsetY="1089" expression="this.coord.x" liveUpdate="False" />
+    <Watch file="Assets/Model/Piece.cs" line="14" offsetX="1093" offsetY="1091" expression="this.coord.y" liveUpdate="False" />
+    <Watch file="Assets/Model/Piece.cs" line="63" offsetX="1009" offsetY="1121" expression="value" liveUpdate="False" />
+    <Watch file="Assets/Model/Piece.cs" line="37" offsetX="962" offsetY="1003" expression="this._neigboreCount" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

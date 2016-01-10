@@ -180,10 +180,10 @@ namespace Submarine.Model {
 
 			_nextCarrierID = loadedSub._nextCarrierID;
 
-			//		// create fuel pipe
-			for (int x = 3; x < 40; x++) {
-				AddPieceToTile (x, 2, PieceType.Pipe);
-			}
+//			//		// create fuel pipe
+//			for (int x = 3; x < 40; x++) {
+//				AddPieceToTile (x, 2, PieceType.Pipe);
+//			}
 		}
 
 		#endregion
@@ -331,7 +331,7 @@ namespace Submarine.Model {
 			};
 
 			RoomPropertiesReqRes [RoomType.Generator] = new List<Resource> {
-				{ new Resource (Units.pks, 140) },
+				{ new Resource (Units.pks, 107) },
 				{ new Resource (Units.Engineers, 2.0f / RoomProperties ["Generator_Min"]) }
 			};
 			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000f / RoomProperties ["Battery_Min"]) } };
@@ -895,6 +895,7 @@ namespace Submarine.Model {
 						_nextCarrierID++;		
 					
 						newCarrier.AddPiece (newPiece);					// add piece to carrier
+						newPiece.IsConnection = true; // first piece in a carrier is always an end piece (0) so it's a connection to the room
 
 						//UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece has a " + typeOfPiece
 						//+ ", so started a new Carrier " + newCarrier.ID);
@@ -932,7 +933,7 @@ namespace Submarine.Model {
 
 		}
 
-		public void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
+		private void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
 			Tile onTile = GetTileAt (x, y);
 			if (onTile == null) {
 				UnityEngine.Debug.LogError ("ERROR: cannot add an connection on a not existing Tile");

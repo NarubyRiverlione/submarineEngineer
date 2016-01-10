@@ -77,23 +77,23 @@ public class WorldController : MonoBehaviour {
 		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
 		ShowAllTilesViaCallback ();		// now show tiles (needed for empty tiles)
 
-		#if DEBUG
-		// create fuel tank
-		mySub.AddTileToRoom (10, 1, RoomType.FuelTank);
-		mySub.AddTileToRoom (11, 1, RoomType.FuelTank);
-		mySub.AddTileToRoom (12, 1, RoomType.FuelTank);
-		mySub.AddTileToRoom (13, 1, RoomType.FuelTank);
-		mySub.AddTileToRoom (10, 3, RoomType.FuelTank);
-		mySub.AddTileToRoom (11, 3, RoomType.FuelTank);
-		mySub.AddTileToRoom (12, 3, RoomType.FuelTank);
-		mySub.AddTileToRoom (13, 3, RoomType.FuelTank);
-		mySub.AddTileToRoom (10, 2, RoomType.FuelTank);
-		mySub.AddTileToRoom (11, 2, RoomType.FuelTank);
-		mySub.AddTileToRoom (12, 2, RoomType.FuelTank);
-		mySub.AddTileToRoom (13, 2, RoomType.FuelTank);
-
-
-		#endif
+//		#if DEBUG
+//		// create fuel tank
+//		mySub.AddTileToRoom (10, 1, RoomType.FuelTank);
+//		mySub.AddTileToRoom (11, 1, RoomType.FuelTank);
+//		mySub.AddTileToRoom (12, 1, RoomType.FuelTank);
+//		mySub.AddTileToRoom (13, 1, RoomType.FuelTank);
+//		mySub.AddTileToRoom (10, 3, RoomType.FuelTank);
+//		mySub.AddTileToRoom (11, 3, RoomType.FuelTank);
+//		mySub.AddTileToRoom (12, 3, RoomType.FuelTank);
+//		mySub.AddTileToRoom (13, 3, RoomType.FuelTank);
+//		mySub.AddTileToRoom (10, 2, RoomType.FuelTank);
+//		mySub.AddTileToRoom (11, 2, RoomType.FuelTank);
+//		mySub.AddTileToRoom (12, 2, RoomType.FuelTank);
+//		mySub.AddTileToRoom (13, 2, RoomType.FuelTank);
+//
+//
+//		#endif
 	}
 	
 	// Update is called once per frame

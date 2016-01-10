@@ -29,7 +29,7 @@ public class MouseController : MonoBehaviour {
 	Vector3 prevMousePosition;
 
 	PieceType PieceTypeToBeBuild = PieceType.None;
-	bool PieceWillBeConnection = false;
+	//bool PieceWillBeConnection = false;
 
 	// Use this for initialization
 	void Start () {
@@ -128,10 +128,10 @@ public class MouseController : MonoBehaviour {
 					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove tile form room
 
 				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove)
-				if (PieceWillBeConnection == false)
+			//	if (PieceWillBeConnection == false)
 					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
-				else
-					world.mySub.AddConnectionToPieceOnTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
+				//	else
+				//	world.mySub.AddConnectionToPieceOnTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
 				
 				if (PieceTypeToBeBuild == PieceType.Remove) {
 					world.mySub.RemovePiecesFromTile (tileBelowMouse.X, tileBelowMouse.Y);
@@ -178,13 +178,13 @@ public class MouseController : MonoBehaviour {
 	// Set piece type to be build
 	public void SetPieceUnitsToBeBuild (string pieceType) {
 		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
-		PieceWillBeConnection = false;
+		//PieceWillBeConnection = false;
 	}
 
-	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
-		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
-		PieceWillBeConnection = true;
-	}
+	//	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
+	//		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
+	//		PieceWillBeConnection = true;
+	//	}
 
 	void ShowCursorInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
