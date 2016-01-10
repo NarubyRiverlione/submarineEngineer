@@ -984,7 +984,7 @@ namespace Submarine.Model {
 					// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
 					AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, piece.Type);
 			}
-			ResourceCarriers.Remove (oldCarrier.ID); // delete old carrier
+			ResourceCarriers.Remove (oldCarrier.ID);// delete old carrier
 			newCarrier.WarnAllPiecesOfCarrier ();	// warn pieces of merge (newly connected piece can have content now)
 		}
 

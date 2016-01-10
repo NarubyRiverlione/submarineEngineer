@@ -42,7 +42,7 @@ namespace Submarine.Model {
 				_neigboreCount = value;
 
 				// end pieces (only 1 other neighbore piece) is automaticly an connection (if it's the first in this room)
-				if (_neigboreCount == 8 || _neigboreCount == 4 || _neigboreCount == 2 || _neigboreCount == 1 || _neigboreCount == 0)
+				if (_neigboreCount == 8 || _neigboreCount == 4 || _neigboreCount == 2 || _neigboreCount == 1)
 					IsConnection = true;
 				else
 					IsConnection = false;
@@ -67,10 +67,10 @@ namespace Submarine.Model {
 					}
 					else {
 						//only 1 connection in same room, returns false if ther is already a connection so this is not a connection
-						if (partOfCarrier != null && prev == false)
+						if (partOfCarrier != null)
 							_isConnection = partOfCarrier.AddConnectedRoomID (OnTile.RoomID);
-						else
-							_isConnection = true;
+//						else
+//							_isConnection = true;
 					}
 				}
 				// remove connection
