@@ -24,21 +24,29 @@ namespace Submarine.Model {
 			get { 
 				if (inSub.ResourceCarriers.ContainsKey (carrierID))
 					return inSub.ResourceCarriers [carrierID];
-				else
-					throw new Exception ("Carrier : " + carrierID + " unknown in sub");
+				else {
+					UnityEngine.Debug.LogError ("Carrier : " + carrierID + " unknown in sub");
+					return null;
+				}
 			}
 		}
 
 		public int carrierID { get; set; }
 
 		[UnityEngine.SerializeField]
-		int neigboreCount;
+		int neigboreCount = 0;
 
 		public int NeighboreCount {
 			get { return neigboreCount; }
 			set {
 				neigboreCount = value;
-				//_isConnection = false;
+
+//				// end pieces (only 1 other neighbore piece) is automaticly an connection (if it's the first in this room)
+//				if (NeighboreCount == 8 || NeighboreCount == 4 || NeighboreCount == 2 || NeighboreCount == 1 || NeighboreCount == 0)
+//					IsConnection = true;
+//				else
+//					IsConnection = false;
+
 				if (OnTile != null && OnTile.TileChangedActions != null)
 					OnTile.TileChangedActions (OnTile);
 			}
@@ -51,16 +59,29 @@ namespace Submarine.Model {
 		public bool IsConnection {
 			get{ return _isConnection; }
 			set {
-				if (OnTile.RoomID == 0 && value == true)
-					UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
-				else
-					_isConnection = true;
+				if (value) {
+					if (OnTile.RoomID == 0) {
+						UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
+						_isConnection = false;
+					}
+					else {
+						//only 1 connection in same room, returns false if ther is already a connection so this is not a connection
+						if (partOfCarrier != null)
+							_isConnection = partOfCarrier.AddConnectedRoomID (OnTile.RoomID);
+						else
+							_isConnection = false;
+					}
+				}
 				// remove connection
-				if (!value)
+				else {
 					_isConnection = false;
-//				if (OnTile != null && OnTile.TileChangedActions != null)
-//					OnTile.TileChangedActions (OnTile);
-				partOfCarrier.WarnAllPiecesOfCarrier ();
+					//  as there is only 1 connection on 1 room this was the last so remove this room as connected,
+					if (partOfCarrier != null)
+						partOfCarrier.RemoveConnectedRoomID (OnTile.RoomID); 
+				}
+				// Warn all pieces in this carrier that connection and so content has changed
+				if (partOfCarrier != null)
+					partOfCarrier.WarnAllPiecesOfCarrier ();
 			}
 		}
 
@@ -108,8 +129,7 @@ namespace Submarine.Model {
 			coord = onCoord;
 
 			Type = typeOfPiece;
-			NeighboreCount = 0;
-		
+			//NeighboreCount = 0;
 
 			//isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room
 		}

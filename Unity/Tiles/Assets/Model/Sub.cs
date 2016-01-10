@@ -179,6 +179,11 @@ namespace Submarine.Model {
 			ResourceCarriers = loadedSub.ResourceCarriers;
 
 			_nextCarrierID = loadedSub._nextCarrierID;
+
+			//		// create fuel pipe
+			for (int x = 3; x < 40; x++) {
+				AddPieceToTile (x, 2, PieceType.Pipe);
+			}
 		}
 
 		#endregion
@@ -889,7 +894,8 @@ namespace Submarine.Model {
 						newPiece.carrierID = _nextCarrierID;			// add carrier to piece
 						_nextCarrierID++;		
 					
-						newCarrier.AddPiece (newPiece);					// add piece to carreier
+						newCarrier.AddPiece (newPiece);					// add piece to carrier
+
 						//UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece has a " + typeOfPiece
 						//+ ", so started a new Carrier " + newCarrier.ID);
 						//+ ", wall type is " + newRoomTile.NeighboreCount);
@@ -912,38 +918,9 @@ namespace Submarine.Model {
 					onTile.RemoveItem (piece);					
 
 					// recalculate neigbores
-					Tile checkTile;
-					Carrier foundSameCarrierType;
+					//Tile checkTile;
+					//Carrier foundSameCarrierType;
 					PieceType typeOfPiece = piece.Type;
-
-
-//					// get info of Tile North
-//					checkTile = GetTileAt (x, y + 1);
-//					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-//					if (foundSameCarrierType != null) {
-//						RecalculatedNeighboreCount (checkTile);
-//					}
-//					
-//					// get info of Tile East
-//					checkTile = GetTileAt (x + 1, y);
-//					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-//					if (foundSameCarrierType != null) {
-//						RecalculatedNeighboreCount (checkTile);
-//					}
-//					
-//					// get info of Tile South
-//					checkTile = GetTileAt (x, y - 1);
-//					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-//					if (foundSameCarrierType != null) {
-//						RecalculatedNeighboreCount (checkTile);
-//					}
-//					
-//					// get info of Tile West
-//					checkTile = GetTileAt (x - 1, y);
-//					foundSameCarrierType = GetSameNeighboreCarrier (typeOfPiece, checkTile);
-//					if (foundSameCarrierType != null) {
-//						RecalculatedNeighboreCount (checkTile);
-//					}
 
 					// rebuild carrier, can be split now into 2 not connected carriers
 					RebuildCarrier (oldCarrierID);
@@ -1002,8 +979,11 @@ namespace Submarine.Model {
 			foreach (Piece piece in oldCarrier.Pieces) {
 				piece.carrierID = newCarrier.ID;	// set other carrier in each piece
 				newCarrier.AddPiece (piece);		// add piece to new carrier
+				if (piece.IsConnection) 
+					// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
+					AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, piece.Type);
 			}
-			ResourceCarriers.Remove (oldCarrier.ID);
+			ResourceCarriers.Remove (oldCarrier.ID); // delete old carrier
 			newCarrier.WarnAllPiecesOfCarrier ();	// warn pieces of merge (newly connected piece can have content now)
 		}
 
@@ -1074,7 +1054,8 @@ namespace Submarine.Model {
 					// rebuild carrier
 					foreach (Piece piece in rememberPieces) {
 						AddPieceToTile (piece.coord.x, piece.coord.y, rebuiltPieceType); // re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
-						if (piece.IsConnection)
+						if (piece.IsConnection) 
+							// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
 							AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, rebuiltPieceType);
 					}
 				}

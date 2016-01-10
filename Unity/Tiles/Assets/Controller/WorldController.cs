@@ -77,30 +77,23 @@ public class WorldController : MonoBehaviour {
 		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
 		ShowAllTilesViaCallback ();		// now show tiles (needed for empty tiles)
 
-//		#if DEBUG
-//		// create fuel tank
-//		mySub.AddTileToRoom (10, 1, RoomType.FuelTank);
-//		mySub.AddTileToRoom (11, 1, RoomType.FuelTank);
-//		mySub.AddTileToRoom (12, 1, RoomType.FuelTank);
-//		mySub.AddTileToRoom (13, 1, RoomType.FuelTank);
-//		mySub.AddTileToRoom (10, 3, RoomType.FuelTank);
-//		mySub.AddTileToRoom (11, 3, RoomType.FuelTank);
-//		mySub.AddTileToRoom (12, 3, RoomType.FuelTank);
-//		mySub.AddTileToRoom (13, 3, RoomType.FuelTank);
-//		mySub.AddTileToRoom (10, 2, RoomType.FuelTank);
-//		mySub.AddTileToRoom (11, 2, RoomType.FuelTank);
-//		mySub.AddTileToRoom (12, 2, RoomType.FuelTank);
-//		mySub.AddTileToRoom (13, 2, RoomType.FuelTank);
-//
-//		// create fuel pipe
-//		mySub.AddPieceToTile (10, 1, PieceType.Pipe);
-//		mySub.AddPieceToTile (11, 1, PieceType.Pipe);
-//		mySub.AddPieceToTile (11, 2, PieceType.Pipe);
-//		mySub.AddPieceToTile (12, 2, PieceType.Pipe);
-//		mySub.AddPieceToTile (13, 2, PieceType.Pipe);
-//		mySub.AddPieceToTile (13, 1, PieceType.Pipe);
-//		mySub.AddPieceToTile (12, 3, PieceType.Pipe);
-//		#endif
+		#if DEBUG
+		// create fuel tank
+		mySub.AddTileToRoom (10, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (11, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (12, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (13, 1, RoomType.FuelTank);
+		mySub.AddTileToRoom (10, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (11, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (12, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (13, 3, RoomType.FuelTank);
+		mySub.AddTileToRoom (10, 2, RoomType.FuelTank);
+		mySub.AddTileToRoom (11, 2, RoomType.FuelTank);
+		mySub.AddTileToRoom (12, 2, RoomType.FuelTank);
+		mySub.AddTileToRoom (13, 2, RoomType.FuelTank);
+
+
+		#endif
 	}
 	
 	// Update is called once per frame
@@ -440,6 +433,14 @@ public class WorldController : MonoBehaviour {
 			renderContent.sortingLayerName = "Pieces";
 			renderContent.sortingOrder = 2;
 
+		}
+
+		if (wire != null) {
+			
+		}
+
+		if (shaft != null) {
+			
 		}
 
 		// no Pieces on tile a(ny more), set outline & content & connection to transparant 

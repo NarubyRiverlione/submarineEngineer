@@ -64,10 +64,12 @@ namespace Submarine.Model {
 		}
 
 		public void AddItem (Piece itemToAdd) {
-			if (PiecesOnTile.Count < MaxItems) // a Tile can contain MaxItems
+			// a Tile can contain MaxItems and only 1 of the same type (no 2 Pipes in 1 tile)
+			if (PiecesOnTile.Count < MaxItems && FindPieceOfTypeOnTile (itemToAdd.Type) == null) {
 				PiecesOnTile.Add (itemToAdd);
-//			if (TileChangedActions != null)
-//				TileChangedActions (this);
+				if (TileChangedActions != null)
+					TileChangedActions (this);
+			}
 		}
 
 		public void RemoveItem (Piece itemToRemove) {

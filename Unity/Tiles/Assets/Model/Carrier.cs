@@ -23,13 +23,14 @@ namespace Submarine.Model {
 
 		public Units UnitOfContent { get; private set; }
 
+		public List<int> connectenRoomIDs { get; private set; }
 
 
 		protected Carrier (int id, Units unit) {
 			ID = id;
 			UnitOfContent = unit;
 			Pieces = new List<Piece> ();
-
+			connectenRoomIDs = new List<int> ();
 		}
 
 		static public Carrier CreateCarrier (PieceType typeOfPiece, int id) {
@@ -55,6 +56,28 @@ namespace Submarine.Model {
 		abstract public void AddPiece (Piece piece);
 
 		abstract public void RemovePiece (Piece piece);
+
+		public bool AddConnectedRoomID (int newRoomID) {
+			if (connectenRoomIDs.Contains (newRoomID)) {
+				UnityEngine.Debug.Log ("Room " + newRoomID + "already connected to carrier " + ID);
+				return false;
+			}
+			else {
+				connectenRoomIDs.Add (newRoomID);
+				return true;
+			}
+		}
+
+		public bool RemoveConnectedRoomID (int newRoomID) {
+			if (connectenRoomIDs.Contains (newRoomID)) {
+				connectenRoomIDs.Remove (newRoomID);
+				return true;
+			}
+			else {
+				UnityEngine.Debug.Log ("ERROR: Room " + newRoomID + " isn't connected to carrier " + ID);
+				return false;
+			}
+		}
 
 	}
 }
