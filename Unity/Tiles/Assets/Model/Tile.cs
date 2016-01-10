@@ -42,10 +42,11 @@ namespace Submarine.Model {
 			} 
 		}
 
-		// a Tile can contain 2 items
+		static public int MaxItems = 2;
+		// a Tile can contain Max items
 		public List<Piece> PiecesOnTile { get; private set; }
 
-		static public int MaxItems = 2;
+	
 
 		public Tile () {
 		}
@@ -82,6 +83,7 @@ namespace Submarine.Model {
 			return PiecesOnTile.Where (p => p.Type == type).FirstOrDefault ();
 		}
 
+	
 
 		public bool IsWalkable () {
 			bool walkable = true;

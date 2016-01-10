@@ -206,13 +206,13 @@ public class MouseController : MonoBehaviour {
 					+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
 				}
 			}
-//			#if DEBUG
-//			info += "\n DEBUG:"
+			#if DEBUG
+			info += "\n DEBUG:"
 //			+ " RoomID: " + tileBelowMouse.RoomID
 //			+ " wall type: " + tileBelowMouse.WallType
 //			+ " layout validate: " + room.IsLayoutValid
-//			+ " resources available " + room.ResourcesAvailable;
-//			#endif
+			+ " resources available " + room.ResourcesAvailable;
+			#endif
 		}
 		UI_Information_Text.text = info;
 	}

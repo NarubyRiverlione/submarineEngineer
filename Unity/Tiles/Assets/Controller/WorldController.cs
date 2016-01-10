@@ -341,106 +341,139 @@ public class WorldController : MonoBehaviour {
 		#endregion
 
 		#region Pieces
-		// show Pieces game object
-		Piece pipe = null, wire = null, shaft = null;
-
-		foreach (Piece piece in showTile.PiecesOnTile) {
-			if (piece != null) {
-				// is there a pipe on this tile ?
-				if (piece.Type == PieceType.Pipe)
-					pipe = piece;
-				if (piece.Type == PieceType.Wire)
-					wire = piece;
-				if (piece.Type == PieceType.Shaft)
-					shaft = piece;
-			}
-		}
-
 		GameObject piece_GameObj = GameObject.Find ("Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 		GameObject pieceConnection_GameObj = GameObject.Find ("PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 		GameObject pieceContent_GameObj = GameObject.Find ("PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 
+		foreach (Piece piece in showTile.PiecesOnTile) {
+			if (piece.carrierID != 0) {
+				Carrier carrierOfPiece = mySub.ResourceCarriers [piece.carrierID];
+				// Show piece outline
+				if (piece_GameObj == null) { 
+					// add piece now		
+					piece_GameObj = new GameObject ();
+					// set name of game object to see in Hierarchy
+					piece_GameObj.name = "Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+					// set parent of warning GameObject to the Title game object
+					piece_GameObj.transform.SetParent (tile_GameObj.transform);
+					// set X, Y of game object
+					piece_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
+					// add Sprite Renderer
+					piece_GameObj.AddComponent<SpriteRenderer> ();
+				}
+				// now it's sure the Pieces game object exist, update (or set) it's sprite
+				SpriteRenderer render = piece_GameObj.GetComponent<SpriteRenderer> ();
+				//set sprite from Pieces sprite sheet
+				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe sprite " + pipe.NeighboreCount);
+				switch (carrierOfPiece.UnitOfContent) {
+					case Units.liters_fuel:
+						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						break;
+					case Units.liters_pump:
+						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						break;
+					case Units.pks:
+						// TODO change to shank sprite
+						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						break;
+					case Units.MWs:
+						// TODO change to wire spritesheet
+						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						break;
+				}
+				// show above Title = on the Pieces sorting layer  						
+				render.sortingLayerName = "Pieces";
+				render.sortingOrder = 0;
 
-		if (pipe != null) {
-			// Show Pipe outline
-			if (piece_GameObj == null) { 
-				// add Pip now		
-				piece_GameObj = new GameObject ();
-				// set name of game object to see in Hierarchy
-				piece_GameObj.name = "Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
-				// set parent of warning GameObject to the Title game object
-				piece_GameObj.transform.SetParent (tile_GameObj.transform);
-				// set X, Y of game object
-				piece_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
-				// add Sprite Renderer
-				piece_GameObj.AddComponent<SpriteRenderer> ();
+
+				//Show Connection
+				if (pieceConnection_GameObj == null) { 
+					// add Connection GameObject now		
+					pieceConnection_GameObj = new GameObject ();
+					// set name of game object to see in Hierarchy
+					pieceConnection_GameObj.name = "PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+					// set parent of warning GameObject to the Pieces game object
+					pieceConnection_GameObj.transform.SetParent (piece_GameObj.transform);
+					// set X, Y of game object
+					pieceConnection_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
+					// add Sprite Renderer
+					pieceConnection_GameObj.AddComponent<SpriteRenderer> ();
+				}
+				// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
+				SpriteRenderer renderConnection = pieceConnection_GameObj.GetComponent<SpriteRenderer> ();
+				//set sprite from Pieces sprite sheet
+				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
+				if (piece.IsConnection) {
+					switch (carrierOfPiece.UnitOfContent) {
+						case Units.liters_fuel:
+							renderConnection.sprite = Sprite_PipeConnection;
+							break;
+						case Units.liters_pump:
+							renderConnection.sprite = Sprite_PipeConnection;
+							break;
+						case Units.pks:
+						// TODO change to shank connection sprite
+							renderConnection.sprite = Sprite_PipeConnection;
+							break;
+						case Units.MWs:
+						// TODO change to wire connection sprite
+							renderConnection.sprite = Sprite_PipeConnection;
+							break;
+					}
+				}
+				else
+					renderConnection.sprite = Tile_Transparent;
+				// show above piece outline & conten 					
+				renderConnection.sortingLayerName = "Pieces";
+				renderConnection.sortingOrder = 10;
+
+
+				//Show Content
+				if (pieceContent_GameObj == null) { 
+					// add Contet GameObject now		
+					pieceContent_GameObj = new GameObject ();
+					// set name of game object to see in Hierarchy
+					pieceContent_GameObj.name = "PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+					// set parent of warning GameObject to the Pieces game object
+					pieceContent_GameObj.transform.SetParent (piece_GameObj.transform);
+					// set X, Y of game object
+					pieceContent_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
+					// add Sprite Renderer
+					pieceContent_GameObj.AddComponent<SpriteRenderer> ();
+				}
+				// now it's sure the Pieces Content game object exist, update (or set) it's sprite
+				SpriteRenderer renderContent = pieceContent_GameObj.GetComponent<SpriteRenderer> ();
+				//set sprite from Pieces sprite sheet
+				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONTENT sprite " + pipe.IsConnection);
+
+				// this update Tile will be called when adding an pipe too the title, before the pipe is added to a carrier
+				if (carrierOfPiece.Content > 0) {
+
+					switch (carrierOfPiece.UnitOfContent) {
+						case Units.liters_fuel:
+							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							break;
+						case Units.liters_pump:
+							//TODO: change to water content spitesheet
+							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							break;
+						case Units.pks:
+							// TODO change to shank content sprite
+							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							break;
+						case Units.MWs:
+							// TODO change to wire content spritesheet
+							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							break;
+					}
+				}
+				else
+					renderContent.sprite = Tile_Transparent;
+				// show above Title = on the Pieces sorting layer  						
+				renderContent.sortingLayerName = "Pieces";
+				renderContent.sortingOrder = 2;
+
 			}
-			// now it's sure the Pieces game object exist, update (or set) it's sprite
-			SpriteRenderer render = piece_GameObj.GetComponent<SpriteRenderer> ();
-			//set sprite from Pieces sprite sheet
-			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe sprite " + pipe.NeighboreCount);
-			render.sprite = PipeSpriteSheet [pipe.NeighboreCount];
-			// show above Title = on the Pieces sorting layer  						
-			render.sortingLayerName = "Pieces";
-			render.sortingOrder = 0;
-
-
-			//Show Connection
-			if (pieceConnection_GameObj == null) { 
-				// add Connection GameObject now		
-				pieceConnection_GameObj = new GameObject ();
-				// set name of game object to see in Hierarchy
-				pieceConnection_GameObj.name = "PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
-				// set parent of warning GameObject to the Pieces game object
-				pieceConnection_GameObj.transform.SetParent (piece_GameObj.transform);
-				// set X, Y of game object
-				pieceConnection_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
-				// add Sprite Renderer
-				pieceConnection_GameObj.AddComponent<SpriteRenderer> ();
-			}
-			// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
-			SpriteRenderer renderConnection = pieceConnection_GameObj.GetComponent<SpriteRenderer> ();
-			//set sprite from Pieces sprite sheet
-			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
-			renderConnection.sprite = pipe.IsConnection ? Sprite_PipeConnection : Tile_Transparent;
-			// show above piece outline & conten 					
-			renderConnection.sortingLayerName = "Pieces";
-			renderConnection.sortingOrder = 10;
-
-
-			//Show Content
-			if (pieceContent_GameObj == null) { 
-				// add Contet GameObject now		
-				pieceContent_GameObj = new GameObject ();
-				// set name of game object to see in Hierarchy
-				pieceContent_GameObj.name = "PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
-				// set parent of warning GameObject to the Pieces game object
-				pieceContent_GameObj.transform.SetParent (piece_GameObj.transform);
-				// set X, Y of game object
-				pieceContent_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
-				// add Sprite Renderer
-				pieceContent_GameObj.AddComponent<SpriteRenderer> ();
-			}
-			// now it's sure the Pieces Content game object exist, update (or set) it's sprite
-			SpriteRenderer renderContent = pieceContent_GameObj.GetComponent<SpriteRenderer> ();
-			//set sprite from Pieces sprite sheet
-			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONTENT sprite " + pipe.IsConnection);
-			if (pipe.carrierID != 0 && mySub.ResourceCarriers [pipe.carrierID].Content > 0) // this update Tile will be called when adding an pipe too the title, before the pipe is added to a carrier
-				renderContent.sprite = FuelSpriteSheet [pipe.NeighboreCount];
-			else
-				renderContent.sprite = Tile_Transparent;
-			// show above Title = on the Pieces sorting layer  						
-			renderContent.sortingLayerName = "Pieces";
-			renderContent.sortingOrder = 2;
-
-		}
-
-		if (wire != null) {
-			
-		}
-
-		if (shaft != null) {
-			
 		}
 
 		// no Pieces on tile a(ny more), set outline & content & connection to transparant 
@@ -454,7 +487,6 @@ public class WorldController : MonoBehaviour {
 				pieceContent_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
 		}
 		#endregion
-
 	}
 
 	//  Update all UI panels (too be called from mouse controller)

@@ -182,7 +182,12 @@ namespace Submarine.Model {
 							resouceAvailable = inSub.AmountOfCrewType (needResource.unit);
 						}
 						else // no crew = normal resource
-							resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
+							if (needResource.unit == Units.food || needResource.unit == Units.tins)
+								// no carrier for food: crew needs to go to the gallery
+								// no carrier for tins: cook get (invisible?) tins for the storage
+								resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
+						else
+							resouceAvailable = ConnectedResource (needResource.unit);
 					}
 					// now available is know check it agains needs
 					if (resouceAvailable < inSub.GetAllNeededResourcesOfUnit (needResource.unit))		// don't check needs of just this room but similar needs of all rooms (aka 2 bunks need together food)
@@ -196,6 +201,22 @@ namespace Submarine.Model {
 			Resource foundResource = NeededResources.Where (res => res.unit == reqUnit).FirstOrDefault ();
 			// resource needed depence on size of room
 			return foundResource != null ? (int)Math.Floor (foundResource.amount * Size) : 0;
+		}
+
+		private int ConnectedResource (Units type) {
+			int resource = 0;
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				Tile tile = inSub.GetTileAt (coord.x, coord.y);
+				foreach (Piece piece in tile.PiecesOnTile) {
+					
+					if (piece.IsConnection) {
+						Carrier carrierInRoom = inSub.ResourceCarriers [piece.carrierID];
+						if (carrierInRoom.UnitOfContent == type)
+							resource += carrierInRoom.Content;
+					}
+				}
+			}
+			return resource;
 		}
 	}
 }
