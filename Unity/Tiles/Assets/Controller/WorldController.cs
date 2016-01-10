@@ -42,6 +42,12 @@ public class WorldController : MonoBehaviour {
 	Sprite[] WallSpriteSheet;
 	Sprite[] PipeSpriteSheet;
 	Sprite[] FuelSpriteSheet;
+	Sprite[] WaterSpriteSheet;
+	Sprite[] CableSpriteSheet;
+	Sprite[] ElectricitySpriteSheet;
+
+	public Sprite ShaftSprite;
+	public Sprite ShaftContentSprite;
 
 	// Connections
 	public Sprite Sprite_PipeConnection;
@@ -72,6 +78,12 @@ public class WorldController : MonoBehaviour {
 		PipeSpriteSheet = Resources.LoadAll<Sprite> ("Pipes_Empty");
 		// loading Fuel sprites from sheet
 		FuelSpriteSheet = Resources.LoadAll<Sprite> ("FuelPipe_Content");
+		// TODO loading Water sprites 
+		WaterSpriteSheet = Resources.LoadAll<Sprite> ("Water_Content");
+		// TODO loading electricity
+		ElectricitySpriteSheet = Resources.LoadAll<Sprite> ("Electricity_Content");
+		// TODO loading cables
+		CableSpriteSheet = Resources.LoadAll<Sprite> ("Cables_Empty");
 
 		CreateAllTileGameObjects ();
 		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
@@ -346,7 +358,7 @@ public class WorldController : MonoBehaviour {
 		GameObject pieceContent_GameObj = GameObject.Find ("PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
 
 		foreach (Piece piece in showTile.PiecesOnTile) {
-			if (piece.carrierID != 0) {
+			if (mySub.ResourceCarriers.ContainsKey (piece.carrierID)) {
 				Carrier carrierOfPiece = mySub.ResourceCarriers [piece.carrierID];
 				// Show piece outline
 				if (piece_GameObj == null) { 
@@ -373,12 +385,10 @@ public class WorldController : MonoBehaviour {
 						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
 						break;
 					case Units.pks:
-						// TODO change to shank sprite
-						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						render.sprite = ShaftSprite;
 						break;
 					case Units.MWs:
-						// TODO change to wire spritesheet
-						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						render.sprite = CableSpriteSheet [piece.NeighboreCount];
 						break;
 				}
 				// show above Title = on the Pieces sorting layer  						
@@ -412,11 +422,9 @@ public class WorldController : MonoBehaviour {
 							renderConnection.sprite = Sprite_PipeConnection;
 							break;
 						case Units.pks:
-						// TODO change to shank connection sprite
 							renderConnection.sprite = Sprite_PipeConnection;
 							break;
 						case Units.MWs:
-						// TODO change to wire connection sprite
 							renderConnection.sprite = Sprite_PipeConnection;
 							break;
 					}
@@ -455,15 +463,13 @@ public class WorldController : MonoBehaviour {
 							break;
 						case Units.liters_pump:
 							//TODO: change to water content spitesheet
-							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							renderContent.sprite = WaterSpriteSheet [piece.NeighboreCount];
 							break;
 						case Units.pks:
-							// TODO change to shank content sprite
-							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							renderContent.sprite = ShaftContentSprite;
 							break;
 						case Units.MWs:
-							// TODO change to wire content spritesheet
-							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							renderContent.sprite = ElectricitySpriteSheet [piece.NeighboreCount];
 							break;
 					}
 				}

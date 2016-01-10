@@ -1,26 +1,19 @@
 ﻿<Properties GitUserInfo="UsingMD" StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Controller/MouseController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Sub.cs">
     <Files>
-      <File FileName="Assets/Controller/MouseController.cs" Line="211" Column="3" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="349" Column="28" />
-      <File FileName="Assets/Model/Sub.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Piece.cs" Line="72" Column="8" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="86" Column="62" />
+      <File FileName="Assets/Model/Sub.cs" Line="1024" Column="29" />
+      <File FileName="Assets/Model/Piece.cs" Line="39" Column="28" />
       <File FileName="Assets/Model/Carrier.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Tile.cs" Line="70" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="187" Column="75" />
+      <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="1" Column="1" />
+      <File FileName="Assets/Model/Resource.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="84" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="71" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="81" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="78" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="66" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="62" column="1" />
-      <Breakpoint enabled="false" file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Piece.cs" line="73" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets/Model/Resource.cs" line="39" offsetX="509" offsetY="681" expression="a" liveUpdate="False" />
@@ -49,5 +42,9 @@
     <Watch file="Assets/Model/Piece.cs" line="14" offsetX="1093" offsetY="1091" expression="this.coord.y" liveUpdate="False" />
     <Watch file="Assets/Model/Piece.cs" line="63" offsetX="1009" offsetY="1121" expression="value" liveUpdate="False" />
     <Watch file="Assets/Model/Piece.cs" line="37" offsetX="962" offsetY="1003" expression="this._neigboreCount" liveUpdate="False" />
+    <Watch file="Assets/Model/Carrier.cs" line="17" offsetX="695" offsetY="225" expression="UnitOfContent" liveUpdate="False" />
+    <Watch file="Assets/Model/Carrier.cs" line="17" offsetX="695" offsetY="255" expression="piece.UnitOfContent" liveUpdate="False" />
+    <Watch file="Assets/Model/Carrier.cs" line="18" offsetX="692" offsetY="297" expression="piece.Input" liveUpdate="False" />
+    <Watch file="Assets/Model/Carrier.cs" line="7" offsetX="713" offsetY="162" expression="this.ID" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

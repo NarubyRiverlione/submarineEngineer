@@ -68,8 +68,9 @@ namespace Submarine.Model {
 			// a Tile can contain MaxItems and only 1 of the same type (no 2 Pipes in 1 tile)
 			if (PiecesOnTile.Count < MaxItems && FindPieceOfTypeOnTile (itemToAdd.Type) == null) {
 				PiecesOnTile.Add (itemToAdd);
-				if (TileChangedActions != null)
-					TileChangedActions (this);
+				// don't redraw Tile now, do it via the piece.carrierID so its sure all needed info is in the piece
+//				if (TileChangedActions != null)
+//					TileChangedActions (this);
 			}
 		}
 

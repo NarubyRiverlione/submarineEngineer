@@ -47,7 +47,7 @@ namespace Submarine.Model {
 				else
 					IsConnection = false;
 
-				if (OnTile != null && OnTile.TileChangedActions != null)
+				if (OnTile != null && OnTile.TileChangedActions != null && carrierID != 0)
 					OnTile.TileChangedActions (OnTile);
 			}
 		}
@@ -88,8 +88,8 @@ namespace Submarine.Model {
 		}
 
 		// only if an item is connected to a Room it can have input
-		[UnityEngine.SerializeField]
-		int _prevInput = 0;
+		//		[UnityEngine.SerializeField]
+		//		int _prevInput = 0;
 
 		public int Input {
 			get {
@@ -102,7 +102,7 @@ namespace Submarine.Model {
 //					if (_prevInput != newInput)
 //						partOfCarrier.WarnAllPiecesOfCarrier (); // input changed, warn all pieces
 				}
-				_prevInput = newInput;
+				//_prevInput = newInput;
 				return newInput;
 			}
 		}
@@ -138,18 +138,21 @@ namespace Submarine.Model {
 
 	
 
-		//		public static PieceType FindPieceType (Units units) {
-		//			switch (units) {
-		//				case Units.MWs:
-		//					return PieceType.Wire;
-		//				case Units.liters_fuel:
-		//					return PieceType.Pipe;
-		//				case Units.pks:
-		//					return PieceType.Shaft;
-		//				default:
-		//					throw new Exception ("Unknow item type for unit: " + units);
-		//			}
-		//		}
+		public static PieceType FindPieceType (Units units) {
+			switch (units) {
+				case Units.MWs:
+					return PieceType.Wire;
+				case Units.liters_fuel:
+					return PieceType.Pipe;
+				case Units.liters_pump:
+					return PieceType.Pipe;
+				case Units.pks:
+					return PieceType.Shaft;
+				default:
+					UnityEngine.Debug.LogError ("Unknow item type for unit: " + units);
+					return PieceType.None;
+			}
+		}
 		//
 		//		public static PieceType FindPieceTypeFormString (string unitAsString) {
 		//			switch (unitAsString) {

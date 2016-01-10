@@ -28,8 +28,8 @@ public class MouseController : MonoBehaviour {
 	// remember where the mouse was so we can detect dragging
 	Vector3 prevMousePosition;
 
-	PieceType PieceTypeToBeBuild = PieceType.None;
-	//bool PieceWillBeConnection = false;
+	Units unitOfCarrierToBuild = Units.None;
+
 
 	// Use this for initialization
 	void Start () {
@@ -88,7 +88,7 @@ public class MouseController : MonoBehaviour {
 					cursorRemovePieces.SetActive (false);
 				} 
 				// selected a piece to be build = show piece icon
-				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove) {
+				if (unitOfCarrierToBuild != Units.None && unitOfCarrierToBuild != Units.Remove) {
 					cursorPiece.transform.position = spaceBelowMouseCoordinates;
 					cursorPiece.SetActive (true);
 					cursorRoomBuilder.SetActive (false);
@@ -103,7 +103,7 @@ public class MouseController : MonoBehaviour {
 					cursorRoomDestroyer.SetActive (true);
 					cursorRemovePieces.SetActive (false);
 				}
-				if (PieceTypeToBeBuild == PieceType.Remove) {
+				if (unitOfCarrierToBuild == Units.Remove) {
 					cursorRemovePieces.transform.position = spaceBelowMouseCoordinates;
 					cursorRoomBuilder.SetActive (false);
 					cursorPiece.SetActive (false);
@@ -127,17 +127,15 @@ public class MouseController : MonoBehaviour {
 				if (RoomTypeToBeBuild == RoomType.Remove)
 					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                   // remove tile form room
 
-				if (PieceTypeToBeBuild != PieceType.None && PieceTypeToBeBuild != PieceType.Remove)
+				if (unitOfCarrierToBuild != Units.None && unitOfCarrierToBuild != Units.Remove)
 			//	if (PieceWillBeConnection == false)
-					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
+					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, unitOfCarrierToBuild);
 				//	else
 				//	world.mySub.AddConnectionToPieceOnTile (tileBelowMouse.X, tileBelowMouse.Y, PieceTypeToBeBuild);
 				
-				if (PieceTypeToBeBuild == PieceType.Remove) {
+				if (unitOfCarrierToBuild == Units.Remove) {
 					world.mySub.RemovePiecesFromTile (tileBelowMouse.X, tileBelowMouse.Y);
 				}
-			
-
 			}
 		}
             
@@ -176,15 +174,11 @@ public class MouseController : MonoBehaviour {
 	}
 
 	// Set piece type to be build
-	public void SetPieceUnitsToBeBuild (string pieceType) {
-		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
-		//PieceWillBeConnection = false;
+	public void SetPieceUnitsToBeBuild (string unitString) {
+		unitOfCarrierToBuild = (Units)Enum.Parse (typeof(Units), unitString);
+
 	}
 
-	//	public void SetConnectionPieceTypeToBeBuild (string pieceType) {
-	//		PieceTypeToBeBuild = (PieceType)Enum.Parse (typeof(PieceType), pieceType);
-	//		PieceWillBeConnection = true;
-	//	}
 
 	void ShowCursorInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
@@ -206,13 +200,13 @@ public class MouseController : MonoBehaviour {
 					+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
 				}
 			}
-			#if DEBUG
-			info += "\n DEBUG:"
+//			#if DEBUG
+//			info += "\n DEBUG:"
 //			+ " RoomID: " + tileBelowMouse.RoomID
 //			+ " wall type: " + tileBelowMouse.WallType
 //			+ " layout validate: " + room.IsLayoutValid
-			+ " resources available " + room.ResourcesAvailable;
-			#endif
+			//	+ " resources available " + room.ResourcesAvailable;
+//			#endif
 		}
 		UI_Information_Text.text = info;
 	}
@@ -244,7 +238,7 @@ public class MouseController : MonoBehaviour {
 
 				}
 				// reset RoomTypeToBeBuild & PieceUnitsToBeBuild so a selection can be made
-				PieceTypeToBeBuild = PieceType.None;
+				unitOfCarrierToBuild = Units.None;
 				RoomTypeToBeBuild = RoomType.Empty;
 			}
 		}

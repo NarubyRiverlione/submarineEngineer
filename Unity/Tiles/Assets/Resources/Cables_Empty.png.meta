@@ -1,0 +1,249 @@
+fileFormatVersion: 2
+guid: 831c217f3e025480a898de49e2b4b868
+timeCreated: 1452458036
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Pipes_Empty_0
+    21300002: Pipes_Empty_1
+    21300004: Pipes_Empty_2
+    21300006: Pipes_Empty_3
+    21300008: Pipes_Empty_4
+    21300010: Pipes_Empty_5
+    21300012: Pipes_Empty_6
+    21300014: Pipes_Empty_7
+    21300016: Pipes_Empty_8
+    21300018: Pipes_Empty_9
+    21300020: Pipes_Empty_10
+    21300022: Pipes_Empty_11
+    21300024: Pipes_Empty_12
+    21300026: Pipes_Empty_13
+    21300028: Pipes_Empty_14
+    21300030: Pipes_Empty_15
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 6
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 20
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Pipes_Empty_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_1
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 69
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_4
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_5
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_6
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 48
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_9
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_10
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_11
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 27
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_12
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_13
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_14
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Pipes_Empty_15
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 6
+        width: 20
+        height: 20
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

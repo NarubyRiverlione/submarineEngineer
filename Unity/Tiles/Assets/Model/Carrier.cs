@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Submarine.Model {
 	// Carrier is generic class for collection of Pieces: FuelPipe contains Pipes, ChargingCable contains Wire
-	abstract public class Carrier {
+	public class Carrier {
 		public int ID { get; private set; }
 
 		public List<Piece> Pieces { get; private set; }
@@ -26,25 +26,25 @@ namespace Submarine.Model {
 		public List<int> connectenRoomIDs { get; private set; }
 
 
-		protected Carrier (int id, Units unit) {
+		public Carrier (int id, Units unit) {
 			ID = id;
 			UnitOfContent = unit;
 			Pieces = new List<Piece> ();
 			connectenRoomIDs = new List<int> ();
 		}
 
-		static public Carrier CreateCarrier (PieceType typeOfPiece, int id) {
-			switch (typeOfPiece) {
-				case PieceType.Pipe:
-					return new FuelPipe (id, Units.liters_fuel);
-				case PieceType.Wire:
-					return new ChargeCable (id, Units.MWs);
+		//		static public Carrier CreateCarrier (PieceType typeOfPiece, int id) {
+		//			switch (typeOfPiece) {
+		//				case PieceType.Pipe:
+		//					return new Carrier (id, Units.liters_fuel);
+		//				case PieceType.Wire:
+		//					return new Carrier (id, Units.MWs);
+		//
+		//				default:
+		//					throw new Exception ("unknow carrier for piece type: " + typeOfPiece);
+		//			}
 
-				default: 
-					throw new Exception ("unknow carrier for piece type: " + typeOfPiece);
-			}
-
-		}
+		//		}
 
 		public void WarnAllPiecesOfCarrier () {
 			foreach (Piece piece in Pieces) {
@@ -53,9 +53,17 @@ namespace Submarine.Model {
 			}
 		}
 
-		abstract public void AddPiece (Piece piece);
+		public void AddPiece (Piece pipe) {
+			if (pipe.Type == PieceType.Pipe)
+				Pieces.Add (pipe);
+		}
 
-		abstract public void RemovePiece (Piece piece);
+		public void RemovePiece (Piece pipe) {
+			if (pipe.Type == PieceType.Pipe) {
+				if (Pieces.Contains (pipe))
+					Pieces.Remove (pipe);
+			}
+		}
 
 		public bool AddConnectedRoomID (int newRoomID) {
 			if (connectenRoomIDs.Contains (newRoomID)) {
