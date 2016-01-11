@@ -62,7 +62,7 @@ namespace Submarine.Model {
 				bool prev = _isConnection;
 				if (value) {
 					if (OnTile.RoomID == 0) {
-						UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
+						//UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
 						_isConnection = false;
 					}
 					else {

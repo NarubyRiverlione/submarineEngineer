@@ -185,29 +185,30 @@ public class MouseController : MonoBehaviour {
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
-			foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
-				if (piece != null) {
-					Carrier partOfCarrier = world.mySub.ResourceCarriers [piece.carrierID];
-					string connectedString = piece.IsConnection ? " IS " : " is NOT ";
-					string inputString = piece.Input == 0 ? " has NO input " : " has " + piece.Input + " " + piece.UnitOfContent + " input";
-					string contentString = partOfCarrier.Content == 0 ? " has NO content" : " has " + partOfCarrier.Content + " " + partOfCarrier.UnitOfContent + " content";
+		}
+		foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
+			if (piece != null) {
+				Carrier partOfCarrier = world.mySub.ResourceCarriers [piece.carrierID];
+				string connectedString = piece.IsConnection ? " IS " : " is NOT ";
+				string inputString = piece.Input == 0 ? " has NO input " : " has " + piece.Input + " " + piece.UnitOfContent + " input";
+				string contentString = partOfCarrier.Content == 0 ? " has NO content" : " has " + partOfCarrier.Content + " " + partOfCarrier.UnitOfContent + " content";
 
-					info += " contains piece " + piece.Type
-					+ connectedString + " connection"
-					+ " neigbore count = " + piece.NeighboreCount
-					+ inputString
-					+ contentString
-					+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
-				}
+				info += " contains piece " + piece.Type
+				+ connectedString + " connection"
+				+ " neigbore count = " + piece.NeighboreCount
+				+ inputString
+				+ contentString
+				+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
 			}
+		}
 //			#if DEBUG
 //			info += "\n DEBUG:"
 //			+ " RoomID: " + tileBelowMouse.RoomID
 //			+ " wall type: " + tileBelowMouse.WallType
 //			+ " layout validate: " + room.IsLayoutValid
-			//	+ " resources available " + room.ResourcesAvailable;
+		//	+ " resources available " + room.ResourcesAvailable;
 //			#endif
-		}
+
 		UI_Information_Text.text = info;
 	}
 

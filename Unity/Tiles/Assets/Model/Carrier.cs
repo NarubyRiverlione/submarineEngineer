@@ -54,15 +54,12 @@ namespace Submarine.Model {
 		}
 
 		public void AddPiece (Piece pipe) {
-			if (pipe.Type == PieceType.Pipe)
-				Pieces.Add (pipe);
+			Pieces.Add (pipe);
 		}
 
 		public void RemovePiece (Piece pipe) {
-			if (pipe.Type == PieceType.Pipe) {
-				if (Pieces.Contains (pipe))
-					Pieces.Remove (pipe);
-			}
+			if (Pieces.Contains (pipe))
+				Pieces.Remove (pipe);
 		}
 
 		public bool AddConnectedRoomID (int newRoomID) {

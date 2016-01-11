@@ -981,6 +981,7 @@ namespace Submarine.Model {
 		private void MergeCarriers (Carrier oldCarrier, Carrier newCarrier) {
 			foreach (Piece piece in oldCarrier.Pieces) {
 				piece.carrierID = newCarrier.ID;	// set other carrier in each piece
+
 				newCarrier.AddPiece (piece);		// add piece to new carrier
 				if (piece.IsConnection) 
 					// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
