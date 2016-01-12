@@ -179,11 +179,12 @@ namespace Submarine.Model {
 			ResourceCarriers = loadedSub.ResourceCarriers;
 
 			_nextCarrierID = loadedSub._nextCarrierID;
+			foreach (var carrierPair in ResourceCarriers) {
+				foreach (Piece piece in carrierPair.Value.Pieces) {
+					piece.inSub = this; // set ref. point too this Submarine
+				}
+			}
 
-//			//		// create fuel pipe
-//			for (int x = 3; x < 40; x++) {
-//				AddPieceToTile (x, 2, PieceType.Pipe);
-//			}
 		}
 
 		#endregion

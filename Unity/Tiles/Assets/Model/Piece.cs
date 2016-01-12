@@ -15,8 +15,7 @@ namespace Submarine.Model {
 
 		public Tile OnTile { get { return inSub.GetTileAt (coord.x, coord.y); } }
 
-		[UnityEngine.SerializeField]
-		Sub inSub;
+		public Sub inSub { get; set; }
 
 		public PieceType Type { get; private set; }
 
@@ -96,8 +95,7 @@ namespace Submarine.Model {
 				int newInput = 0;
 				if (IsConnection) {
 					Room roomOfItem = inSub.GetRoom (OnTile.RoomID);
-					if (roomOfItem == null)
-						throw new Exception ("Cannot find room of item: roomId=" + OnTile.RoomID);
+					if (roomOfItem != null) // carrier can pass through tile that isn't part of a room
 					newInput = roomOfItem.Output;
 //					if (_prevInput != newInput)
 //						partOfCarrier.WarnAllPiecesOfCarrier (); // input changed, warn all pieces
