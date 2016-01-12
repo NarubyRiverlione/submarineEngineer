@@ -66,16 +66,19 @@ namespace Submarine.Model {
 
 		public void AddItem (Piece itemToAdd) {
 			// a Tile can contain MaxItems and only 1 of the same type (no 2 Pipes in 1 tile)
-			if (PiecesOnTile.Count < MaxItems && FindPieceOfTypeOnTile (itemToAdd.Type) == null) {
+			// count amount of not-none items
+			int amountOfItems = PiecesOnTile.Where (p => p.Type != PieceType.None).Count ();
+			if (amountOfItems < MaxItems && FindPieceOfTypeOnTile (itemToAdd.Type) == null) {
 				PiecesOnTile.Add (itemToAdd);
 				// don't redraw Tile now, do it via the piece.carrierID so its sure all needed info is in the piece
-//				if (TileChangedActions != null)
-//					TileChangedActions (this);
 			}
 		}
 
 		public void RemoveItem (Piece itemToRemove) {
-			PiecesOnTile.Remove (itemToRemove);
+			// set "empty" piece slot to none to UI can draw a transparant
+			Piece findPiece = PiecesOnTile.Where (p => p == itemToRemove).FirstOrDefault ();
+			findPiece.Reset ();
+
 			if (TileChangedActions != null)
 				TileChangedActions (this);
 		}

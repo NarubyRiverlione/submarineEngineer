@@ -353,11 +353,15 @@ public class WorldController : MonoBehaviour {
 		#endregion
 
 		#region Pieces
-		GameObject piece_GameObj = GameObject.Find ("Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
-		GameObject pieceConnection_GameObj = GameObject.Find ("PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
-		GameObject pieceContent_GameObj = GameObject.Find ("PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y);
-
+	
 		foreach (Piece piece in showTile.PiecesOnTile) {
+			string namePiece_obj = "Piece_" + showTile.PiecesOnTile.IndexOf (piece) + "__"
+			                       + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;		
+			GameObject piece_GameObj = GameObject.Find (namePiece_obj);
+
+			string namePieceContent_GameObj = "PiecesContent_" + showTile.PiecesOnTile.IndexOf (piece) + "__" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+			GameObject pieceContent_GameObj = GameObject.Find (namePieceContent_GameObj);
+
 			if (mySub.ResourceCarriers.ContainsKey (piece.carrierID)) {
 				Carrier carrierOfPiece = mySub.ResourceCarriers [piece.carrierID];
 				// Show piece outline
@@ -365,7 +369,7 @@ public class WorldController : MonoBehaviour {
 					// add piece now		
 					piece_GameObj = new GameObject ();
 					// set name of game object to see in Hierarchy
-					piece_GameObj.name = "Pieces_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+					piece_GameObj.name = namePiece_obj;
 					// set parent of warning GameObject to the Title game object
 					piece_GameObj.transform.SetParent (tile_GameObj.transform);
 					// set X, Y of game object
@@ -396,44 +400,44 @@ public class WorldController : MonoBehaviour {
 				render.sortingOrder = 0;
 
 
-				//Show Connection
-				if (pieceConnection_GameObj == null) { 
-					// add Connection GameObject now		
-					pieceConnection_GameObj = new GameObject ();
-					// set name of game object to see in Hierarchy
-					pieceConnection_GameObj.name = "PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
-					// set parent of warning GameObject to the Pieces game object
-					pieceConnection_GameObj.transform.SetParent (piece_GameObj.transform);
-					// set X, Y of game object
-					pieceConnection_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
-					// add Sprite Renderer
-					pieceConnection_GameObj.AddComponent<SpriteRenderer> ();
-				}
-				// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
-				SpriteRenderer renderConnection = pieceConnection_GameObj.GetComponent<SpriteRenderer> ();
-				//set sprite from Pieces sprite sheet
-				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
-				if (piece.IsConnection) {
-					switch (carrierOfPiece.UnitOfContent) {
-						case Units.liters_fuel:
-							renderConnection.sprite = Sprite_PipeConnection;
-							break;
-						case Units.liters_pump:
-							renderConnection.sprite = Sprite_PipeConnection;
-							break;
-						case Units.pks:
-							renderConnection.sprite = Sprite_PipeConnection;
-							break;
-						case Units.MWs:
-							renderConnection.sprite = Sprite_PipeConnection;
-							break;
-					}
-				}
-				else
-					renderConnection.sprite = Tile_Transparent;
-				// show above piece outline & conten 					
-				renderConnection.sortingLayerName = "Pieces";
-				renderConnection.sortingOrder = 10;
+//				//Show Connection
+//				if (pieceConnection_GameObj == null) { 
+//					// add Connection GameObject now		
+//					pieceConnection_GameObj = new GameObject ();
+//					// set name of game object to see in Hierarchy
+//					pieceConnection_GameObj.name = "PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+//					// set parent of warning GameObject to the Pieces game object
+//					pieceConnection_GameObj.transform.SetParent (piece_GameObj.transform);
+//					// set X, Y of game object
+//					pieceConnection_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
+//					// add Sprite Renderer
+//					pieceConnection_GameObj.AddComponent<SpriteRenderer> ();
+//				}
+//				// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
+//				SpriteRenderer renderConnection = pieceConnection_GameObj.GetComponent<SpriteRenderer> ();
+//				//set sprite from Pieces sprite sheet
+//				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
+//				if (piece.IsConnection) {
+//					switch (carrierOfPiece.UnitOfContent) {
+//						case Units.liters_fuel:
+//							renderConnection.sprite = Sprite_PipeConnection;
+//							break;
+//						case Units.liters_pump:
+//							renderConnection.sprite = Sprite_PipeConnection;
+//							break;
+//						case Units.pks:
+//							renderConnection.sprite = Sprite_PipeConnection;
+//							break;
+//						case Units.MWs:
+//							renderConnection.sprite = Sprite_PipeConnection;
+//							break;
+//					}
+//				}
+//				else
+//					renderConnection.sprite = Tile_Transparent;
+//				// show above piece outline & conten 					
+//				renderConnection.sortingLayerName = "Pieces";
+//				renderConnection.sortingOrder = 10;
 
 
 				//Show Content
@@ -441,7 +445,7 @@ public class WorldController : MonoBehaviour {
 					// add Contet GameObject now		
 					pieceContent_GameObj = new GameObject ();
 					// set name of game object to see in Hierarchy
-					pieceContent_GameObj.name = "PiecesContent_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
+					pieceContent_GameObj.name = namePieceContent_GameObj;
 					// set parent of warning GameObject to the Pieces game object
 					pieceContent_GameObj.transform.SetParent (piece_GameObj.transform);
 					// set X, Y of game object
@@ -480,17 +484,14 @@ public class WorldController : MonoBehaviour {
 				renderContent.sortingOrder = 2;
 
 			}
-		}
 
-		// no Pieces on tile a(ny more), set outline & content & connection to transparant 
-		if (showTile.PiecesOnTile.Count == 0) { 
-			//Debug.Log ("No pieces = no sprites in  (" + showTile.X + "," + showTile.Y + ")");
-			if (piece_GameObj != null)
-				piece_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
-			if (pieceConnection_GameObj != null)
-				pieceConnection_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
-			if (pieceContent_GameObj != null)
-				pieceContent_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
+			if (piece.Type == PieceType.None) {
+				if (piece_GameObj != null)
+					piece_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
+			
+				if (pieceContent_GameObj != null)
+					pieceContent_GameObj.GetComponent<SpriteRenderer> ().sprite = Tile_Transparent; 
+			}
 		}
 		#endregion
 	}

@@ -127,14 +127,16 @@ namespace Submarine.Model {
 		public Piece (PieceType typeOfPiece, Point onCoord, Sub sub) {
 			inSub = sub;
 			coord = onCoord;
-
 			Type = typeOfPiece;
-			//NeighboreCount = 0;
-
-			//isConnection = isconnection; // set always after setting OnTile as tile is checked to be part of a room
 		}
 
-	
+		public void Reset () {
+			Type = PieceType.None;
+			carrierID = 0;
+			_isConnection = false;
+			_neigboreCount = 0;
+			inSub = null;
+		}
 
 		public static PieceType FindPieceType (Units units) {
 			switch (units) {
