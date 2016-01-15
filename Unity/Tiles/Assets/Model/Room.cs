@@ -24,7 +24,8 @@ namespace Submarine.Model {
 		BalastTank,
 		StorageRoom,
 		EscapeHatch,
-		TorpedoRoom}
+		TorpedoRoom,
+		Propellor}
 
 	;
 

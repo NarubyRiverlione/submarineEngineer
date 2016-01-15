@@ -3,6 +3,7 @@
 namespace Submarine.Model {
 
 	public enum Units {
+		kts,
 		pks,
 		MWs,
 		AH,
@@ -26,7 +27,7 @@ namespace Submarine.Model {
 		Ops,
 		Escape,
 		None,
-Remove}
+		Remove}
 
 	;
 

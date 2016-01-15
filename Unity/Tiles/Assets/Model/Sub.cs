@@ -202,16 +202,16 @@ namespace Submarine.Model {
 		// GameObject should be created first so Action updateSprite is attached before a room is created
 		public Sub () { 
 			
-			lengthOfSub = 39;
+			lengthOfSub = 41;
 			heightOfSub = 6;
 
 			lenghtOfBridgeTower = 3;
 			heightOfBridgeTower = 2;
-			startOfBridgeTower = 22;
+			startOfBridgeTower = 24;
 
 			smallerTailUpper = 1;
 			smallerTailLower = 1;
-			smallerTailLenght = 4;
+			smallerTailLenght = 5;
 
 			// initialize 2D array, still doesn't contain anything
 			_tile = new Tile[lengthOfSub, heightOfSub];
@@ -269,11 +269,20 @@ namespace Submarine.Model {
 					AddTileToRoom (x, y, RoomType.Bridge);
 				}
 			}
+			// add propellor Tower
+			for (int x = 0; x < 1; x++) {
+				for (int y = 1; y <= 2; y++) {
+					AddTileToRoom (x, y, RoomType.Propellor);
+				}
+			}
 		}
 
 		// set min tile size, capacity per tile and unit of capacity for each Room Type (output unit is set in concrete classes)
 		private void SetRoomProperties () {//TODO: read from config file for this submarine outline type
 			RoomProperties = new Dictionary<string, float> ();
+
+			RoomProperties ["Propellor_Min"] = 1.0f;
+			RoomProperties ["Propellor_CapPerTile"] = 0;
 
 			RoomProperties ["Stairs_Min"] = 1.0f;
 			RoomProperties ["Stairs_CapPerTile"] = 0;
@@ -330,6 +339,10 @@ namespace Submarine.Model {
 		private void SetRoomResoucresNeeds () {
 			RoomPropertiesReqRes = new Dictionary<RoomType,List<Resource>> ();
 
+			RoomPropertiesReqRes [RoomType.Propellor] = new List<Resource> {
+				{ new Resource (Units.pks, 20) }
+			};
+				
 			RoomPropertiesReqRes [RoomType.EngineRoom] = new List<Resource> {
 				{ new Resource (Units.liters_fuel, 100) },
 				{ new Resource (Units.Engineers, 4.0f / RoomProperties ["EngineRoom_Min"]) }
@@ -877,16 +890,18 @@ namespace Submarine.Model {
 					bool remember1found = false;
 
 					// get info of Tile North
-					checkTile = GetTileAt (x, y + 1);
-					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
-					if (foundSameCarrierType != null) {
-						remember1found = remember1found || true;
-						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-						newPiece.NeighboreCount += 1;		
-						RecalculatedNeighboreCount (checkTile);	
+					if (typeOfPiece != PieceType.Shaft) { // shaft only connects horizontal
+						checkTile = GetTileAt (x, y + 1);
+						foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
+						if (foundSameCarrierType != null) {
+							remember1found = remember1found || true;
+							AddToOrMergeCarrier (newPiece, foundSameCarrierType);
+							newPiece.NeighboreCount += 1;		
+							RecalculatedNeighboreCount (checkTile);	
+						}
 					}
-
 					// get info of Tile East
+			
 					checkTile = GetTileAt (x + 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
 					if (foundSameCarrierType != null) {
@@ -895,15 +910,18 @@ namespace Submarine.Model {
 						newPiece.NeighboreCount += 2; 
 						RecalculatedNeighboreCount (checkTile);	
 					}
+				
 
 					// get info of Tile South
-					checkTile = GetTileAt (x, y - 1);
-					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
-					if (foundSameCarrierType != null) {
-						remember1found = remember1found || true;
-						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-						newPiece.NeighboreCount += 4;
-						RecalculatedNeighboreCount (checkTile);	
+					if (typeOfPiece != PieceType.Shaft) {// shaft only connects horizontal
+						checkTile = GetTileAt (x, y - 1);
+						foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
+						if (foundSameCarrierType != null) {
+							remember1found = remember1found || true;
+							AddToOrMergeCarrier (newPiece, foundSameCarrierType);
+							newPiece.NeighboreCount += 4;
+							RecalculatedNeighboreCount (checkTile);	
+						}
 					}
 
 					// get info of Tile West
@@ -916,6 +934,7 @@ namespace Submarine.Model {
 						newPiece.NeighboreCount += 8; 
 						RecalculatedNeighboreCount (checkTile);	
 					}
+				
 
 					if (remember1found == false) { // not found in any neigbores
 						//  start a new Carrier with this piece
@@ -1032,32 +1051,34 @@ namespace Submarine.Model {
 					checkPiece.NeighboreCount = 0;
 
 					// get info of Tile North
-					checkTile = GetTileAt (x, y + 1);
-					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
-
-					if (foundSameCarrierType != null)
-						checkPiece.NeighboreCount += 1;	
-				
+					if (typeOfPiece != PieceType.Shaft) { // shaft only connects horizontal
+						checkTile = GetTileAt (x, y + 1);
+						foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+						if (foundSameCarrierType != null)
+							checkPiece.NeighboreCount += 1;	
+					}
 					// get info of Tile East
+
 					checkTile = GetTileAt (x + 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
-
 					if (foundSameCarrierType != null)
 						checkPiece.NeighboreCount += 2;
 				
 					// get info of Tile South
-					checkTile = GetTileAt (x, y - 1);
-					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
-					if (foundSameCarrierType != null)
-						checkPiece.NeighboreCount += 4;
-				
+					if (typeOfPiece != PieceType.Shaft) { // shaft only connects horizontal
+						checkTile = GetTileAt (x, y - 1);
+						foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+						if (foundSameCarrierType != null)
+							checkPiece.NeighboreCount += 4;
+					}
 					// get info of Tile West
+
 					checkTile = GetTileAt (x - 1, y);
 					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
-
 					if (foundSameCarrierType != null)
 						checkPiece.NeighboreCount += 8;
-				} 
+				
+				}
 			}
 		}
 

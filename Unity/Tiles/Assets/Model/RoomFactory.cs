@@ -38,13 +38,13 @@ namespace Submarine.Model {
 					return new EscapeHatch (type, inThisSub, getRoomProp ("EscapeHatch_Min", inThisSub), getRoomProp ("EscapeHatch_CapPerTile", inThisSub), getPropReqRes (RoomType.EscapeHatch, inThisSub));
 				case RoomType.TorpedoRoom:
 					return new TorpedoRoom (type, inThisSub, getRoomProp ("TorpedoRoom_Min", inThisSub), getRoomProp ("TorpedoRoom_CapPerTile", inThisSub), getPropReqRes (RoomType.TorpedoRoom, inThisSub));
-				
 				case RoomType.Stairs:
 					return new Stairs (type, inThisSub, getRoomProp ("Stairs_Min", inThisSub), getRoomProp ("Stairs_CapPerTile", inThisSub), getPropReqRes (RoomType.Stairs, inThisSub));
-				
 				case RoomType.BalastTank:
 					return new BalastTank (type, inThisSub, getRoomProp ("Balasttank_Min", inThisSub), getRoomProp ("Balasttank_CapPerTile", inThisSub), getPropReqRes (RoomType.BalastTank, inThisSub));
-				
+				case RoomType.Propellor:
+					return new Propellor (type, inThisSub, getRoomProp ("Propellor_Min", inThisSub), getRoomProp ("Propellor_CapPerTile", inThisSub), getPropReqRes (RoomType.Propellor, inThisSub));
+
 				case RoomType.Empty:
 					return new EmptyRoom (type, inThisSub, 0, 0, null);
 				case RoomType.Remove:

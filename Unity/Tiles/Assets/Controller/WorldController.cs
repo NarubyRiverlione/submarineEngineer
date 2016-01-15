@@ -215,6 +215,9 @@ public class WorldController : MonoBehaviour {
 				tile_renderer.sprite = Tile_Escapehatch;
 				break;
 			
+			case RoomType.Propellor:
+				tile_renderer.sprite = Tile_Bridge;
+				break;
 			case RoomType.EngineRoom:
 				tile_renderer.sprite = Tile_EngineRoom;
 				break;
