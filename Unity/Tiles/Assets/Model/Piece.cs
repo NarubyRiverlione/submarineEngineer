@@ -15,6 +15,8 @@ namespace Submarine.Model {
 
 		public Tile OnTile { get { return inSub.GetTileAt (coord.x, coord.y); } }
 
+		// don't save point to Sub but set it in Load
+		[FullSerializer.fsIgnore]
 		public Sub inSub { get; set; }
 
 		public PieceType Type { get; private set; }
@@ -124,12 +126,16 @@ namespace Submarine.Model {
 		}
 
 
-		// CONSTRUCTOR
+
+		#region CONSTRUCTOR
+
 		public Piece (PieceType typeOfPiece, Point onCoord, Sub sub) {
 			inSub = sub;
 			coord = onCoord;
 			Type = typeOfPiece;
 		}
+
+		#endregion
 
 		public void Reset () {
 			Type = PieceType.None;
@@ -155,19 +161,6 @@ namespace Submarine.Model {
 					return PieceType.None;
 			}
 		}
-		//
-		//		public static PieceType FindPieceTypeFormString (string unitAsString) {
-		//			switch (unitAsString) {
-		//				case "ChargeCable":
-		//					return PieceType.Wire;
-		//				case "FuelPipe":
-		//					return PieceType.Pipe;
-		//				case "Shaft":
-		//					return PieceType.Shaft;
-		//				default:
-		//					throw new Exception ("Unknow item type for unit: " + unitAsString);
-		//			}
-		//		}
+
 	}
 }
-

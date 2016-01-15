@@ -38,16 +38,16 @@ namespace Submarine.Model {
 		[UnityEngine.SerializeField]
 		Dictionary<int, Room> rooms;
 
-		// count of rooms
-		[fsIgnore]
-		public int AmountOfRooms {
-			get {
-				if (rooms != null)
-					return rooms.Count;
-				else
-					return 0;
-			}
-		}
+		//		// count of rooms
+		//		[fsIgnore]
+		//		public int AmountOfRooms {
+		//			get {
+		//				if (rooms != null)
+		//					return rooms.Count;
+		//				else
+		//					return 0;
+		//			}
+		//		}
 
 		// next roomID
 		[UnityEngine.SerializeField]
@@ -79,6 +79,7 @@ namespace Submarine.Model {
 		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted (); } }
 
 
+		static public int MaxPiecesOnTile = 2;
 
 		public Dictionary<int,Carrier> ResourceCarriers { get; private set; }
 
@@ -159,6 +160,9 @@ namespace Submarine.Model {
 			List<Tile> allTiles = (List<Tile>)Deserialize (typeof(List<Tile>), jsonStringOfAllTitles);
 
 			foreach (Tile addTile in allTiles) {
+				foreach (Piece piece in addTile.PiecesOnTile) {
+					piece.inSub = this;
+				}
 				_tile [addTile.X, addTile.Y] = addTile;
 			}
 
@@ -849,11 +853,18 @@ namespace Submarine.Model {
 				UnityEngine.Debug.LogError ("ERROR: cannot add an Piece on a not existing Tile");
 			}
 			else {
+				// still place on this tile for an other piece ?
 				if (onTile.FindPieceOfTypeOnTile (PieceType.None) == null) {
-					UnityEngine.Debug.Log ("Already in the " + Tile.MaxItems + " items on tile (" + x + "," + y + ")");
+					UnityEngine.Debug.Log ("Already in the " + Sub.MaxPiecesOnTile + " items on tile (" + x + "," + y + ")");
 					return;
 				}
+				// already a same piece type on this tile ?
 				PieceType typeOfPiece = Piece.FindPieceType (unitOfCarrier);
+				if (onTile.FindPieceOfTypeOnTile (typeOfPiece) != null) {
+					UnityEngine.Debug.Log ("Already a " + typeOfPiece + " piece on this tile");
+					return;
+				}
+
 				if (typeOfPiece != PieceType.None) {
 					// create new piece according unit
 					Piece newPiece = new Piece (typeOfPiece, new Point (x, y), this);
@@ -930,7 +941,7 @@ namespace Submarine.Model {
 		public void RemovePiecesFromTile (int x, int y) {
 			Tile onTile = GetTileAt (x, y);
 			if (onTile != null) {
-				for (int i = 0; i < Tile.MaxItems; i++) {
+				for (int i = 0; i < Sub.MaxPiecesOnTile; i++) {
 					Piece piece = onTile.PiecesOnTile [i];
 					// only for non-empty piece slots on tile
 					if (piece.Type != PieceType.None) {

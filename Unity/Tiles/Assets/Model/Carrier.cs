@@ -26,6 +26,8 @@ namespace Submarine.Model {
 		public List<int> connectenRoomIDs { get; private set; }
 
 
+		#region CONSTRUCTOR
+
 		public Carrier (int id, Units unit) {
 			ID = id;
 			UnitOfContent = unit;
@@ -33,18 +35,8 @@ namespace Submarine.Model {
 			connectenRoomIDs = new List<int> ();
 		}
 
-		//		static public Carrier CreateCarrier (PieceType typeOfPiece, int id) {
-		//			switch (typeOfPiece) {
-		//				case PieceType.Pipe:
-		//					return new Carrier (id, Units.liters_fuel);
-		//				case PieceType.Wire:
-		//					return new Carrier (id, Units.MWs);
-		//
-		//				default:
-		//					throw new Exception ("unknow carrier for piece type: " + typeOfPiece);
-		//			}
+		#endregion
 
-		//		}
 
 		public void WarnAllPiecesOfCarrier () {
 			foreach (Piece piece in Pieces) {
@@ -86,4 +78,3 @@ namespace Submarine.Model {
 
 	}
 }
-

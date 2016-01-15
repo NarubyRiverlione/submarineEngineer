@@ -41,16 +41,17 @@ namespace Submarine.Model {
 					TileChangedActions (this);
 			} 
 		}
-
-		static public int MaxItems = 2;
+			
 		// a Tile can contain Max items
 		private List<Piece> _piecesOnTile;
+
+		[UnityEngine.SerializeField]
 		// lazy Initialise PiecesOnTile
 		public List<Piece> PiecesOnTile { 
 			get {
 				if (_piecesOnTile == null) {
 					_piecesOnTile = new List<Piece> ();
-					for (int i = 0; i < MaxItems; i++) {
+					for (int i = 0; i < Sub.MaxPiecesOnTile; i++) {
 						_piecesOnTile.Add (new Piece (PieceType.None, _coord, null));
 					}
 				}
@@ -63,6 +64,8 @@ namespace Submarine.Model {
 
 	
 
+		#region CONSTRUCTORS
+
 		public Tile () {
 		}
 		// default constructor needs for initiating List<Tile) when loading sub
@@ -71,14 +74,19 @@ namespace Submarine.Model {
 			canContainRoom = true;
 		}
 
+		#endregion
+
 		public void Reset () {
 			RoomID = 0;
 			WallType = 0;
 
-			for (int i = 0; i < MaxItems; i++) {
+			for (int i = 0; i < Sub.MaxPiecesOnTile; i++) {
 				_piecesOnTile.Add (new Piece (PieceType.None, _coord, null));
 			}
 		}
+
+
+		#region Pieces
 
 		public void AddItem (Piece itemToAdd) {
 			// find empty piece slot
@@ -93,7 +101,7 @@ namespace Submarine.Model {
 		}
 
 		public void RemoveItem (Piece itemToRemove) {
-//			// set piece slot to none and call UI update to transparant is shown
+			//			// set piece slot to none and call UI update to transparant is shown
 			int index = PiecesOnTile.IndexOf (itemToRemove);
 			PiecesOnTile [index].Reset ();
 			// warn UI to redraw
@@ -101,12 +109,11 @@ namespace Submarine.Model {
 				TileChangedActions (this);
 		}
 
-
 		public Piece FindPieceOfTypeOnTile (PieceType type) {
 			return (Piece)PiecesOnTile.Where (p => p.Type == type).FirstOrDefault ();
 		}
 
-	
+		#endregion
 
 		public bool IsWalkable () {
 			bool walkable = true;
