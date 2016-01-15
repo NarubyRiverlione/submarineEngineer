@@ -111,7 +111,7 @@ namespace Submarine.Model {
 				if (IsConnection) {
 					Room roomOfItem = inSub.GetRoom (OnTile.RoomID);
 					if (roomOfItem == null) {
-						UnityEngine.Debug.Log ("!!!! Cannot find room of item: roomId=" + OnTile.RoomID + " disconnecting piece now");
+						//UnityEngine.Debug.Log ("!!!! Cannot find room of item: roomId=" + OnTile.RoomID + " disconnecting piece now");
 						// room doesn't exist (any more), disconnect piece
 						IsConnection = false;
 						return Units.None;

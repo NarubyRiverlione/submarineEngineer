@@ -481,6 +481,21 @@ namespace Submarine.Model {
 					newRoom.WarnTilesIfRoomLayoutValidationIsChanged (newRoomValid);  
 					// remove old room form sub											 
 					RemoveRoomFromSubmarine (oldRoomID);  
+
+
+					// rebuild carriers in this merged room
+					List<int> rebuiledCarriers = new List<int> ();// only rebuild each carrier in this room 1 time
+					// check each tile in merged room
+					foreach (var coord in newRoom.coordinatesOfTilesInRoom) {
+						Tile tileInNewRoom = GetTileAt (coord.x, coord.y);
+						// check each piec on tile
+						foreach (Piece piece in tileInNewRoom.PiecesOnTile) {
+							if (piece.Type != PieceType.None && rebuiledCarriers.Contains (piece.carrierID) == false) {	 // only rebuild each carrier in this room 1 time
+								RebuildCarrier (piece.carrierID);
+								rebuiledCarriers.Add (piece.carrierID);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -652,8 +667,6 @@ namespace Submarine.Model {
 						// rebuild room to be sure the wall type and layout is still OK
 						Room newRoom = RebuildRoom (roomID);    
 						removeFromThisRoom = null; 			// set to null be sure it isn't used anymore, the room is rebuild
-						//roomID = newRoom.RoomID; 	// get new roomID
-
 						// compare new valid layout
 						newRoom.WarnTilesIfRoomLayoutValidationIsChanged (oldRoomLayoutValid);	 
 					}
