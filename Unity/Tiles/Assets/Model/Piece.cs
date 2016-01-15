@@ -66,7 +66,8 @@ namespace Submarine.Model {
 					}
 					else {
 						//only 1 connection in same room, returns false if ther is already a connection so this is not a connection
-						if (partOfCarrier != null)
+						// don't connect not existing rooms : maybee piece is on a tile that isn't part of a room
+						if (partOfCarrier != null && OnTile.RoomID != 0)
 							_isConnection = partOfCarrier.AddConnectedRoomID (OnTile.RoomID);
 //						else
 //							_isConnection = true;
@@ -76,7 +77,7 @@ namespace Submarine.Model {
 				else {
 					_isConnection = false;
 					//  as there is only 1 connection on 1 room this was the last so remove this room as connected,
-					if (partOfCarrier != null && prev == true)
+					if (partOfCarrier != null && prev == true && OnTile.RoomID != 0)
 						partOfCarrier.RemoveConnectedRoomID (OnTile.RoomID); 
 				}
 
@@ -132,6 +133,7 @@ namespace Submarine.Model {
 
 		public void Reset () {
 			Type = PieceType.None;
+
 			carrierID = 0;
 			_isConnection = false;
 			_neigboreCount = 0;

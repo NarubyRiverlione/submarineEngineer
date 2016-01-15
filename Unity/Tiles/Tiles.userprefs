@@ -1,37 +1,23 @@
 ﻿<Properties GitUserInfo="UsingMD" StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Controller/WorldController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Sub.cs">
     <Files>
-      <File FileName="Assets/Controller/MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="449" Column="8" />
-      <File FileName="Assets/Model/Sub.cs" Line="263" Column="1" />
-      <File FileName="Assets/Model/Piece.cs" Line="129" Column="20" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="169" Column="1" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="493" Column="1" />
+      <File FileName="Assets/Model/Sub.cs" Line="519" Column="42" />
+      <File FileName="Assets/Model/Tile.cs" Line="18" Column="18" />
+      <File FileName="Assets/Model/Piece.cs" Line="134" Column="18" />
       <File FileName="Assets/Model/Carrier.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Tile.cs" Line="83" Column="31" />
-      <File FileName="Assets/Model/Room.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Resource.cs" Line="1" Column="1" />
+      <File FileName="Assets/Model/RoomFactory.cs" Line="60" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="132" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="490" column="1" />
-      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Controller/WorldController.cs" line="493" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets/Model/Resource.cs" line="39" offsetX="509" offsetY="681" expression="a" liveUpdate="False" />
     <Watch file="Assets/Model/Resource.cs" line="38" offsetX="497" offsetY="647" expression="u" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="885" offsetX="893" offsetY="6296" expression="unitOfContent" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="885" offsetX="961" offsetY="6239" expression="checkTile.X" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="885" offsetX="963" offsetY="6266" expression="checkTile.Y" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="886" offsetX="898" offsetY="6328" expression="searchPieceType" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="892" offsetX="913" offsetY="6367" expression="foundCarrier" liveUpdate="False" />
-    <Watch file="Assets/Controller/WorldController.cs" line="436" offsetX="837" offsetY="4317" expression="pipe.OnTile.X" liveUpdate="False" />
-    <Watch file="Assets/Controller/WorldController.cs" line="436" offsetX="849" offsetY="4351" expression="pipe.OnTile.Y" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="515" offsetX="829" offsetY="2499" expression="rebuildTile.PiecesOnTile" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="905" offsetX="666" offsetY="5008" expression="x" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="905" offsetX="805" offsetY="5009" expression="y" liveUpdate="False" />
-    <Watch file="Assets/Model/Sub.cs" line="499" offsetX="950" offsetY="3002" expression="remeberPieces" liveUpdate="False" />
     <Watch file="Assets/Model/Piece.cs" line="71" offsetX="1012" offsetY="1190" expression="_isConnection" liveUpdate="False" />
     <Watch file="Assets/Model/Piece.cs" line="62" offsetX="1012" offsetY="1158" expression="prev" liveUpdate="False" />
     <Watch file="Assets/Model/Piece.cs" line="14" offsetX="934" offsetY="1089" expression="this.coord.x" liveUpdate="False" />
@@ -43,5 +29,9 @@
     <Watch file="Assets/Model/Carrier.cs" line="18" offsetX="692" offsetY="297" expression="piece.Input" liveUpdate="False" />
     <Watch file="Assets/Model/Carrier.cs" line="7" offsetX="713" offsetY="162" expression="this.ID" liveUpdate="False" />
     <Watch file="Assets/Model/Tile.cs" line="24" offsetX="472" offsetY="367" expression="value" liveUpdate="False" />
+    <Watch file="Assets/Model/Sub.cs" line="956" offsetX="861" offsetY="3333" expression="piece.Type" liveUpdate="False" />
+    <Watch file="Assets/Model/Sub.cs" line="957" offsetX="1071" offsetY="3334" expression="piece.carrierID" liveUpdate="False" />
+    <Watch file="Assets/Controller/WorldController.cs" line="358" offsetX="791" offsetY="3724" expression="namePiece_obj" liveUpdate="False" />
+    <Watch file="Assets/Controller/WorldController.cs" line="492" offsetX="938" offsetY="3770" expression="piece.Type" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

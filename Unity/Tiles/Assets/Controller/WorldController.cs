@@ -394,6 +394,10 @@ public class WorldController : MonoBehaviour {
 					case Units.MWs:
 						render.sprite = CableSpriteSheet [piece.NeighboreCount];
 						break;
+					default:
+						render.sprite = Tile_Transparent;
+						break;
+
 				}
 				// show above Title = on the Pieces sorting layer  						
 				render.sortingLayerName = "Pieces";

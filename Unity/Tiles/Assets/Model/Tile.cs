@@ -15,7 +15,7 @@ namespace Submarine.Model {
 		// functions can registered via this Action to be informed when tile is changed
 		public Action<Tile> TileChangedActions { get; set; }
 
-		int _roomID;
+		int _roomID = 0;
 
 		[UnityEngine.SerializeField]
 		public int RoomID {
@@ -30,7 +30,7 @@ namespace Submarine.Model {
 		// used to exclude Tiles that are outside the outline of the sub
 		public bool canContainRoom { get; set; }
 
-		int _wallType;
+		int _wallType = 0;
 
 		[UnityEngine.SerializeField]
 		public int WallType { 
@@ -44,7 +44,22 @@ namespace Submarine.Model {
 
 		static public int MaxItems = 2;
 		// a Tile can contain Max items
-		public List<Piece> PiecesOnTile { get; private set; }
+		private List<Piece> _piecesOnTile;
+		// lazy Initialise PiecesOnTile
+		public List<Piece> PiecesOnTile { 
+			get {
+				if (_piecesOnTile == null) {
+					_piecesOnTile = new List<Piece> ();
+					for (int i = 0; i < MaxItems; i++) {
+						_piecesOnTile.Add (new Piece (PieceType.None, _coord, null));
+					}
+				}
+				return _piecesOnTile;
+			} 
+			private set {
+				_piecesOnTile = value;
+			}
+		}
 
 	
 
@@ -53,38 +68,42 @@ namespace Submarine.Model {
 		// default constructor needs for initiating List<Tile) when loading sub
 		public Tile (int x, int y) {
 			_coord = new Point (x, y);
-			Reset ();
 			canContainRoom = true;
-			PiecesOnTile = new List<Piece> ();
 		}
 
 		public void Reset () {
 			RoomID = 0;
 			WallType = 0;
 
+			for (int i = 0; i < MaxItems; i++) {
+				_piecesOnTile.Add (new Piece (PieceType.None, _coord, null));
+			}
 		}
 
 		public void AddItem (Piece itemToAdd) {
-			// a Tile can contain MaxItems and only 1 of the same type (no 2 Pipes in 1 tile)
-			// count amount of not-none items
-			int amountOfItems = PiecesOnTile.Where (p => p.Type != PieceType.None).Count ();
-			if (amountOfItems < MaxItems && FindPieceOfTypeOnTile (itemToAdd.Type) == null) {
-				PiecesOnTile.Add (itemToAdd);
-				// don't redraw Tile now, do it via the piece.carrierID so its sure all needed info is in the piece
+			// find empty piece slot
+			if (FindPieceOfTypeOnTile (PieceType.None) == null) {
+				UnityEngine.Debug.Log ("No more free space on tile (" + X + ", " + Y + ") for piece");
+			}
+			else {
+				// get index of empty slot and fill it with new piece
+				int index = PiecesOnTile.FindIndex (p => p.Type == PieceType.None);
+				PiecesOnTile [index] = itemToAdd;
 			}
 		}
 
 		public void RemoveItem (Piece itemToRemove) {
-			// set "empty" piece slot to none to UI can draw a transparant
-			Piece findPiece = PiecesOnTile.Where (p => p == itemToRemove).FirstOrDefault ();
-			findPiece.Reset ();
-
-			if (TileChangedActions != null)
+//			// set piece slot to none and call UI update to transparant is shown
+			int index = PiecesOnTile.IndexOf (itemToRemove);
+			PiecesOnTile [index].Reset ();
+			// warn UI to redraw
+			if (TileChangedActions != null) // call all the registered callbacks
 				TileChangedActions (this);
 		}
 
+
 		public Piece FindPieceOfTypeOnTile (PieceType type) {
-			return PiecesOnTile.Where (p => p.Type == type).FirstOrDefault ();
+			return (Piece)PiecesOnTile.Where (p => p.Type == type).FirstOrDefault ();
 		}
 
 	

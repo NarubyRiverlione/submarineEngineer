@@ -499,9 +499,10 @@ namespace Submarine.Model {
 				foreach (Point coordTeRemove in remeberCoordinatesOfTiles) {
 					Tile rebuildTile = GetTileAt (coordTeRemove.x, coordTeRemove.y);
 					foreach (Piece piece in rebuildTile.PiecesOnTile) {
-						remeberPieces.Add (piece);
+						if (piece.Type != PieceType.None)
+							remeberPieces.Add (piece);
 					}
-					rebuildTile.Reset ();	// also destroys all pieces on tile, rebuild carrier when done !
+					rebuildTile.Reset ();	// also reset all pieces on tile, rebuild carrier when done !
 				}
 
 				// remove the room so it can be rebuild
@@ -835,7 +836,7 @@ namespace Submarine.Model {
 				UnityEngine.Debug.LogError ("ERROR: cannot add an Piece on a not existing Tile");
 			}
 			else {
-				if (onTile.PiecesOnTile.Count == Tile.MaxItems) {
+				if (onTile.FindPieceOfTypeOnTile (PieceType.None) == null) {
 					UnityEngine.Debug.Log ("Already in the " + Tile.MaxItems + " items on tile (" + x + "," + y + ")");
 					return;
 				}
@@ -915,24 +916,23 @@ namespace Submarine.Model {
 
 		public void RemovePiecesFromTile (int x, int y) {
 			Tile onTile = GetTileAt (x, y);
-			if (onTile != null && onTile.PiecesOnTile.Count > 0) {
-				do {
-					Piece piece = onTile.PiecesOnTile.First ();
-					int oldCarrierID = piece.carrierID;
-					;
-					// remove piece form carrier
-					ResourceCarriers [piece.carrierID].RemovePiece (piece); 	
-					// remove piece form tile
-					onTile.RemoveItem (piece);					
+			if (onTile != null) {
+				for (int i = 0; i < Tile.MaxItems; i++) {
+					Piece piece = onTile.PiecesOnTile [i];
+					// only for non-empty piece slots on tile
+					if (piece.Type != PieceType.None) {
+						int oldCarrierID = piece.carrierID;
+						// remove piece from carrier
+						ResourceCarriers [piece.carrierID].RemovePiece (piece); 	
+						// remove piece from tile while be done in rebuild carrier
+						onTile.RemoveItem (piece);					
 
-					// rebuild carrier, can be split now into 2 not connected carriers
-					RebuildCarrier (oldCarrierID);
-
+						// rebuild carrier, can be split now into 2 not connected carriers
+						RebuildCarrier (oldCarrierID);
+					}
 				}
-				while (onTile.PiecesOnTile.Count > 1);
+
 			}
-
-
 		}
 
 		private void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
@@ -953,12 +953,13 @@ namespace Submarine.Model {
 			if (checkTile != null) {
 				//	PieceType searchPieceType = Piece.FindPieceType (unitOfContent);
 				foreach (Piece piece in checkTile.PiecesOnTile) {
-					Carrier carrierOfpiece = ResourceCarriers [piece.carrierID];// get carrier of found piece
-					if (carrierOfpiece.UnitOfContent == findUnitOfCarrier)		// found same carrier type
+					if (piece.Type != PieceType.None) {
+						Carrier carrierOfpiece = ResourceCarriers [piece.carrierID];// get carrier of found piece
+						if (carrierOfpiece.UnitOfContent == findUnitOfCarrier)		// found same carrier type
 						foundCarrier = carrierOfpiece; 
+					}
 				}
 			}
-			
 			return foundCarrier;
 		}
 
@@ -994,42 +995,45 @@ namespace Submarine.Model {
 
 		private void RecalculatedNeighboreCount (Tile checkTile) {
 			foreach (Piece checkPiece in checkTile.PiecesOnTile) {
-				int x = checkPiece.coord.x;
-				int y = checkPiece.coord.y;
 				PieceType typeOfPiece = checkPiece.Type;
-				Carrier carrierOfpiece = ResourceCarriers [checkPiece.carrierID];
+				// only check not-empty piece slots on a tile
+				if (typeOfPiece != PieceType.None) {
+					int x = checkPiece.coord.x;
+					int y = checkPiece.coord.y;
 
-				Carrier foundSameCarrierType;
-				// reset count
-				checkPiece.NeighboreCount = 0;
+					Carrier carrierOfpiece = ResourceCarriers [checkPiece.carrierID];
 
-				// get info of Tile North
-				checkTile = GetTileAt (x, y + 1);
-				foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+					Carrier foundSameCarrierType;
+					// reset count
+					checkPiece.NeighboreCount = 0;
 
-				if (foundSameCarrierType != null)
-					checkPiece.NeighboreCount += 1;	
+					// get info of Tile North
+					checkTile = GetTileAt (x, y + 1);
+					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+
+					if (foundSameCarrierType != null)
+						checkPiece.NeighboreCount += 1;	
 				
-				// get info of Tile East
-				checkTile = GetTileAt (x + 1, y);
-				foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+					// get info of Tile East
+					checkTile = GetTileAt (x + 1, y);
+					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
 
-				if (foundSameCarrierType != null)
-					checkPiece.NeighboreCount += 2;
+					if (foundSameCarrierType != null)
+						checkPiece.NeighboreCount += 2;
 				
-				// get info of Tile South
-				checkTile = GetTileAt (x, y - 1);
-				foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
-				if (foundSameCarrierType != null)
-					checkPiece.NeighboreCount += 4;
+					// get info of Tile South
+					checkTile = GetTileAt (x, y - 1);
+					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+					if (foundSameCarrierType != null)
+						checkPiece.NeighboreCount += 4;
 				
-				// get info of Tile West
-				checkTile = GetTileAt (x - 1, y);
-				foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
+					// get info of Tile West
+					checkTile = GetTileAt (x - 1, y);
+					foundSameCarrierType = GetSameNeighboreCarrier (carrierOfpiece.UnitOfContent, checkTile);
 
-				if (foundSameCarrierType != null)
-					checkPiece.NeighboreCount += 8;
-				
+					if (foundSameCarrierType != null)
+						checkPiece.NeighboreCount += 8;
+				} 
 			}
 		}
 
@@ -1048,8 +1052,7 @@ namespace Submarine.Model {
 
 					// remove pieces in the old carrier (does also reset tile)
 					foreach (Piece piece in rememberPieces) {
-						piece.NeighboreCount = 0;
-						piece.carrierID = 0;
+						
 						Tile onTile = GetTileAt (piece.coord.x, piece.coord.y);
 						onTile.RemoveItem (piece); // remove form tile
 					}

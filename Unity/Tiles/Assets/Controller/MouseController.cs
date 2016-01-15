@@ -187,7 +187,7 @@ public class MouseController : MonoBehaviour {
 			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
 		}
 		foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
-			if (piece != null) {
+			if (piece.Type != PieceType.None) {
 				Carrier partOfCarrier = world.mySub.ResourceCarriers [piece.carrierID];
 				string connectedString = piece.IsConnection ? " IS " : " is NOT ";
 				string inputString = piece.Input == 0 ? " has NO input " : " has " + piece.Input + " " + piece.UnitOfContent + " input";
