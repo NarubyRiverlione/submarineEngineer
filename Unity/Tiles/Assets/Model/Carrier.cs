@@ -23,7 +23,7 @@ namespace Submarine.Model {
 
 		public Units UnitOfContent { get; private set; }
 
-		public List<int> connectenRoomIDs { get; private set; }
+		public List<int> connectedRoomIDs { get; private set; }
 
 
 		#region CONSTRUCTOR
@@ -32,7 +32,7 @@ namespace Submarine.Model {
 			ID = id;
 			UnitOfContent = unit;
 			Pieces = new List<Piece> ();
-			connectenRoomIDs = new List<int> ();
+			connectedRoomIDs = new List<int> ();
 		}
 
 		#endregion
@@ -59,19 +59,19 @@ namespace Submarine.Model {
 		}
 
 		public bool AddConnectedRoomID (int newRoomID) {
-			if (connectenRoomIDs.Contains (newRoomID)) {
+			if (connectedRoomIDs.Contains (newRoomID)) {
 				//UnityEngine.Debug.Log ("Room " + newRoomID + "already connected to carrier " + ID);
 				return false;
 			}
 			else {
-				connectenRoomIDs.Add (newRoomID);
+				connectedRoomIDs.Add (newRoomID);
 				return true;
 			}
 		}
 
 		public bool RemoveConnectedRoomID (int newRoomID) {
-			if (connectenRoomIDs.Contains (newRoomID)) {
-				connectenRoomIDs.Remove (newRoomID);
+			if (connectedRoomIDs.Contains (newRoomID)) {
+				connectedRoomIDs.Remove (newRoomID);
 				return true;
 			}
 			else {

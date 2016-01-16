@@ -467,7 +467,6 @@ public class WorldController : MonoBehaviour {
 
 				// this update Tile will be called when adding an pipe too the title, before the pipe is added to a carrier
 				if (carrierOfPiece.Content > 0) {
-
 					switch (carrierOfPiece.UnitOfContent) {
 						case Units.liters_fuel:
 							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];

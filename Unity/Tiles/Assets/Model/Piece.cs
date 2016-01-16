@@ -89,9 +89,6 @@ namespace Submarine.Model {
 			}
 		}
 
-		// only if an item is connected to a Room it can have input
-		//		[UnityEngine.SerializeField]
-		//		int _prevInput = 0;
 
 		public int Input {
 			get {
@@ -100,10 +97,7 @@ namespace Submarine.Model {
 					Room roomOfItem = inSub.GetRoom (OnTile.RoomID);
 					if (roomOfItem != null) // carrier can pass through tile that isn't part of a room
 					newInput = roomOfItem.Output;
-//					if (_prevInput != newInput)
-//						partOfCarrier.WarnAllPiecesOfCarrier (); // input changed, warn all pieces
 				}
-				//_prevInput = newInput;
 				return newInput;
 			}
 		}
@@ -119,7 +113,6 @@ namespace Submarine.Model {
 						return Units.None;
 					}
 					return roomOfItem.UnitOfOutput;
-
 				}
 				return Units.None;
 			}

@@ -78,13 +78,38 @@ namespace Submarine.Model {
 			} 
 		}
 
-		// only output is layout is valid and all resources are available
+		private int _output = 0;
+		// only output if layout is valid and all resources are available
 		public int Output { 
-			get { 
+			get {
+				int newOutput = 0;
 				if (IsLayoutValid && ResourcesAvailable)
-					return OutputCapacity;
-				else
-					return 0;
+					newOutput = OutputCapacity;
+				
+				// output has changed -> warn all pieces of each carrier that ... in this room 
+				if (newOutput != _output) {
+					_output = newOutput;
+					List<int> rebuildedCarriers = new List<int> ();
+
+					foreach (Point coord in coordinatesOfTilesInRoom) {
+						Tile checkTile = inSub.GetTileAt (coord.x, coord.y);
+						foreach (Piece checkPiece in checkTile.PiecesOnTile) {
+							int checkCarrier = checkPiece.carrierID;
+							if (checkCarrier != 0 && rebuildedCarriers.Contains (checkCarrier) == false) {
+								// warn pieces only if there aren't warn't already (carrierID is in rebuilded carriers)
+								// and the output of the room is the unit that this carrier needs (else called also if needed room hasn't needed resources)
+								if (inSub.ResourceCarriers [checkCarrier].UnitOfContent == UnitOfOutput) {
+									UnityEngine.Debug.Log ("Carrier " + checkCarrier + " should be redraw because output of room " + RoomID + " has changed to " + _output);
+									rebuildedCarriers.Add (checkCarrier);
+									inSub.ResourceCarriers [checkCarrier].WarnAllPiecesOfCarrier ();
+								}
+							}
+						}
+					}
+				}
+					
+
+				return _output;
 			}
 		}
 
@@ -151,6 +176,7 @@ namespace Submarine.Model {
 			if (oldRoomLayoutValid != IsLayoutValid) {
 				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
 				WarnTilesOfChange ();
+
 			}				
 		}
 
@@ -162,8 +188,13 @@ namespace Submarine.Model {
 				if (warnTile.RoomID != RoomID)
 					UnityEngine.Debug.LogError ("I don't belong here !!");
 				#endif
+
+
+
 				if (warnTile.TileChangedActions != null)
 					warnTile.TileChangedActions (warnTile);
+
+
 				#if DEBUG
 				else //TODO: check can be remove
 					UnityEngine.Debug.Log ("No action for " + coord.x + "," + coord.y + " room id " + warnTile.RoomID);

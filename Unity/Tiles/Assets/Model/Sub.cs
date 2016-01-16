@@ -501,21 +501,18 @@ namespace Submarine.Model {
 
 
 					// rebuild carriers in this merged room
-					List<int> rebuiledCarriers = new List<int> ();// only rebuild each carrier in this room 1 time
+					List<int> rebuiledCarriers = new List<int> ();
 					// check each tile in merged room
 					foreach (var coord in newRoom.coordinatesOfTilesInRoom) {
 						Tile tileInNewRoom = GetTileAt (coord.x, coord.y);
-						// check each piec on tile
-						foreach (Piece piece in tileInNewRoom.PiecesOnTile) {
-							if (piece.Type != PieceType.None && rebuiledCarriers.Contains (piece.carrierID) == false) {	 // only rebuild each carrier in this room 1 time
-								RebuildCarrier (piece.carrierID);
-								rebuiledCarriers.Add (piece.carrierID);
-							}
-						}
+						// check each piece on tile
+						rebuiledCarriers = RebuildCarrierForPieces (tileInNewRoom.PiecesOnTile, rebuiledCarriers);
 					}
 				}
 			}
 		}
+
+
 
 		private Room RebuildRoom (int roomID) {
 			if (rooms.ContainsKey (roomID) == false) {
@@ -541,20 +538,12 @@ namespace Submarine.Model {
 				RemoveRoomFromSubmarine (roomID);
 
 				// rebuild room
+				List<int> rebuiledCarriers = new List<int> ();
 				foreach (Point coordToAdd in remeberCoordinatesOfTiles) {
 					Tile rebuildTile = GetTileAt (coordToAdd.x, coordToAdd.y);
 					AddTileToRoom (rebuildTile.X, rebuildTile.Y, rebuildRoomType);
+					rebuiledCarriers = RebuildCarrierForPieces (rebuildTile.PiecesOnTile, rebuiledCarriers);
 				}
-
-				// rebuild carriers in this new room
-				List<int> rebuiledCarriers = new List<int> ();
-				foreach (Piece piece in remeberPieces) {
-					if (rebuiledCarriers.Contains (piece.carrierID) == false) {	// only rebuild each carrier in this room 1 time
-						RebuildCarrier (piece.carrierID);
-						rebuiledCarriers.Add (piece.carrierID);
-					}
-				}
-
 
 				// room is rebuilt, get new roomID
 				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in sub
@@ -864,97 +853,99 @@ namespace Submarine.Model {
 			Tile onTile = GetTileAt (x, y);
 			if (onTile == null) {
 				UnityEngine.Debug.LogError ("ERROR: cannot add an Piece on a not existing Tile");
+				return;
 			}
-			else {
-				// still place on this tile for an other piece ?
-				if (onTile.FindPieceOfTypeOnTile (PieceType.None) == null) {
-					UnityEngine.Debug.Log ("Already in the " + Sub.MaxPiecesOnTile + " items on tile (" + x + "," + y + ")");
-					return;
-				}
-				// already a same piece type on this tile ?
-				PieceType typeOfPiece = Piece.FindPieceType (unitOfCarrier);
-				if (onTile.FindPieceOfTypeOnTile (typeOfPiece) != null) {
-					UnityEngine.Debug.Log ("Already a " + typeOfPiece + " piece on this tile");
-					return;
-				}
+		
+			// still place on this tile for an other piece ?
+			if (onTile.FindPieceOfTypeOnTile (PieceType.None) == null) {
+				UnityEngine.Debug.Log ("Already in the " + Sub.MaxPiecesOnTile + " items on tile (" + x + "," + y + ")");
+				return;
+			}
 
-				if (typeOfPiece != PieceType.None) {
-					// create new piece according unit
-					Piece newPiece = new Piece (typeOfPiece, new Point (x, y), this);
+			// already a same piece type on this tile ?
+			PieceType typeOfPiece = Piece.FindPieceType (unitOfCarrier);
+			if (onTile.FindPieceOfTypeOnTile (typeOfPiece) != null) {
+				UnityEngine.Debug.Log ("Already a " + typeOfPiece + " piece on this tile");
+				return;
+			}
 
-					// add to tile, will call TileChanged Action to update UI
-					onTile.AddItem (newPiece);
+			if (typeOfPiece != PieceType.None) {
+				// create new piece according unit
+				Piece newPiece = new Piece (typeOfPiece, new Point (x, y), this);
 
-					Tile checkTile;
-					Carrier foundSameCarrierType;
-					bool remember1found = false;
+				// add to tile, will call TileChanged Action to update UI
+				onTile.AddItem (newPiece);
 
-					// get info of Tile North
-					if (typeOfPiece != PieceType.Shaft) { // shaft only connects horizontal
-						checkTile = GetTileAt (x, y + 1);
-						foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
-						if (foundSameCarrierType != null) {
-							remember1found = remember1found || true;
-							AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-							newPiece.NeighboreCount += 1;		
-							RecalculatedNeighboreCount (checkTile);	
-						}
+				Tile checkTile;
+				Carrier foundSameCarrierType;
+				bool remember1found = false;
+
+				// get info of Tile North
+				if (typeOfPiece != PieceType.Shaft) { // shaft only connects horizontal
+					checkTile = GetTileAt (x, y + 1);
+					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
+					if (foundSameCarrierType != null) {
+						remember1found = remember1found || true;
+						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
+						newPiece.NeighboreCount += 1;		
+						RecalculatedNeighboreCount (checkTile);	
 					}
-					// get info of Tile East
+				}
+				// get info of Tile East
 			
-					checkTile = GetTileAt (x + 1, y);
-					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
-					if (foundSameCarrierType != null) {
-						remember1found = remember1found || true;
-						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-						newPiece.NeighboreCount += 2; 
-						RecalculatedNeighboreCount (checkTile);	
-					}
-				
-
-					// get info of Tile South
-					if (typeOfPiece != PieceType.Shaft) {// shaft only connects horizontal
-						checkTile = GetTileAt (x, y - 1);
-						foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
-						if (foundSameCarrierType != null) {
-							remember1found = remember1found || true;
-							AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-							newPiece.NeighboreCount += 4;
-							RecalculatedNeighboreCount (checkTile);	
-						}
-					}
-
-					// get info of Tile West
-					checkTile = GetTileAt (x - 1, y);
-					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
-
-					if (foundSameCarrierType != null) {
-						remember1found = remember1found || true;
-						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
-						newPiece.NeighboreCount += 8; 
-						RecalculatedNeighboreCount (checkTile);	
-					}
-				
-
-					if (remember1found == false) { // not found in any neigbores
-						//  start a new Carrier with this piece
-						Carrier newCarrier = new Carrier (_nextCarrierID, unitOfCarrier); // create concrete carrier
-						ResourceCarriers [_nextCarrierID] = newCarrier;	// add new carrier to submarine
-						newPiece.carrierID = _nextCarrierID;			// add carrier to piece
-						_nextCarrierID++;		
-					
-						newCarrier.AddPiece (newPiece);					// add piece to carrier
-						newPiece.IsConnection = true; // first piece in a carrier is always an end piece (0) so it's a connection to the room
-
-						//UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece has a " + typeOfPiece
-						//+ ", so started a new Carrier " + newCarrier.ID);
-						//+ ", wall type is " + newRoomTile.NeighboreCount);
-					}
-					// now Neighbor count and carrier ID are know draw the piece on the tile
-					if (newPiece.OnTile.TileChangedActions != null)
-						newPiece.OnTile.TileChangedActions (newPiece.OnTile);
+				checkTile = GetTileAt (x + 1, y);
+				foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
+				if (foundSameCarrierType != null) {
+					remember1found = remember1found || true;
+					AddToOrMergeCarrier (newPiece, foundSameCarrierType);
+					newPiece.NeighboreCount += 2; 
+					RecalculatedNeighboreCount (checkTile);	
 				}
+				
+
+				// get info of Tile South
+				if (typeOfPiece != PieceType.Shaft) {// shaft only connects horizontal
+					checkTile = GetTileAt (x, y - 1);
+					foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
+					if (foundSameCarrierType != null) {
+						remember1found = remember1found || true;
+						AddToOrMergeCarrier (newPiece, foundSameCarrierType);
+						newPiece.NeighboreCount += 4;
+						RecalculatedNeighboreCount (checkTile);	
+					}
+				}
+
+				// get info of Tile West
+				checkTile = GetTileAt (x - 1, y);
+				foundSameCarrierType = GetSameNeighboreCarrier (unitOfCarrier, checkTile);
+
+				if (foundSameCarrierType != null) {
+					remember1found = remember1found || true;
+					AddToOrMergeCarrier (newPiece, foundSameCarrierType);
+					newPiece.NeighboreCount += 8; 
+					RecalculatedNeighboreCount (checkTile);	
+				}
+				
+
+				if (remember1found == false) { // not found in any neigbores
+					//  start a new Carrier with this piece
+					Carrier newCarrier = new Carrier (_nextCarrierID, unitOfCarrier); // create concrete carrier
+					ResourceCarriers [_nextCarrierID] = newCarrier;	// add new carrier to submarine
+					newPiece.carrierID = _nextCarrierID;			// add carrier to piece
+					_nextCarrierID++;		
+					
+					newCarrier.AddPiece (newPiece);					// add piece to carrier
+					newPiece.IsConnection = true; // first piece in a carrier is always an end piece (0) so it's a connection to the room
+
+					//UnityEngine.Debug.Log ("Added Piece on (" + x + "," + y + "): no neighbor piece has a " + typeOfPiece
+					//+ ", so started a new Carrier " + newCarrier.ID);
+					//+ ", wall type is " + newRoomTile.NeighboreCount);
+				}
+				// now Neighbor count and carrier ID are know draw the piece on the tile
+				if (newPiece.OnTile.TileChangedActions != null)
+					newPiece.OnTile.TileChangedActions (newPiece.OnTile);
 			}
+
 		}
 
 		public void RemovePiecesFromTile (int x, int y) {
@@ -976,6 +967,18 @@ namespace Submarine.Model {
 				}
 
 			}
+		}
+
+		public List<int> RebuildCarrierForPieces (List<Piece> piecesNeedRebuild, List<int> rebuiledCarriers) {
+			// rebuild carriers in this new room
+			foreach (Piece piece in piecesNeedRebuild) {
+				if (rebuiledCarriers.Contains (piece.carrierID) == false) {
+					// only rebuild each carrier in this room 1 time
+					RebuildCarrier (piece.carrierID);
+					rebuiledCarriers.Add (piece.carrierID);
+				}
+			}
+			return rebuiledCarriers;
 		}
 
 		private void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
@@ -1084,39 +1087,41 @@ namespace Submarine.Model {
 
 		private void RebuildCarrier (int carrierID) {
 			if (ResourceCarriers.ContainsKey (carrierID) == false) {
-				UnityEngine.Debug.LogError ("ERROR: cannot rebuild a carrier that doesn't exist, carrierID:" + carrierID);
+				UnityEngine.Debug.Log ("ERROR: cannot rebuild a carrier that doesn't exist, carrierID:" + carrierID);
+				return;
 			}
-			else {
-				if (ResourceCarriers [carrierID].Pieces.Count == 0) {
-					UnityEngine.Debug.Log ("No pieces in carrier, remove carrier now");
-					ResourceCarriers.Remove (carrierID);
-				}
-				else {
-					PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
-					List<Piece> rememberPieces = ResourceCarriers [carrierID].Pieces;
+			
+			if (ResourceCarriers [carrierID].Pieces.Count == 0) {
+				UnityEngine.Debug.Log ("No pieces in carrier, remove carrier now");
+				ResourceCarriers.Remove (carrierID);
+				return;
+			}
 
-					// remove pieces in the old carrier (does also reset tile)
-					foreach (Piece piece in rememberPieces) {
+			PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
+			List<Piece> rememberPieces = ResourceCarriers [carrierID].Pieces;
+
+			// remove pieces in the old carrier (does also reset tile)
+			foreach (Piece piece in rememberPieces) {
 						
-						Tile onTile = GetTileAt (piece.coord.x, piece.coord.y);
-						onTile.RemoveItem (piece); // remove form tile
-					}
+				Tile onTile = GetTileAt (piece.coord.x, piece.coord.y);
+				onTile.RemoveItem (piece); // remove form tile
+			}
 
-					// remove the carrier so it can be rebuild
-					Carrier oldCarrier = ResourceCarriers [carrierID];
-					ResourceCarriers.Remove (oldCarrier.ID);
+			// remove the carrier so it can be rebuild
+			Carrier oldCarrier = ResourceCarriers [carrierID];
+			ResourceCarriers.Remove (oldCarrier.ID);
 
-					// rebuild carrier
-					foreach (Piece piece in rememberPieces) {
-						// re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
-						AddPieceToTile (piece.coord.x, piece.coord.y, oldCarrier.UnitOfContent);
-						if (piece.IsConnection) 
+			// rebuild carrier
+			foreach (Piece piece in rememberPieces) {
+				// re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
+				AddPieceToTile (piece.coord.x, piece.coord.y, oldCarrier.UnitOfContent);
+				if (piece.IsConnection) 
 							// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
 							AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, rebuiltPieceType);
-					}
-				}
 			}
 		}
+
+		
 
 		#endregion
 	}
