@@ -45,13 +45,17 @@ namespace Submarine.Model {
 			}
 		}
 
-		public void AddPiece (Piece pipe) {
-			Pieces.Add (pipe);
+		public void AddPiece (Piece pieceToAdd) {
+			Pieces.Add (pieceToAdd);
 		}
 
-		public void RemovePiece (Piece pipe) {
-			if (Pieces.Contains (pipe))
-				Pieces.Remove (pipe);
+		public void RemovePiece (Piece pieceToRemove) {
+			int index = Pieces.FindIndex (p => p.coord.x == pieceToRemove.coord.x && p.coord.y == pieceToRemove.coord.y);
+			if (index == -1) {
+				UnityEngine.Debug.LogError ("cannot find piece in carrier");
+				return;
+			}
+			Pieces.RemoveAt (index);
 		}
 
 		public bool AddConnectedRoomID (int newRoomID) {

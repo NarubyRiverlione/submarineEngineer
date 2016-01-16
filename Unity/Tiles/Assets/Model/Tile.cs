@@ -102,7 +102,11 @@ namespace Submarine.Model {
 
 		public void RemoveItem (Piece itemToRemove) {
 			//			// set piece slot to none and call UI update to transparant is shown
-			int index = PiecesOnTile.IndexOf (itemToRemove);
+			int index = PiecesOnTile.FindIndex (p => p.carrierID == itemToRemove.carrierID);
+			if (index == -1) {
+				UnityEngine.Debug.Log ("cannot find piece on tile to remove");
+				return;
+			}
 			PiecesOnTile [index].Reset ();
 			// warn UI to redraw
 			if (TileChangedActions != null) // call all the registered callbacks
