@@ -6,7 +6,7 @@ namespace Submarine.Model {
 
 		public override Units UnitOfOutput {
 			get {
-				return Units.MWs;
+				return Units.kW;
 			}
 		}
 

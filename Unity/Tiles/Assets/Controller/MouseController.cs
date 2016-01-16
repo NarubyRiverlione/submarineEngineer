@@ -89,8 +89,7 @@ public class MouseController : MonoBehaviour {
 					cursorRemovePieces.SetActive (false);
 				} 
 				// selected a carrier or connection to be build = show carrier building icon
-				if ((unitOfCarrierToBuild != Units.None || unitConnectionPieceToBuild != Units.None)
-				    && unitOfCarrierToBuild != Units.Remove) {
+				if (unitConnectionPieceToBuild != Units.None || unitOfCarrierToBuild != Units.Remove) {
 					cursorPiece.transform.position = spaceBelowMouseCoordinates;
 					cursorPiece.SetActive (true);
 					cursorRoomBuilder.SetActive (false);
@@ -132,7 +131,7 @@ public class MouseController : MonoBehaviour {
 					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                 
 
 				// add piece
-				if (unitOfCarrierToBuild != Units.None && unitOfCarrierToBuild != Units.Remove)
+				if (unitConnectionPieceToBuild == Units.None && unitOfCarrierToBuild != Units.Remove)
 					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, unitOfCarrierToBuild);
 				// remove piece and connection				
 				if (unitOfCarrierToBuild == Units.Remove) {

@@ -60,32 +60,34 @@ namespace Submarine.Model {
 		public bool IsConnection {
 			get{ return _isConnection; }
 			set {
-				bool prev = _isConnection;
-				if (value) {
-					if (OnTile.RoomID == 0) {
-						//UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
-						_isConnection = false;
-					}
-					else {
-						//only 1 connection in same room, returns false if ther is already a connection so this is not a connection
-						// don't connect not existing rooms : maybee piece is on a tile that isn't part of a room
-						if (partOfCarrier != null && OnTile.RoomID != 0)
-							_isConnection = partOfCarrier.AddConnectedRoomID (OnTile.RoomID);
+				//bool prev = _isConnection;
+				if (_isConnection != value) {
+					if (value) {
+						if (OnTile.RoomID == 0) {
+							//UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
+							_isConnection = false;
+						}
+						else {
+							//only 1 connection in same room, returns false if ther is already a connection so this is not a connection
+							// don't connect not existing rooms : maybee piece is on a tile that isn't part of a room
+							if (partOfCarrier != null && OnTile.RoomID != 0)
+								_isConnection = partOfCarrier.AddConnectedRoomID (OnTile.RoomID);
 //						else
 //							_isConnection = true;
+						}
 					}
-				}
 				// remove connection
 				else {
-					_isConnection = false;
-					//  as there is only 1 connection on 1 room this was the last so remove this room as connected,
-					if (partOfCarrier != null && prev == true && OnTile.RoomID != 0)
-						partOfCarrier.RemoveConnectedRoomID (OnTile.RoomID); 
-				}
+						_isConnection = false;
+						//  as there is only 1 connection on 1 room this was the last so remove this room as connected,
+						if (partOfCarrier != null && OnTile.RoomID != 0)
+							partOfCarrier.RemoveConnectedRoomID (OnTile.RoomID); 
+					}
 
-				// Warn all pieces in this carrier that connection and so content has changed
-				if (partOfCarrier != null && prev != _isConnection)
-					partOfCarrier.WarnAllPiecesOfCarrier ();
+					// Warn all pieces in this carrier that connection and so content has changed
+					if (partOfCarrier != null)
+						partOfCarrier.WarnAllPiecesOfCarrier ();
+				}
 			}
 		}
 
@@ -141,7 +143,7 @@ namespace Submarine.Model {
 
 		public static PieceType FindPieceType (Units units) {
 			switch (units) {
-				case Units.MWs:
+				case Units.kW:
 					return PieceType.Wire;
 				case Units.liters_fuel:
 					return PieceType.Pipe;
@@ -149,6 +151,8 @@ namespace Submarine.Model {
 					return PieceType.Pipe;
 				case Units.pks:
 					return PieceType.Shaft;
+				case Units.None:
+					return PieceType.None;
 				default:
 					UnityEngine.Debug.LogError ("Unknow item type for unit: " + units);
 					return PieceType.None;

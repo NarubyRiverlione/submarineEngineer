@@ -5,7 +5,7 @@ namespace Submarine.Model {
 	public enum Units {
 		kts,
 		pks,
-		MWs,
+		kW,
 		AH,
 		liters_fuel,
 		liters_pump,

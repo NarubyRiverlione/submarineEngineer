@@ -399,7 +399,7 @@ public class WorldController : MonoBehaviour {
 					case Units.pks:
 						render.sprite = piece.IsConnection ? ShaftConnection_Sprite : Shaft_Sprite;
 						break;
-					case Units.MWs:
+					case Units.kW:
 						render.sprite = piece.IsConnection ? CableConnection_Sprite : Cable_SpriteSheet [piece.NeighboreCount];
 						break;
 					case Units.None:
@@ -445,7 +445,7 @@ public class WorldController : MonoBehaviour {
 						case Units.pks:
 							renderContent.sprite = ShaftContent_Sprite;
 							break;
-						case Units.MWs:
+						case Units.kW:
 							renderContent.sprite = Electricity_SpriteSheet [piece.NeighboreCount];
 							break;
 					}

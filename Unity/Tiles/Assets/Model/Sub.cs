@@ -282,57 +282,57 @@ namespace Submarine.Model {
 			RoomProperties = new Dictionary<string, float> ();
 
 			RoomProperties ["Propellor_Min"] = 1.0f;
-			RoomProperties ["Propellor_CapPerTile"] = 0;
+			RoomProperties ["Propellor_CapPerTile"] = 12; // 12
 
 			RoomProperties ["Stairs_Min"] = 1.0f;
 			RoomProperties ["Stairs_CapPerTile"] = 0;
 
 			RoomProperties ["Balasttank_Min"] = 6.0f;
-			RoomProperties ["Balasttank_CapPerTile"] = 230;
+			RoomProperties ["Balasttank_CapPerTile"] = 230; // 1380
 
-			RoomProperties ["EngineRoom_Min"] = 12.0f;
-			RoomProperties ["EngineRoom_CapPerTile"] = 123;
+			RoomProperties ["EngineRoom_Min"] = 18.0f;
+			RoomProperties ["EngineRoom_CapPerTile"] = 123; // 1476
 
-			RoomProperties ["Generator_Min"] = 12.0f;
-			RoomProperties ["Generator_CapPerTile"] = 478;
+			RoomProperties ["Generator_Min"] = 9.0f;
+			RoomProperties ["Generator_CapPerTile"] = 478; // 5736
 					
 			RoomProperties ["Battery_Min"] = 8.0f;
-			RoomProperties ["Battery_CapPerTile"] = 5.6f;
+			RoomProperties ["Battery_CapPerTile"] = 5.6f; // 44,8
 					
 			RoomProperties ["Bridge_Min"] = 4.0f;
 			RoomProperties ["Bridge_CapPerTile"] = 0;
 
 			RoomProperties ["Gallery_Min"] = 6.0f;
-			RoomProperties ["Gallery_CapPerTile"] = 4;
+			RoomProperties ["Gallery_CapPerTile"] = 4; // 24
 					
 			RoomProperties ["Cabin_Min"] = 2.0f;
 			RoomProperties ["Cabin_CapPerTile"] = 1;
 					
 			RoomProperties ["Bunks_Min"] = 8.0f;
-			RoomProperties ["Bunks_CapPerTile"] = 1;
+			RoomProperties ["Bunks_CapPerTile"] = 1.5f; // 8
 
 			RoomProperties ["Conn_Min"] = 10.0f;
-			RoomProperties ["Conn_CapPerTile"] = 1;
+			RoomProperties ["Conn_CapPerTile"] = 1; // 10
 					
 			RoomProperties ["Sonar_Min"] = 4.0f;
-			RoomProperties ["Sonar_CapPerTile"] = 1;
+			RoomProperties ["Sonar_CapPerTile"] = 1; // 4
 					
 			RoomProperties ["RadioRoom_Min"] = 4.0f;
-			RoomProperties ["RadioRoom_CapPerTile"] = 1;
+			RoomProperties ["RadioRoom_CapPerTile"] = 1; // 4
 					
 			RoomProperties ["FuelTank_Min"] = 9.0f;
-			RoomProperties ["FuelTank_CapPerTile"] = 1000;
+			RoomProperties ["FuelTank_CapPerTile"] = 1000; // 9000
 					
 			RoomProperties ["PumpRoom_Min"] = 8.0f;
-			RoomProperties ["PumpRoom_CapPerTile"] = 1000;
+			RoomProperties ["PumpRoom_CapPerTile"] = 1000; // 8000
 					
 			RoomProperties ["StorageRoom_Min"] = 1.0f;
-			RoomProperties ["StorageRoom_CapPerTile"] = 27;
+			RoomProperties ["StorageRoom_CapPerTile"] = 27; // 27
 				
 			RoomProperties ["EscapeHatch_Min"] = 1.0f;
 			RoomProperties ["EscapeHatch_CapPerTile"] = 1;
 					
-			RoomProperties ["TorpedoRoom_Min"] = 16.0f;
+			RoomProperties ["TorpedoRoom_Min"] = 12.0f;
 			RoomProperties ["TorpedoRoom_CapPerTile"] = 1;
 		}
 
@@ -340,7 +340,7 @@ namespace Submarine.Model {
 			RoomPropertiesReqRes = new Dictionary<RoomType,List<Resource>> ();
 
 			RoomPropertiesReqRes [RoomType.Propellor] = new List<Resource> {
-				{ new Resource (Units.pks, 20) }
+				{ new Resource (Units.pks, 1120) }
 			};
 				
 			RoomPropertiesReqRes [RoomType.EngineRoom] = new List<Resource> {
@@ -349,33 +349,56 @@ namespace Submarine.Model {
 			};
 
 			RoomPropertiesReqRes [RoomType.Generator] = new List<Resource> {
-				{ new Resource (Units.pks, 107) },
+				{ new Resource (Units.pks, 107f / RoomProperties ["Generator_Min"]) },
 				{ new Resource (Units.Engineers, 2.0f / RoomProperties ["Generator_Min"]) }
 			};
-			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.MWs, 5000f / RoomProperties ["Battery_Min"]) } };
+			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.kW, 500f / RoomProperties ["Battery_Min"]) } };
 
 			RoomPropertiesReqRes [RoomType.Bridge] = new List<Resource> (); 
 			// TODO: not sure if bridge needs crew (underwater) { { new Resource (Units.Watchstanders, 2) } };
 
 			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
 				{ new Resource (Units.tins, 4.0f / RoomProperties ["Gallery_Min"]) },
-				{ new Resource (Units.Cook, 1.0f / RoomProperties ["Gallery_Min"]) }
+				{ new Resource (Units.Cook, 1.0f / RoomProperties ["Gallery_Min"]) },
+				// gallery may not need electricity because thats a resource loop:gallery needs generator needs engineers needs food needs gallery
+				//	{ new Resource (Units.kW, 10f / RoomProperties ["Gallery_Min"]) }
 			};
-			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> { { new Resource (Units.food, 2) } };
+			RoomPropertiesReqRes [RoomType.Cabin] = new List<Resource> {
+				{ new Resource (Units.food, 2.0f / RoomProperties ["Cabin_Min"]) },
+				//{ new Resource (Units.kW, 0.2f / RoomProperties ["Cabin_Min"]) }
+			};
 
-			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { { new Resource (Units.food, 8.0f / RoomProperties ["Bunks_Min"]) } };
+			RoomPropertiesReqRes [RoomType.Bunks] = new List<Resource> { 
+				{ new Resource (Units.food, 8.0f / RoomProperties ["Bunks_Min"]) },
+				//{ new Resource (Units.kW, 0.5f / RoomProperties ["Bunks_Min"]) }
+			};
 
 			RoomPropertiesReqRes [RoomType.Conn] = new List<Resource> {
 				{ new Resource (Units.Officers, 2.0f /	RoomProperties ["Conn_Min"]) },
-				{ new Resource (Units.Watchstanders, 4.0f /	RoomProperties ["Conn_Min"]) }
+				{ new Resource (Units.Watchstanders, 4.0f /	RoomProperties ["Conn_Min"]) },
+				{ new Resource (Units.kW, 5.0f / RoomProperties ["Conn_Min"]) }
 			};
-			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> { { new Resource (Units.Sonarman, 1.0f / RoomProperties ["Sonar_Min"]) } };
 
-			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { { new Resource (Units.Radioman, 1.0f / RoomProperties ["RadioRoom_Min"]) } };
+			RoomPropertiesReqRes [RoomType.Sonar] = new List<Resource> {
+				{ new Resource (Units.Sonarman, 1.0f / RoomProperties ["Sonar_Min"]) },
+				{ new Resource (Units.kW, 200.0f / RoomProperties ["Sonar_Min"]) }
+			};
+
+			RoomPropertiesReqRes [RoomType.RadioRoom] = new List<Resource> { 
+				{ new Resource (Units.Radioman, 1.0f / RoomProperties ["RadioRoom_Min"]) },
+				{ new Resource (Units.kW, 50.0f / RoomProperties ["RadioRoom_Min"]) }
+			
+			};
 	
-			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { { new Resource (Units.liters_balast, 1.0f) } };
+			RoomPropertiesReqRes [RoomType.PumpRoom] = new List<Resource> { 
+				{ new Resource (Units.liters_balast, 1.0f) },
+				{ new Resource (Units.kW, 250.0f) }
+			};
 		
-			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { { new Resource (Units.Torpedoman, 4.0f / RoomProperties ["TorpedoRoom_Min"]) } };
+			RoomPropertiesReqRes [RoomType.TorpedoRoom] = new List<Resource> { 
+				{ new Resource (Units.Torpedoman, 4.0f / RoomProperties ["TorpedoRoom_Min"]) }
+			};
+			
 
 			RoomPropertiesReqRes [RoomType.EscapeHatch] = new List<Resource> ();
 			RoomPropertiesReqRes [RoomType.Stairs] = new List<Resource> ();
@@ -867,8 +890,11 @@ namespace Submarine.Model {
 
 			// already a same piece type on this tile ?
 			PieceType typeOfPiece = Piece.FindPieceType (unitOfCarrier);
-			if (onTile.FindPieceOfTypeOnTile (typeOfPiece) != null) {
+			Piece findPiece = onTile.FindPieceOfTypeOnTile (typeOfPiece);
+			if (findPiece != null) {
 				UnityEngine.Debug.Log ("Already a " + typeOfPiece + " piece on this tile");
+				if (isConnection)  // set already existing piece no as connection
+					findPiece.IsConnection = true;
 				return;
 			}
 
@@ -948,8 +974,8 @@ namespace Submarine.Model {
 				if (newPiece.OnTile.TileChangedActions != null)
 					newPiece.OnTile.TileChangedActions (newPiece.OnTile);
 
-				// set connected if its a connection
-				newPiece.IsConnection = isConnection;
+				// set connected if its a connection (may be it's automatic a connecton so OR it with wanted isConnection)
+				newPiece.IsConnection = newPiece.IsConnection || isConnection;
 			}
 
 
@@ -1105,7 +1131,7 @@ namespace Submarine.Model {
 				return;
 			}
 
-			PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
+			//PieceType rebuiltPieceType = ResourceCarriers [carrierID].Pieces.First ().Type; // get type of carrier be looking at type of first piece in carrier
 			List<Piece> rememberPieces = ResourceCarriers [carrierID].Pieces;
 
 			// remove pieces in the old carrier (does also reset tile)
