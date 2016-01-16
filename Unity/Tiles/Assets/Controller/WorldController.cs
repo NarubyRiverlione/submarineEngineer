@@ -39,18 +39,23 @@ public class WorldController : MonoBehaviour {
 	public Sprite Waring_NoResources;
 
 	// Wall sprite sheet (private, loaded in Start)
-	Sprite[] WallSpriteSheet;
-	Sprite[] PipeSpriteSheet;
-	Sprite[] FuelSpriteSheet;
-	Sprite[] WaterSpriteSheet;
-	Sprite[] CableSpriteSheet;
-	Sprite[] ElectricitySpriteSheet;
+	Sprite[] Wall_SpriteSheet;
+	Sprite[] Pipe_SpriteSheet;
+	Sprite[] Fuel_SpriteSheet;
+	Sprite[] Water_SpriteSheet;
+	Sprite[] Cable_SpriteSheet;
+	Sprite[] Electricity_SpriteSheet;
 
-	public Sprite ShaftSprite;
-	public Sprite ShaftContentSprite;
+	public Sprite Shaft_Sprite;
+	public Sprite ShaftContent_Sprite;
 
 	// Connections
-	public Sprite Sprite_PipeConnection;
+	public Sprite PipeConnection_Sprite;
+	// connection valve
+	public Sprite CableConnection_Sprite;
+	// socket
+	public Sprite ShaftConnection_Sprite;
+	// gear
 
 	// UI Panels
 	public GameObject Panel_Resources;
@@ -73,17 +78,17 @@ public class WorldController : MonoBehaviour {
 		//Debug.Log ("Sub created with length:" + mySub.lengthOfSub + " & height " + mySub.heightOfSub);
 	
 		// loading Wall sprites from sheet
-		WallSpriteSheet = Resources.LoadAll<Sprite> ("Walls");
+		Wall_SpriteSheet = Resources.LoadAll<Sprite> ("Walls");
 		// loading Pipes sprites from sheet
-		PipeSpriteSheet = Resources.LoadAll<Sprite> ("Pipes_Empty");
+		Pipe_SpriteSheet = Resources.LoadAll<Sprite> ("Carriers/Pipes_Empty");
 		// loading Fuel sprites from sheet
-		FuelSpriteSheet = Resources.LoadAll<Sprite> ("FuelPipe_Content");
-		// TODO loading Water sprites 
-		WaterSpriteSheet = Resources.LoadAll<Sprite> ("Water_Content");
-		// TODO loading electricity
-		ElectricitySpriteSheet = Resources.LoadAll<Sprite> ("Electricity_Content");
-		// TODO loading cables
-		CableSpriteSheet = Resources.LoadAll<Sprite> ("Cables_Empty");
+		Fuel_SpriteSheet = Resources.LoadAll<Sprite> ("Carriers/FuelPipe_Content");
+		// loading Water sprites 
+		Water_SpriteSheet = Resources.LoadAll<Sprite> ("Carriers/Water_Content");
+		// loading electricity
+		Electricity_SpriteSheet = Resources.LoadAll<Sprite> ("Carriers/Electricity_Content");
+		// loading cables
+		Cable_SpriteSheet = Resources.LoadAll<Sprite> ("Carriers/Cables_Empty");
 
 		CreateAllTileGameObjects ();
 		mySub.SetOutlines (); 			// create fixed rooms (bridge), set tile outside submarine outline as unavailable
@@ -340,7 +345,7 @@ public class WorldController : MonoBehaviour {
 			SpriteRenderer tileWall_renderer = tileWall_GameObj.GetComponent<SpriteRenderer> ();
 			//set sprite from wall sprite sheet
 			//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show wall type " + showTile.WallType);
-			tileWall_renderer.sprite = WallSpriteSheet [showTile.WallType];
+			tileWall_renderer.sprite = Wall_SpriteSheet [showTile.WallType];
 			// show above Title = on the Tile_Warning sorting layer  						
 			tileWall_renderer.sortingLayerName = "Walls";
 		}
@@ -349,7 +354,7 @@ public class WorldController : MonoBehaviour {
 				SpriteRenderer tileWall_renderer = tileWall_GameObj.GetComponent<SpriteRenderer> ();
 				//set sprite from wall sprite sheet
 				//Debug.Log ("Remove all walls for  (" + showTile.X + "," + showTile.Y + ")");
-				tileWall_renderer.sprite = WallSpriteSheet [15]; // no room = no walls
+				tileWall_renderer.sprite = Wall_SpriteSheet [15]; // no room = no walls
 			}
 			
 		}
@@ -386,65 +391,28 @@ public class WorldController : MonoBehaviour {
 				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe sprite " + pipe.NeighboreCount);
 				switch (carrierOfPiece.UnitOfContent) {
 					case Units.liters_fuel:
-						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						render.sprite = piece.IsConnection ? PipeConnection_Sprite : Pipe_SpriteSheet [piece.NeighboreCount];
 						break;
 					case Units.liters_pump:
-						render.sprite = PipeSpriteSheet [piece.NeighboreCount];
+						render.sprite = piece.IsConnection ? PipeConnection_Sprite : Pipe_SpriteSheet [piece.NeighboreCount];
 						break;
 					case Units.pks:
-						render.sprite = ShaftSprite;
+						render.sprite = piece.IsConnection ? ShaftConnection_Sprite : Shaft_Sprite;
 						break;
 					case Units.MWs:
-						render.sprite = CableSpriteSheet [piece.NeighboreCount];
+						render.sprite = piece.IsConnection ? CableConnection_Sprite : Cable_SpriteSheet [piece.NeighboreCount];
+						break;
+					case Units.None:
+						render.sprite = Tile_Transparent;
 						break;
 					default:
-						render.sprite = Tile_Transparent;
+						render.sprite = Tile_Unknown;
 						break;
 
 				}
 				// show above Title = on the Pieces sorting layer  						
 				render.sortingLayerName = "Pieces";
 				render.sortingOrder = 0;
-
-
-//				//Show Connection
-//				if (pieceConnection_GameObj == null) { 
-//					// add Connection GameObject now		
-//					pieceConnection_GameObj = new GameObject ();
-//					// set name of game object to see in Hierarchy
-//					pieceConnection_GameObj.name = "PiecesConnection_" + tile_GameObj.transform.position.x + "/" + tile_GameObj.transform.position.y;
-//					// set parent of warning GameObject to the Pieces game object
-//					pieceConnection_GameObj.transform.SetParent (piece_GameObj.transform);
-//					// set X, Y of game object
-//					pieceConnection_GameObj.transform.position = new Vector2 (tile_GameObj.transform.position.x, tile_GameObj.transform.position.y);
-//					// add Sprite Renderer
-//					pieceConnection_GameObj.AddComponent<SpriteRenderer> ();
-//				}
-//				// now it's sure the PiecesConnection game object exist, update (or set) it's sprite
-//				SpriteRenderer renderConnection = pieceConnection_GameObj.GetComponent<SpriteRenderer> ();
-//				//set sprite from Pieces sprite sheet
-//				//Debug.Log ("For (" + showTile.X + "," + showTile.Y + ") show Pipe CONNECTION sprite " + pipe.IsConnection);
-//				if (piece.IsConnection) {
-//					switch (carrierOfPiece.UnitOfContent) {
-//						case Units.liters_fuel:
-//							renderConnection.sprite = Sprite_PipeConnection;
-//							break;
-//						case Units.liters_pump:
-//							renderConnection.sprite = Sprite_PipeConnection;
-//							break;
-//						case Units.pks:
-//							renderConnection.sprite = Sprite_PipeConnection;
-//							break;
-//						case Units.MWs:
-//							renderConnection.sprite = Sprite_PipeConnection;
-//							break;
-//					}
-//				}
-//				else
-//					renderConnection.sprite = Tile_Transparent;
-//				// show above piece outline & conten 					
-//				renderConnection.sortingLayerName = "Pieces";
-//				renderConnection.sortingOrder = 10;
 
 
 				//Show Content
@@ -469,17 +437,16 @@ public class WorldController : MonoBehaviour {
 				if (carrierOfPiece.Content > 0) {
 					switch (carrierOfPiece.UnitOfContent) {
 						case Units.liters_fuel:
-							renderContent.sprite = FuelSpriteSheet [piece.NeighboreCount];
+							renderContent.sprite = Fuel_SpriteSheet [piece.NeighboreCount];
 							break;
 						case Units.liters_pump:
-							//TODO: change to water content spitesheet
-							renderContent.sprite = WaterSpriteSheet [piece.NeighboreCount];
+							renderContent.sprite = Water_SpriteSheet [piece.NeighboreCount];
 							break;
 						case Units.pks:
-							renderContent.sprite = ShaftContentSprite;
+							renderContent.sprite = ShaftContent_Sprite;
 							break;
 						case Units.MWs:
-							renderContent.sprite = ElectricitySpriteSheet [piece.NeighboreCount];
+							renderContent.sprite = Electricity_SpriteSheet [piece.NeighboreCount];
 							break;
 					}
 				}

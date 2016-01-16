@@ -390,6 +390,7 @@ namespace Submarine.Model {
 
 		#region Design Validation
 
+		// check if all rooms of a RoomType produce enough output
 		private bool ValidationCriteria (RoomType checkRoomType, int minOutput = 0) {
 			int roomCount = 0, validCount = 0;
 			foreach (var roomPair in rooms) {
@@ -425,10 +426,12 @@ namespace Submarine.Model {
 			return ValidationCriteria (RoomType.TorpedoRoom);
 		}
 
-		public bool ValidatePropulsion () {	// Engine & battery must be ok
-			bool engineOk = ValidationCriteria (RoomType.EngineRoom);
+		public bool ValidatePropulsion () {	// Proppelor & battery must be ok
+			// don't check engine but propellor as this is the "end station"
+			bool propellorOk = ValidationCriteria (RoomType.Propellor);
+			//bool engineOk = ValidationCriteria (RoomType.EngineRoom);
 			bool batteryOk = ValidationCriteria (RoomType.Battery);
-			return engineOk && batteryOk;
+			return propellorOk && batteryOk;
 		}
 
 		#endregion
@@ -849,7 +852,7 @@ namespace Submarine.Model {
 
 		#region Carrier / Pieces
 
-		public void AddPieceToTile (int x, int y, Units unitOfCarrier) {
+		public void AddPieceToTile (int x, int y, Units unitOfCarrier, bool isConnection = false) {
 			Tile onTile = GetTileAt (x, y);
 			if (onTile == null) {
 				UnityEngine.Debug.LogError ("ERROR: cannot add an Piece on a not existing Tile");
@@ -944,7 +947,12 @@ namespace Submarine.Model {
 				// now Neighbor count and carrier ID are know draw the piece on the tile
 				if (newPiece.OnTile.TileChangedActions != null)
 					newPiece.OnTile.TileChangedActions (newPiece.OnTile);
+
+				// set connected if its a connection
+				newPiece.IsConnection = isConnection;
 			}
+
+
 
 		}
 
@@ -981,16 +989,16 @@ namespace Submarine.Model {
 			return rebuiledCarriers;
 		}
 
-		private void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
-			Tile onTile = GetTileAt (x, y);
-			if (onTile == null) {
-				UnityEngine.Debug.LogError ("ERROR: cannot add an connection on a not existing Tile");
-			}
-			else {
-				Piece addToPiece = onTile.FindPieceOfTypeOnTile (typeOfPiece);
-				addToPiece.IsConnection = true;
-			}
-		}
+		//		public void AddConnectionToPieceOnTile (int x, int y, PieceType typeOfPiece) {
+		//			Tile onTile = GetTileAt (x, y);
+		//			if (onTile == null) {
+		//				UnityEngine.Debug.LogError ("ERROR: cannot add an connection on a not existing Tile");
+		//			}
+		//			else {
+		//				Piece addToPiece = onTile.FindPieceOfTypeOnTile (typeOfPiece);
+		//				addToPiece.IsConnection = true;
+		//			}
+		//		}
 
 		private Carrier GetSameNeighboreCarrier (Units findUnitOfCarrier, Tile checkTile) {
 			Carrier foundCarrier = null;
@@ -1031,9 +1039,9 @@ namespace Submarine.Model {
 				piece.carrierID = newCarrier.ID;	// set other carrier in each piece
 
 				newCarrier.AddPiece (piece);		// add piece to new carrier
-				if (piece.IsConnection) 
-					// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
-					AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, piece.Type);
+//				if (piece.IsConnection) 
+//					// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
+//					AddPieceToTile (piece.coord.x, piece.coord.y, piece.Type, true);
 			}
 			ResourceCarriers.Remove (oldCarrier.ID);// delete old carrier
 			newCarrier.WarnAllPiecesOfCarrier ();	// warn pieces of merge (newly connected piece can have content now)
@@ -1114,10 +1122,10 @@ namespace Submarine.Model {
 			// rebuild carrier
 			foreach (Piece piece in rememberPieces) {
 				// re-add piece to same tile as previous (will evaluated if pieces is part of with carrierID)
-				AddPieceToTile (piece.coord.x, piece.coord.y, oldCarrier.UnitOfContent);
-				if (piece.IsConnection) 
-							// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
-							AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, rebuiltPieceType);
+				AddPieceToTile (piece.coord.x, piece.coord.y, oldCarrier.UnitOfContent, piece.IsConnection);
+//				if (piece.IsConnection) 
+//							// need to use AddConnectionToPieceOnTile to add connection to new created piece, not to the old rememberd piece
+//							AddConnectionToPieceOnTile (piece.coord.x, piece.coord.y, rebuiltPieceType);
 			}
 		}
 
