@@ -67,7 +67,7 @@ public class WorldController : MonoBehaviour {
 	public string filePath = null;
 	private bool chooseFilePathNow = false;
 	private bool Loading = false;
-	string saveDir = "Saves";
+	const string saveDir = "Saves";
 
 
 
@@ -602,7 +602,6 @@ public class WorldController : MonoBehaviour {
 
         
 		_uiFB.Open (saveDir, loading);
-		//_uiFB.FileBrowserWindow.GetComponentInParent<Image>().raycastTarget = false;
 		_uiFB.FileBrowserWindow.transform.parent.GetComponent<Image> ().raycastTarget = false;
 		chooseFilePathNow = true; 
 		Loading = loading;

@@ -26,7 +26,11 @@ namespace Submarine.Model {
 				if (inSub.ResourceCarriers.ContainsKey (carrierID))
 					return inSub.ResourceCarriers [carrierID];
 				else {
-					UnityEngine.Debug.LogError ("Carrier : " + carrierID + " unknown in sub");
+					// only error if carrierID isn't null 
+					// partOfCarrier is called when creating first piece in a carrier as this is default a connection
+					// but that first piece is at creation not yet assigned to a carrier
+					if (carrierID != 0)
+						UnityEngine.Debug.LogError ("Carrier : " + carrierID + " unknown in sub");
 					return null;
 				}
 			}
@@ -136,7 +140,7 @@ namespace Submarine.Model {
 			Type = PieceType.None;
 
 			carrierID = 0;
-			_isConnection = false;
+			//_isConnection = false;
 			_neigboreCount = 0;
 			inSub = null;
 		}

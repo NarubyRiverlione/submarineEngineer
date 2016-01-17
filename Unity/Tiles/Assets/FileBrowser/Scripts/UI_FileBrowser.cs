@@ -206,10 +206,10 @@ public class UI_FileBrowser : MonoBehaviour {
 	public void Open (string Path, bool Loading) {
 		m_pOpenedPath = null;
 		FileBrowserWindow.SetActive (true);
-        if (OpenButton != null) {
-            string textButton = Loading ? "OPEN" : "SAVE";
-            OpenButton.GetComponentInChildren<Text>().text = textButton;
-            }
+		if (OpenButton != null) {
+			string textButton = Loading ? "OPEN" : "SAVE";
+			OpenButton.GetComponentInChildren<Text> ().text = textButton;
+		}
 
 		if (Path == null || Path == string.Empty)
 			_FB.Relocate (null);
@@ -487,8 +487,8 @@ public class UI_FileBrowser : MonoBehaviour {
 
 	public void Rename () {
 		if (RenameInputField.text.Trim () != string.Empty
-			&& CurrentlySelected != null
-			&& RenameInputField.text.IndexOfAny (new char[] { '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' }) == -1) {
+		    && CurrentlySelected != null
+		    && RenameInputField.text.IndexOfAny (new char[] { '/', '\\', '?', '%', '*', ':', '|', '"', '<', '>' }) == -1) {
 			RectTransform _CurrentRect = CurrentlySelected.gameObject.GetComponent<RectTransform> ();
 			string _text = _CurrentRect.FindChild ("Text").gameObject.GetComponent<Text> ().text;
 
@@ -791,7 +791,8 @@ public class UI_FileBrowser : MonoBehaviour {
 		}
 
 		// Set default filter
-		SelectedFilter.text = "\".json\"";   //"\".*\"";
+		ChangeFilters (FiltersList [0]);
+		//SelectedFilter.text = "\".json\"";   //"\".*\"";
 	
 	}
 
@@ -910,10 +911,10 @@ public class UI_FileBrowser : MonoBehaviour {
 					// Add a button for each file
 					for (int i = 0; i < _ThumbnailsFiles.Length; i++) {
 						if (_ThumbnailsFiles [i].Extension.ToLower () == ".png"
-							|| _ThumbnailsFiles [i].Extension.ToLower () == ".jpg"
-							|| _ThumbnailsFiles [i].Extension.ToLower () == ".jpeg"
-							|| _ThumbnailsFiles [i].Extension.ToLower () == ".gif"
-							|| _ThumbnailsFiles [i].Extension.ToLower () == ".bmp") {
+						    || _ThumbnailsFiles [i].Extension.ToLower () == ".jpg"
+						    || _ThumbnailsFiles [i].Extension.ToLower () == ".jpeg"
+						    || _ThumbnailsFiles [i].Extension.ToLower () == ".gif"
+						    || _ThumbnailsFiles [i].Extension.ToLower () == ".bmp") {
 							ThumbData _data = new ThumbData ();
 							_data._fullName = _ThumbnailsFiles [i].FullName;
 							_data._name = _ThumbnailsFiles [i].Name;

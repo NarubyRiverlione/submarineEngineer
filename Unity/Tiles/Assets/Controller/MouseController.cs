@@ -190,10 +190,17 @@ public class MouseController : MonoBehaviour {
 
 	void ShowCursorInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
+
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
-			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
+			info += " part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
+			if (!room.ResourcesAvailable) {
+				foreach (var need in room.NeededResources) {
+					info += " ,needs " + need.amount + " " + need.unit;
+				}
+			}
 		}
+
 		foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
 			if (piece.Type != PieceType.None) {
 				Carrier partOfCarrier = world.mySub.ResourceCarriers [piece.carrierID];
@@ -209,13 +216,6 @@ public class MouseController : MonoBehaviour {
 				+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
 			}
 		}
-//			#if DEBUG
-//			info += "\n DEBUG:"
-//			+ " RoomID: " + tileBelowMouse.RoomID
-//			+ " wall type: " + tileBelowMouse.WallType
-//			+ " layout validate: " + room.IsLayoutValid
-		//	+ " resources available " + room.ResourcesAvailable;
-//			#endif
 
 		UI_Information_Text.text = info;
 	}

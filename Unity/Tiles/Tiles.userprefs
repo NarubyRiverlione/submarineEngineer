@@ -1,21 +1,22 @@
 ﻿<Properties GitUserInfo="UsingMD" StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Room.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Model/Tile.cs">
     <Files>
-      <File FileName="Assets/Controller/MouseController.cs" Line="135" Column="1" />
-      <File FileName="Assets/Controller/WorldController.cs" Line="373" Column="61" />
-      <File FileName="Assets/Model/Sub.cs" Line="312" Column="42" />
-      <File FileName="Assets/Model/Tile.cs" Line="1" Column="1" />
-      <File FileName="Assets/Model/Piece.cs" Line="155" Column="28" />
+      <File FileName="Assets/Controller/MouseController.cs" Line="219" Column="1" />
+      <File FileName="Assets/Controller/WorldController.cs" Line="70" Column="8" />
+      <File FileName="Assets/Model/Sub.cs" Line="1150" Column="1" />
+      <File FileName="Assets/Model/Tile.cs" Line="110" Column="25" />
+      <File FileName="Assets/Model/Piece.cs" Line="143" Column="6" />
       <File FileName="Assets/Model/Carrier.cs" Line="62" Column="1" />
-      <File FileName="Assets/Model/Room.cs" Line="104" Column="1" />
-      <File FileName="Assets/Model/Resource.cs" Line="8" Column="5" />
-      <File FileName="Assets/Model/Rooms/Generator.cs" Line="9" Column="1" />
-      <File FileName="Assets/FileBrowser/Scripts/UI_FileBrowser.cs" Line="184" Column="1" />
+      <File FileName="Assets/Model/Room.cs" Line="102" Column="12" />
+      <File FileName="Assets/Model/Resource.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Sub.cs" line="1150" column="1" />
+      <Breakpoint file="/Users/Renaat/Documents/submarineEngineer/Unity/Tiles/Assets/Model/Sub.cs" line="1143" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets/Model/Resource.cs" line="39" offsetX="509" offsetY="681" expression="a" liveUpdate="False" />
@@ -26,5 +27,9 @@
     <Watch file="Assets/Model/Tile.cs" line="106" offsetX="918" offsetY="1818" expression="index" liveUpdate="False" />
     <Watch file="Assets/Model/Room.cs" line="164" offsetX="870" offsetY="1864" expression="RoomID" liveUpdate="False" />
     <Watch file="Assets/Model/Room.cs" line="85" offsetX="829" offsetY="1427" expression="newOutput" liveUpdate="False" />
+    <Watch file="Assets/Model/Sub.cs" line="1142" offsetX="1084" offsetY="6502" expression="piece.IsConnection" liveUpdate="False" />
+    <Watch file="Assets/Model/Sub.cs" line="1142" offsetX="1076" offsetY="6455" expression="piece.coord.y" liveUpdate="False" />
+    <Watch file="Assets/Model/Sub.cs" line="1142" offsetX="1026" offsetY="6417" expression="piece.coord.x" liveUpdate="False" />
+    <Watch file="Assets/Model/Sub.cs" line="1144" offsetX="992" offsetY="6834" expression="piece.IsConnection" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

@@ -99,7 +99,7 @@ namespace Submarine.Model {
 								// warn pieces only if there aren't warn't already (carrierID is in rebuilded carriers)
 								// and the output of the room is the unit that this carrier needs (else called also if needed room hasn't needed resources)
 								if (inSub.ResourceCarriers [checkCarrier].UnitOfContent == UnitOfOutput) {
-									UnityEngine.Debug.Log ("Carrier " + checkCarrier + " should be redraw because output of room " + RoomID + " has changed to " + _output);
+									//UnityEngine.Debug.Log ("Carrier " + checkCarrier + " should be redraw because output of room " + RoomID + " has changed to " + _output);
 									rebuildedCarriers.Add (checkCarrier);
 									inSub.ResourceCarriers [checkCarrier].WarnAllPiecesOfCarrier ();
 								}
