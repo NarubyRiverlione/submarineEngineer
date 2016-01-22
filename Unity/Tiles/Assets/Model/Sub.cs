@@ -51,7 +51,7 @@ namespace Submarine.Model {
 
 
 		// List of crew
-		public List<Crew> CrewList { get; private set; }
+		public Dictionary<int,Crew> CrewList { get; private set; }
 
 		[UnityEngine.SerializeField]
 		int _nextCrewID = 1;
@@ -60,15 +60,10 @@ namespace Submarine.Model {
 
 		public int AmountOfOfficers { get { return AmountOfCrewType (Units.Officers); } }
 
-		//		// 1 cook / gallery
-		//		public int SpacesForCooks  { get { return AmountOfRoomOftype (RoomType.Gallery) - AmountOfCooks; } }
-
-		//		public int AmountOfCooks  { get { return AmountOfCrewType (Units.Cook); } }
-
 		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted (); } }
 
-
 		static public int MaxPiecesOnTile = 2;
+
 
 		public Dictionary<int,Carrier> ResourceCarriers { get; private set; }
 
@@ -214,7 +209,7 @@ namespace Submarine.Model {
 			rooms = new Dictionary<int, Room> ();
 
 			// instantiate CrewList
-			CrewList = new List<Crew> ();
+			CrewList = new Dictionary<int,Crew> ();
 
 			// instantiate ResourceCarriers
 			ResourceCarriers = new  Dictionary<int, Carrier> ();
@@ -817,13 +812,7 @@ namespace Submarine.Model {
 					AddCrewToSub (crewType);
 				}
 			}
-//			// Add cook (doesn't rest in Bunks because of loop: bunk needs food, food needs cook, cook needs bunk)
-//			if (crewType == Units.Cook) {
-//				// add only if there is enough spaces left
-//				if (SpacesForCooks > 0) {
-//					AddCrewToSub (crewType);
-//				}
-//			}
+
 			// Add normal crew (not Cooks)
 			if (Resource.isEnlisted (crewType)) {
 				// add only if there is enough spaces left (bunks have Enlisted as generic crew type)
@@ -834,29 +823,32 @@ namespace Submarine.Model {
 		}
 
 		private void AddCrewToSub (Units crewType) {
-			CrewList.Add (new Crew (crewType, _nextCrewID));
+			//TODO: logical place where new crew member starts
+			Point coord = new Point (0, 0);
+
+			CrewList [_nextCrewID] = (new Crew (crewType, this, coord));
 			_nextCrewID++;
 		}
 
-		public void RemoveCrew (Units crewType) {
+		public void RemoveCrewOfType (Units crewType) {
 			int stillCrewAboard = AmountOfCrewType (crewType);
 			if (stillCrewAboard > 0) {
-				Crew foundCrew = CrewList.Where (c => c.Type == crewType).First ();
-				CrewList.Remove (foundCrew);
+				KeyValuePair<int,Crew> crewPair = CrewList.Where (c => c.Value.Type == crewType).First ();
+				CrewList.Remove (crewPair.Key);
 			}
 		}
 
 		public int AmountOfCrewType (Units crewType) {
-			return CrewList.Where (c => c.Type == crewType).Count ();
+			return CrewList.Where (c => c.Value.Type == crewType).Count ();
 		}
 
 		public int AmountOfEnlisted () {
 			int amount = 0;
-			amount += CrewList.Where (c => c.Type == Units.Engineers).Count ();
-			amount += CrewList.Where (c => c.Type == Units.Radioman).Count ();
-			amount += CrewList.Where (c => c.Type == Units.Sonarman).Count ();
-			amount += CrewList.Where (c => c.Type == Units.Torpedoman).Count ();
-			amount += CrewList.Where (c => c.Type == Units.Watchstanders).Count ();
+			amount += CrewList.Where (c => c.Value.Type == Units.Engineers).Count ();
+			amount += CrewList.Where (c => c.Value.Type == Units.Radioman).Count ();
+			amount += CrewList.Where (c => c.Value.Type == Units.Sonarman).Count ();
+			amount += CrewList.Where (c => c.Value.Type == Units.Torpedoman).Count ();
+			amount += CrewList.Where (c => c.Value.Type == Units.Watchstanders).Count ();
 			return amount;
 		}
 
@@ -896,15 +888,16 @@ namespace Submarine.Model {
 					if (isConnection) {
 						// set piece on tile as connected
 						findPieceOnTile.SetAsConnection ();
-						// set already existing piece now as connection in carrier
-						int index = ResourceCarriers [findPieceOnTile.carrierID].Pieces.FindIndex
-							(p => p.coord.x == findPieceOnTile.coord.x && p.coord.y == findPieceOnTile.coord.y);
-						if (index != -1) {
-							ResourceCarriers [findPieceOnTile.carrierID].Pieces [index].SetAsConnection ();
-							onTile.TileChangedActions (onTile);
-						}
-						return;
+//						// set already existing piece now as connection in carrier
+//						int index = ResourceCarriers [findPieceOnTile.carrierID].Pieces.FindIndex
+//							(p => p.coord.x == findPieceOnTile.coord.x && p.coord.y == findPieceOnTile.coord.y);
+//						if (index != -1) {
+//							ResourceCarriers [findPieceOnTile.carrierID].Pieces [index].SetAsConnection ();
+//							onTile.TileChangedActions (onTile);
+//						}
+					
 					}
+					return;
 				}
 
 
@@ -955,9 +948,13 @@ namespace Submarine.Model {
 					newCarrier.AddPiece (newPiece);				
 				}
 				else {
-					// a neighbore was found, piece was added to neighbor carrier
-					if (isConnection) // check if piece is also a connection
-						newPiece.SetAsConnection ();
+					// connection is or the first piece, then it's set just above
+					// or added on an existing piece, then it's set in the check if there is a same piece type on this tile
+					// no need to set it here again
+
+//					// a neighbore was found, piece was added to neighbor carrier
+//					if (isConnection) // check if piece is also a connection
+//						newPiece.SetAsConnection ();
 				}
 
 				// now Neighbor count and carrier ID are know draw the piece on the tile

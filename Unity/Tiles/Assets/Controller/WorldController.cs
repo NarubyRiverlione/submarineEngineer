@@ -645,7 +645,7 @@ public class WorldController : MonoBehaviour {
 
 	public void RemoveCrew (string typeOfCrew) {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
-		mySub.RemoveCrew (crewType);
+		mySub.RemoveCrewOfType (crewType);
 	}
 
 }

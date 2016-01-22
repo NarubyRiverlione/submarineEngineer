@@ -54,6 +54,7 @@
      <Compile Include="Assets\FileBrowser\Test\TestInput.cs" />
      <Compile Include="Assets\Model\Carrier.cs" />
      <Compile Include="Assets\Model\Crew.cs" />
+     <Compile Include="Assets\Model\Item.cs" />
      <Compile Include="Assets\Model\Piece.cs" />
      <Compile Include="Assets\Model\Point.cs" />
      <Compile Include="Assets\Model\Resource.cs" />
