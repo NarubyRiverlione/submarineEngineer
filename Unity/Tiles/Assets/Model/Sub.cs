@@ -38,17 +38,6 @@ namespace Submarine.Model {
 		[UnityEngine.SerializeField]
 		Dictionary<int, Room> rooms;
 
-		//		// count of rooms
-		//		[fsIgnore]
-		//		public int AmountOfRooms {
-		//			get {
-		//				if (rooms != null)
-		//					return rooms.Count;
-		//				else
-		//					return 0;
-		//			}
-		//		}
-
 		// next roomID
 		[UnityEngine.SerializeField]
 		// ID 0 = no room assigned to Tile
@@ -71,10 +60,10 @@ namespace Submarine.Model {
 
 		public int AmountOfOfficers { get { return AmountOfCrewType (Units.Officers); } }
 
-		// 1 cook / gallery
-		public int SpacesForCooks  { get { return AmountOfRoomOftype (RoomType.Gallery) - AmountOfCooks; } }
+		//		// 1 cook / gallery
+		//		public int SpacesForCooks  { get { return AmountOfRoomOftype (RoomType.Gallery) - AmountOfCooks; } }
 
-		public int AmountOfCooks  { get { return AmountOfCrewType (Units.Cook); } }
+		//		public int AmountOfCooks  { get { return AmountOfCrewType (Units.Cook); } }
 
 		public int SpacesForEnlisted  { get { return GetAllOutputOfUnit (Units.Enlisted) - AmountOfEnlisted (); } }
 
@@ -340,7 +329,7 @@ namespace Submarine.Model {
 			RoomPropertiesReqRes = new Dictionary<RoomType,List<Resource>> ();
 
 			RoomPropertiesReqRes [RoomType.Propellor] = new List<Resource> {
-				{ new Resource (Units.pks, 1120) }
+				{ new Resource (Units.pks, 670) }
 			};
 				
 			RoomPropertiesReqRes [RoomType.EngineRoom] = new List<Resource> {
@@ -349,7 +338,7 @@ namespace Submarine.Model {
 			};
 
 			RoomPropertiesReqRes [RoomType.Generator] = new List<Resource> {
-				{ new Resource (Units.pks, 107f / RoomProperties ["Generator_Min"]) },
+				{ new Resource (Units.pks, 17f / RoomProperties ["Generator_Min"]) },
 				{ new Resource (Units.Engineers, 2.0f / RoomProperties ["Generator_Min"]) }
 			};
 			RoomPropertiesReqRes [RoomType.Battery] = new List<Resource> { { new Resource (Units.kW, 500f / RoomProperties ["Battery_Min"]) } };
@@ -358,8 +347,8 @@ namespace Submarine.Model {
 			// TODO: not sure if bridge needs crew (underwater) { { new Resource (Units.Watchstanders, 2) } };
 
 			RoomPropertiesReqRes [RoomType.Gallery] = new List<Resource> {
-				{ new Resource (Units.tins, 4.0f / RoomProperties ["Gallery_Min"]) },
-				{ new Resource (Units.Cook, 1.0f / RoomProperties ["Gallery_Min"]) },
+				{ new Resource (Units.tins, 16.0f / RoomProperties ["Gallery_Min"]) },
+				//{ new Resource (Units.Cook, 1.0f / RoomProperties ["Gallery_Min"]) },
 				// gallery may not need electricity because thats a resource loop:gallery needs generator needs engineers needs food needs gallery
 				//	{ new Resource (Units.kW, 10f / RoomProperties ["Gallery_Min"]) }
 			};
@@ -828,13 +817,13 @@ namespace Submarine.Model {
 					AddCrewToSub (crewType);
 				}
 			}
-			// Add cook (doesn't rest in Bunks because of loop: bunk needs food, food needs cook, cook needs bunk)
-			if (crewType == Units.Cook) {
-				// add only if there is enough spaces left
-				if (SpacesForCooks > 0) {
-					AddCrewToSub (crewType);
-				}
-			}
+//			// Add cook (doesn't rest in Bunks because of loop: bunk needs food, food needs cook, cook needs bunk)
+//			if (crewType == Units.Cook) {
+//				// add only if there is enough spaces left
+//				if (SpacesForCooks > 0) {
+//					AddCrewToSub (crewType);
+//				}
+//			}
 			// Add normal crew (not Cooks)
 			if (Resource.isEnlisted (crewType)) {
 				// add only if there is enough spaces left (bunks have Enlisted as generic crew type)
