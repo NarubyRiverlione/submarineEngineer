@@ -184,19 +184,15 @@ namespace Submarine.Model {
 			foreach (Point coord in coordinatesOfTilesInRoom) {
 				Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
 				#if DEBUG
-				//TODO: check can be remove
 				if (warnTile.RoomID != RoomID)
 					UnityEngine.Debug.LogError ("I don't belong here !!");
 				#endif
 
-
-
 				if (warnTile.TileChangedActions != null)
 					warnTile.TileChangedActions (warnTile);
 
-
-				#if DEBUG
-				else //TODO: check can be remove
+			#if DEBUG
+				else
 					UnityEngine.Debug.Log ("No action for " + coord.x + "," + coord.y + " room id " + warnTile.RoomID);
 				#endif
 			}
@@ -250,5 +246,26 @@ namespace Submarine.Model {
 			}
 			return resource;
 		}
+
+		public List<Point> lowestCoordOfRoom () {
+			List<Point> lowestPoints = new List<Point> ();
+
+			// get for each X in the room the lowest Y
+			List<int> allXinRoom = new List<int> ();
+
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				if (allXinRoom.Contains (coord.x) == false) {
+					allXinRoom.Add (coord.x); // add this X as checked
+					int lowestY = 99;
+					foreach (Point findLowestCoord in coordinatesOfTilesInRoom) {
+						if (findLowestCoord.x == coord.x)
+							lowestY = findLowestCoord.y < lowestY ? findLowestCoord.y : lowestY;
+					}
+					lowestPoints.Add (new Point (coord.x, lowestY));
+				}
+			}
+			return lowestPoints;
+		}
+
 	}
 }
