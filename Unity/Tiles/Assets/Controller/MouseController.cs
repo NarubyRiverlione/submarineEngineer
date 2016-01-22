@@ -193,9 +193,12 @@ public class MouseController : MonoBehaviour {
 
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
-			info += " part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
+			info += " part of the "	+ room.TypeOfRoom;
+			info += tileBelowMouse.Walkable ? " is WALKABLE " : " no access ";
+				
 			if (!room.ResourcesAvailable) {
 				foreach (var need in room.NeededResources) {
+
 					info += " ,needs " + need.amount + " " + need.unit;
 				}
 			}

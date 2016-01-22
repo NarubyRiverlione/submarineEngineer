@@ -116,7 +116,8 @@ namespace Submarine.Model {
 		// Some rooms cannot be access be crew (tanks)
 		public bool IsAccessable { get; protected set; }
 
-
+		// lowest coord of tile (will be walkable)
+		public List<Point> LowestCoordInRoom { get { return GetLowestCoordOfRoom (); } }
 
 		#region CONSTRUCTOR
 
@@ -159,17 +160,17 @@ namespace Submarine.Model {
 		}
 
 		public void AddTile (Tile addTile) {
-			//TilesInRoom.Add (addTile);
 			Point coord = new Point (addTile.X, addTile.Y);
 			coordinatesOfTilesInRoom.Add (coord);
+			// update lowest tiles as walkable
+			SetLowestTilesInRoomWalkable ();
 		}
 
 		public void RemoveTile (Tile removeTile) {
-			//TilesInRoom.Remove (removeTile);
 			Point coord = new Point (removeTile.X, removeTile.Y);
 			coordinatesOfTilesInRoom.Remove (coord);
-			// reset Tile (roomId, waalType,...)
-			// removeTile.Reset ();
+			// update lowest tiles as walkable
+			SetLowestTilesInRoomWalkable ();
 		}
 
 		public void WarnTilesIfRoomLayoutValidationIsChanged (bool oldRoomLayoutValid) {
@@ -247,7 +248,7 @@ namespace Submarine.Model {
 			return resource;
 		}
 
-		public List<Point> lowestCoordOfRoom () {
+		private List<Point> GetLowestCoordOfRoom () {
 			List<Point> lowestPoints = new List<Point> ();
 
 			// get for each X in the room the lowest Y
@@ -265,6 +266,37 @@ namespace Submarine.Model {
 				}
 			}
 			return lowestPoints;
+		}
+
+		public void SetLowestTilesInRoomWalkable () {
+			// reset walkable of all tiles
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				Tile tile = inSub.GetTileAt (coord.x, coord.y);
+				tile.Walkable = false;
+			}
+			if (IsAccessable == false)
+				return; // no access == all tiles of room are not walkable
+				
+			
+			if (TypeOfRoom != RoomType.Stairs) {
+				// for normal rooms:  set lowest tiles walkable (if there are no pieces on tile)
+				foreach (Point coord in LowestCoordInRoom) {
+					Tile tile = inSub.GetTileAt (coord.x, coord.y);
+					tile.Walkable = true;
+					foreach (Piece piece in tile.PiecesOnTile) {
+						if (piece.Type != PieceType.None)
+						// found a non-empty tile => no walkable
+						tile.Walkable = false;
+					}
+				}
+			}
+			else {
+				// stairs: all (horizontal and vertical) tiles all walkable
+				foreach (Point coord in coordinatesOfTilesInRoom) {
+					Tile tile = inSub.GetTileAt (coord.x, coord.y);
+					tile.Walkable = true;
+				}
+			}
 		}
 
 	}

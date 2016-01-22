@@ -158,6 +158,10 @@ namespace Submarine.Model {
 				//int roomid = roomPair.Key;
 				Room room = roomPair.Value;
 				room.inSub = this; // set ref. point too this Submarine 
+//				//TODO: remove, only for old load files
+//				#if DEBUG
+//				room.SetLowestTilesInRoomWalkable ();
+//				#endif
 			}
 
 			_nextCrewID = loadedSub._nextCrewID;

@@ -62,7 +62,7 @@ namespace Submarine.Model {
 			}
 		}
 
-	
+		public bool Walkable { get; set; }
 
 		#region CONSTRUCTORS
 
@@ -117,15 +117,18 @@ namespace Submarine.Model {
 
 		#endregion
 
-		public bool IsWalkable () {
-			bool walkable = true;
-			// tiles that hold a piece isn't walkable any more
-			if (PiecesOnTile.Count > 0)
-				walkable = false;
-
-			//TODO: only lowest Tiles of a room are walkable
-
-			return walkable;
-		}
+		//		public bool IsWalkable () {
+		//			bool walkable = true;
+		//			// tiles that hold a piece isn't walkable any more
+		//			if (PiecesOnTile.Count > 0)
+		//				walkable = false;
+		//
+		//			//TODO: only lowest Tiles of a room are walkable
+		//			if (RoomID != 0){
+		//
+		//			}
+		//
+		//			return walkable;
+		//		}
 	}
 }

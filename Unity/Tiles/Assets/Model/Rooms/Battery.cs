@@ -17,7 +17,8 @@ namespace Submarine.Model {
 
 		public Battery (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) :
 			base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
-			IsAccessable = false;
+			//TODO is battery room accessable??
+			//IsAccessable = false;
 		}
 	}
 }
