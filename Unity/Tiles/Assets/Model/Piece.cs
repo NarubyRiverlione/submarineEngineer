@@ -10,15 +10,8 @@ namespace Submarine.Model {
 
 	;
 
-	public class Piece {
-		public Point coord { get; protected set; }
-
-		public Tile OnTile { get { return inSub.GetTileAt (coord.x, coord.y); } }
-
-		// don't save point to Sub but set it in Load
-		[FullSerializer.fsIgnore]
-		public Sub inSub { get; set; }
-
+	public class Piece :Item {
+		
 		public PieceType Type { get; private set; }
 
 		Carrier partOfCarrier { 
@@ -98,9 +91,7 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Piece (PieceType typeOfPiece, Point onCoord, Sub sub) {
-			inSub = sub;
-			coord = onCoord;
+		public Piece (PieceType typeOfPiece, Point onCoord, Sub sub) : base (sub, onCoord) {
 			Type = typeOfPiece;
 		}
 
@@ -133,7 +124,6 @@ namespace Submarine.Model {
 			}
 		}
 
-
 		public void SetAsConnection () {
 			if (OnTile.RoomID == 0) {
 				//UnityEngine.Debug.Log ("Cannot connect item if tile isn't part of a room");
@@ -142,8 +132,10 @@ namespace Submarine.Model {
 			}
 			//only 1 connection in same room, returns false if ther is already a connection so this is not a connection
 			// don't connect not existing rooms : may be piece is on a tile that isn't part of a room
-			if (partOfCarrier != null && OnTile.RoomID != 0)
+			if (partOfCarrier != null && OnTile.RoomID != 0) {
 				IsConnection = partOfCarrier.AddConnectedRoomID (OnTile.RoomID);
+				partOfCarrier.WarnAllPiecesOfCarrier ();
+			}
 		}
 
 		public void RemoveConnection () {
