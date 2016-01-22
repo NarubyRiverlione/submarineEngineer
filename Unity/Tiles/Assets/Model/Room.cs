@@ -99,7 +99,7 @@ namespace Submarine.Model {
 								// warn pieces only if there aren't warn't already (carrierID is in rebuilded carriers)
 								// and the output of the room is the unit that this carrier needs (else called also if needed room hasn't needed resources)
 								if (inSub.ResourceCarriers [checkCarrier].UnitOfContent == UnitOfOutput) {
-									UnityEngine.Debug.Log ("Carrier " + checkCarrier + " should be redraw because output of room " + RoomID + " has changed to " + _output);
+									//UnityEngine.Debug.Log ("Carrier " + checkCarrier + " should be redraw because output of room " + RoomID + " has changed to " + _output);
 									rebuildedCarriers.Add (checkCarrier);
 									inSub.ResourceCarriers [checkCarrier].WarnAllPiecesOfCarrier ();
 								}
@@ -116,7 +116,8 @@ namespace Submarine.Model {
 		// Some rooms cannot be access be crew (tanks)
 		public bool IsAccessable { get; protected set; }
 
-
+		// lowest coord of tile (will be walkable)
+		public List<Point> LowestCoordInRoom { get { return GetLowestCoordOfRoom (); } }
 
 		#region CONSTRUCTOR
 
@@ -159,17 +160,17 @@ namespace Submarine.Model {
 		}
 
 		public void AddTile (Tile addTile) {
-			//TilesInRoom.Add (addTile);
 			Point coord = new Point (addTile.X, addTile.Y);
 			coordinatesOfTilesInRoom.Add (coord);
+			// update lowest tiles as walkable
+			SetLowestTilesInRoomWalkable ();
 		}
 
 		public void RemoveTile (Tile removeTile) {
-			//TilesInRoom.Remove (removeTile);
 			Point coord = new Point (removeTile.X, removeTile.Y);
 			coordinatesOfTilesInRoom.Remove (coord);
-			// reset Tile (roomId, waalType,...)
-			// removeTile.Reset ();
+			// update lowest tiles as walkable
+			SetLowestTilesInRoomWalkable ();
 		}
 
 		public void WarnTilesIfRoomLayoutValidationIsChanged (bool oldRoomLayoutValid) {
@@ -184,19 +185,15 @@ namespace Submarine.Model {
 			foreach (Point coord in coordinatesOfTilesInRoom) {
 				Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
 				#if DEBUG
-				//TODO: check can be remove
 				if (warnTile.RoomID != RoomID)
 					UnityEngine.Debug.LogError ("I don't belong here !!");
 				#endif
 
-
-
 				if (warnTile.TileChangedActions != null)
 					warnTile.TileChangedActions (warnTile);
 
-
-				#if DEBUG
-				else //TODO: check can be remove
+			#if DEBUG
+				else
 					UnityEngine.Debug.Log ("No action for " + coord.x + "," + coord.y + " room id " + warnTile.RoomID);
 				#endif
 			}
@@ -241,7 +238,7 @@ namespace Submarine.Model {
 				Tile tile = inSub.GetTileAt (coord.x, coord.y);
 				foreach (Piece piece in tile.PiecesOnTile) {
 					
-					if (piece.IsConnection) {
+					if (piece.Type != PieceType.None && piece.IsConnection) {
 						Carrier carrierInRoom = inSub.ResourceCarriers [piece.carrierID];
 						if (carrierInRoom.UnitOfContent == type)
 							resource += carrierInRoom.Content;
@@ -250,5 +247,57 @@ namespace Submarine.Model {
 			}
 			return resource;
 		}
+
+		private List<Point> GetLowestCoordOfRoom () {
+			List<Point> lowestPoints = new List<Point> ();
+
+			// get for each X in the room the lowest Y
+			List<int> allXinRoom = new List<int> ();
+
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				if (allXinRoom.Contains (coord.x) == false) {
+					allXinRoom.Add (coord.x); // add this X as checked
+					int lowestY = 99;
+					foreach (Point findLowestCoord in coordinatesOfTilesInRoom) {
+						if (findLowestCoord.x == coord.x)
+							lowestY = findLowestCoord.y < lowestY ? findLowestCoord.y : lowestY;
+					}
+					lowestPoints.Add (new Point (coord.x, lowestY));
+				}
+			}
+			return lowestPoints;
+		}
+
+		public void SetLowestTilesInRoomWalkable () {
+			// reset walkable of all tiles
+			foreach (Point coord in coordinatesOfTilesInRoom) {
+				Tile tile = inSub.GetTileAt (coord.x, coord.y);
+				tile.Walkable = false;
+			}
+			if (IsAccessable == false)
+				return; // no access == all tiles of room are not walkable
+				
+			
+			if (TypeOfRoom != RoomType.Stairs) {
+				// for normal rooms:  set lowest tiles walkable (if there are no pieces on tile)
+				foreach (Point coord in LowestCoordInRoom) {
+					Tile tile = inSub.GetTileAt (coord.x, coord.y);
+					tile.Walkable = true;
+					foreach (Piece piece in tile.PiecesOnTile) {
+						if (piece.Type != PieceType.None)
+						// found a non-empty tile => no walkable
+						tile.Walkable = false;
+					}
+				}
+			}
+			else {
+				// stairs: all (horizontal and vertical) tiles all walkable
+				foreach (Point coord in coordinatesOfTilesInRoom) {
+					Tile tile = inSub.GetTileAt (coord.x, coord.y);
+					tile.Walkable = true;
+				}
+			}
+		}
+
 	}
 }

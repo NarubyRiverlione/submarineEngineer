@@ -60,11 +60,12 @@ namespace Submarine.Model {
 
 		public bool AddConnectedRoomID (int newRoomID) {
 			if (connectedRoomIDs.Contains (newRoomID)) {
-				//UnityEngine.Debug.Log ("Room " + newRoomID + "already connected to carrier " + ID);
+				UnityEngine.Debug.Log ("Room " + newRoomID + "already connected to carrier " + ID);
 				return false;
 			}
 			else {
 				connectedRoomIDs.Add (newRoomID);
+		
 				return true;
 			}
 		}

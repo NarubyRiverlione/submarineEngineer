@@ -52,7 +52,6 @@ namespace Submarine.Model {
 
 				default:
 					throw new NotImplementedException ("ERROR: Room type " + type + "isn't implemented yet.");
-			//return null;
 			}
 		}
 

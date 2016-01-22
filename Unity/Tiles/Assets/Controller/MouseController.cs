@@ -150,7 +150,7 @@ public class MouseController : MonoBehaviour {
 	public void SetZoomLevel (int zoomLevel) {
 		if (zoomLevel == 1) {
 			//reset camera
-			Camera.main.transform.position = new Vector3 (19.5f, 4, -20); // TODO: check if this hard coded offset will work with other submarine outline images or if it needs to be set via Model
+			Camera.main.transform.position = new Vector3 (21f, 4f, -20); // TODO: check if this hard coded offset will work with other submarine outline images or if it needs to be set via Model
 			Camera.main.GetComponent<Camera> ().orthographicSize = 14;
 		}
 		else {
@@ -190,10 +190,20 @@ public class MouseController : MonoBehaviour {
 
 	void ShowCursorInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
+
 		if (tileBelowMouse.RoomID != 0) {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
-			info += " witch is part of the "	+ room.TypeOfRoom;// + "\n" + room.ValidationText;
+			info += " part of the "	+ room.TypeOfRoom;
+			info += tileBelowMouse.Walkable ? " is WALKABLE " : " no access ";
+				
+			if (!room.ResourcesAvailable) {
+				foreach (var need in room.NeededResources) {
+
+					info += " ,needs " + need.amount + " " + need.unit;
+				}
+			}
 		}
+
 		foreach (Piece piece in tileBelowMouse.PiecesOnTile) {
 			if (piece.Type != PieceType.None) {
 				Carrier partOfCarrier = world.mySub.ResourceCarriers [piece.carrierID];
@@ -209,13 +219,6 @@ public class MouseController : MonoBehaviour {
 				+ " wich is part of " + partOfCarrier.UnitOfContent + " carrier (" + partOfCarrier.ID + ")";
 			}
 		}
-//			#if DEBUG
-//			info += "\n DEBUG:"
-//			+ " RoomID: " + tileBelowMouse.RoomID
-//			+ " wall type: " + tileBelowMouse.WallType
-//			+ " layout validate: " + room.IsLayoutValid
-		//	+ " resources available " + room.ResourcesAvailable;
-//			#endif
 
 		UI_Information_Text.text = info;
 	}
@@ -262,7 +265,7 @@ public class MouseController : MonoBehaviour {
 
 	public void RemoveCrew (string typeOfCrew) {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
-		world.mySub.RemoveCrew (crewType);
+		world.mySub.RemoveCrewOfType (crewType);
 		world.UpdateUIpanels ();
 	}
 }

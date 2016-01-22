@@ -15,7 +15,7 @@ namespace Submarine.Model {
 		Enlisted,
 		// needed for generic output of Bunks
 		Engineers,
-		Cook,
+		//Cook,
 		Watchstanders,
 		Officers,
 		Sonarman,
@@ -49,7 +49,7 @@ namespace Submarine.Model {
 		}
 		// all crew types : enlisted + officers + cook
 		static public bool isCrewType (Units crewType) {
-			return isEnlisted (crewType) || crewType == Units.Officers || crewType == Units.Cook;
+			return isEnlisted (crewType) || crewType == Units.Officers;
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Submarine.Model {
 		}
 
 		public Sonar (RoomType ofThisRoomType, Sub sub, int minSize, int capPerTile, List<Resource> reqRes) : base (ofThisRoomType, sub, minSize, capPerTile, reqRes) {
-			IsAccessable = false;
+
 		}
 	}
 }

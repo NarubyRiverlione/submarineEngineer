@@ -62,7 +62,7 @@ namespace Submarine.Model {
 			}
 		}
 
-	
+		public bool Walkable { get; set; }
 
 		#region CONSTRUCTORS
 
@@ -100,17 +100,15 @@ namespace Submarine.Model {
 			}
 		}
 
-		public void RemoveItem (Piece itemToRemove) {
+		public void RemoveItem (int carrierID) {
 			//			// set piece slot to none and call UI update to transparant is shown
-			int index = PiecesOnTile.FindIndex (p => p.carrierID == itemToRemove.carrierID);
+			int index = PiecesOnTile.FindIndex (p => p.carrierID == carrierID);
 			if (index == -1) {
 				UnityEngine.Debug.Log ("cannot find piece on tile to remove");
 				return;
 			}
 			PiecesOnTile [index].Reset ();
-			// warn UI to redraw
-			if (TileChangedActions != null) // call all the registered callbacks
-				TileChangedActions (this);
+
 		}
 
 		public Piece FindPieceOfTypeOnTile (PieceType type) {
@@ -119,15 +117,18 @@ namespace Submarine.Model {
 
 		#endregion
 
-		public bool IsWalkable () {
-			bool walkable = true;
-			// tiles that hold a piece isn't walkable any more
-			if (PiecesOnTile.Count > 0)
-				walkable = false;
-
-			//TODO: only lowest Tiles of a room are walkable
-
-			return walkable;
-		}
+		//		public bool IsWalkable () {
+		//			bool walkable = true;
+		//			// tiles that hold a piece isn't walkable any more
+		//			if (PiecesOnTile.Count > 0)
+		//				walkable = false;
+		//
+		//			//TODO: only lowest Tiles of a room are walkable
+		//			if (RoomID != 0){
+		//
+		//			}
+		//
+		//			return walkable;
+		//		}
 	}
 }

@@ -67,7 +67,7 @@ public class WorldController : MonoBehaviour {
 	public string filePath = null;
 	private bool chooseFilePathNow = false;
 	private bool Loading = false;
-	string saveDir = "Saves";
+	const string saveDir = "Saves";
 
 
 
@@ -540,7 +540,7 @@ public class WorldController : MonoBehaviour {
 		if (GameObject.Find ("ScrollView_CrewButtons") != null && mySub != null) { // only when Crew panel is shown and sub is fully loaded
 			GameObject.Find ("Officer place").GetComponent<Text> ().text = mySub.SpacesForOfficers.ToString ();
 
-			GameObject.Find ("Cook place").GetComponent<Text> ().text = mySub.SpacesForCooks.ToString ();
+			//GameObject.Find ("Cook place").GetComponent<Text> ().text = mySub.SpacesForCooks.ToString ();
 
 			GameObject.Find ("SonarMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
 			GameObject.Find ("RadioMan place").GetComponent<Text> ().text = mySub.SpacesForEnlisted.ToString ();
@@ -553,8 +553,8 @@ public class WorldController : MonoBehaviour {
 			button = GameObject.Find ("Officer_+").GetComponent<Button> ();
 			button.interactable = mySub.SpacesForOfficers > 0;
 
-			button = GameObject.Find ("Cook_+").GetComponent<Button> ();
-			button.interactable = mySub.SpacesForCooks > 0;
+			//button = GameObject.Find ("Cook_+").GetComponent<Button> ();
+			//button.interactable = mySub.SpacesForCooks > 0;
 
 			button = GameObject.Find ("Engineer+").GetComponent<Button> ();
 			button.interactable = mySub.SpacesForEnlisted > 0;
@@ -571,8 +571,8 @@ public class WorldController : MonoBehaviour {
 			button = GameObject.Find ("Officer_-").GetComponent<Button> ();
 			button.interactable = mySub.AmountOfOfficers > 0;
 
-			button = GameObject.Find ("Cook_-").GetComponent<Button> ();
-			button.interactable = mySub.AmountOfCooks > 0;
+//			button = GameObject.Find ("Cook_-").GetComponent<Button> ();
+//			button.interactable = mySub.AmountOfCooks > 0;
 
 			button = GameObject.Find ("Engineer-").GetComponent<Button> ();
 			button.interactable = mySub.AmountOfEnlisted () > 0;
@@ -602,7 +602,6 @@ public class WorldController : MonoBehaviour {
 
         
 		_uiFB.Open (saveDir, loading);
-		//_uiFB.FileBrowserWindow.GetComponentInParent<Image>().raycastTarget = false;
 		_uiFB.FileBrowserWindow.transform.parent.GetComponent<Image> ().raycastTarget = false;
 		chooseFilePathNow = true; 
 		Loading = loading;
@@ -646,7 +645,7 @@ public class WorldController : MonoBehaviour {
 
 	public void RemoveCrew (string typeOfCrew) {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
-		mySub.RemoveCrew (crewType);
+		mySub.RemoveCrewOfType (crewType);
 	}
 
 }
