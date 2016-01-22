@@ -241,7 +241,7 @@ namespace Submarine.Model {
 				Tile tile = inSub.GetTileAt (coord.x, coord.y);
 				foreach (Piece piece in tile.PiecesOnTile) {
 					
-					if (piece.IsConnection) {
+					if (piece.Type != PieceType.None && piece.IsConnection) {
 						Carrier carrierInRoom = inSub.ResourceCarriers [piece.carrierID];
 						if (carrierInRoom.UnitOfContent == type)
 							resource += carrierInRoom.Content;

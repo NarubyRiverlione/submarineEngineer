@@ -100,7 +100,7 @@ namespace Submarine.Model {
 			}
 		}
 
-		public void RemoveItemInCarrier (int carrierID) {
+		public void RemoveItem (int carrierID) {
 			//			// set piece slot to none and call UI update to transparant is shown
 			int index = PiecesOnTile.FindIndex (p => p.carrierID == carrierID);
 			if (index == -1) {
@@ -108,9 +108,7 @@ namespace Submarine.Model {
 				return;
 			}
 			PiecesOnTile [index].Reset ();
-			// warn UI to redraw
-			if (TileChangedActions != null) // call all the registered callbacks
-				TileChangedActions (this);
+
 		}
 
 		public Piece FindPieceOfTypeOnTile (PieceType type) {
