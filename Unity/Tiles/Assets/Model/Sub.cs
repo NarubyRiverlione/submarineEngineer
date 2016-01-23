@@ -64,6 +64,8 @@ namespace Submarine.Model {
 
 		static public int MaxPiecesOnTile = 2;
 
+		//TODO: dummy mode for each crew member: later set via clock and multiple shifts
+		public CrewMode modeOfCrew { get; private set; }
 
 		public Dictionary<int,Carrier> ResourceCarriers { get; private set; }
 
@@ -222,6 +224,9 @@ namespace Submarine.Model {
 			SetRoomProperties ();
 			// set room resources needs
 			SetRoomResoucresNeeds ();
+
+			// set starting mode
+			modeOfCrew = CrewMode.Resting;
 		}
 
 		// set tiles around tail and tower as unavailable for building, create Tower
@@ -844,10 +849,7 @@ namespace Submarine.Model {
 		}
 
 		private void AddCrewToSub (Units crewType) {
-			//TODO: logical place where new crew member starts
-			Point coord = new Point (0, 0);
-
-			CrewList [_nextCrewID] = (new Crew (crewType, this, coord));
+			CrewList [_nextCrewID] = (new Crew (crewType, this, modeOfCrew));
 			_nextCrewID++;
 		}
 
@@ -892,6 +894,7 @@ namespace Submarine.Model {
 		}
 
 		public void SetAllCrewMode (CrewMode setMode) {
+			modeOfCrew = setMode;	// set global crew mode so if a new crewmember is recruted it's start in the current mode
 			foreach (var crewPair in CrewList) {
 				crewPair.Value.Mode = setMode;
 			}

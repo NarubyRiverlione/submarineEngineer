@@ -497,7 +497,7 @@ public class WorldController : MonoBehaviour {
 
 					// show text (available / needed)
 					Text resourceText = resourceGameObject.GetComponent<Text> ();
-					resourceText.text = outputCount.ToString () + " / " + neededCount.ToString ();
+					resourceText.text = neededCount.ToString () + " / " + outputCount.ToString ();
 					// not enough resources = show text in red
 					resourceText.color = neededCount > outputCount ? Color.red : Color.white;
 				}

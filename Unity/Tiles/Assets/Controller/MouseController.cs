@@ -162,35 +162,7 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
-	// Room buttons use this to set the room type that will be build
-	public void SetRoomTypeToBeBuild () {
-		ToggleGroup toggleGroup_Rooms = GameObject.FindWithTag ("ToggleGroup_Rooms").GetComponent<ToggleGroup> ();
-		if (toggleGroup_Rooms != null) {
-			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
-			if (activeRoomToggle != null) {
-				string nameOfRoomType = activeRoomToggle.name;
-				string typeOfRoom = nameOfRoomType.Split ('_') [2]; // Toggle_Room_xxxx
-				// set room type to be build
-				RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
-				//TODO: other way then creating a room ?
-				// create 'prototype' of room to get the validation text as validation text is set in Constructor and uses needs requirements
-				Room prototypeRoom = Room.CreateRoomOfType (RoomTypeToBeBuild, world.mySub);
-				// show building rules
-				UI_Room_Info_Text.text = prototypeRoom.ValidationText;
-			}
-		}
-	}
-	// Set piece type to be build
-	public void SetPieceUnitsToBeBuild (string unitString) {
-		unitOfCarrierToBuild = (Units)Enum.Parse (typeof(Units), unitString);
-		unitConnectionPieceToBuild = Units.None;
-	}
-	// Add connection
-	public void SetConnectionPieceUnitsToBeBuild (string unitString) {
-		unitConnectionPieceToBuild = (Units)Enum.Parse (typeof(Units), unitString);
-		unitOfCarrierToBuild = Units.None;
-	}
-
+	// show cursor text
 	void ShowCursorInformation (Tile tileBelowMouse) {
 		string info = "Above tile (" + tileBelowMouse.X + "," + tileBelowMouse.Y + ")";
 
@@ -198,11 +170,11 @@ public class MouseController : MonoBehaviour {
 			Room room = world.mySub.GetRoom (tileBelowMouse.RoomID);
 			info += " part of the "	+ room.TypeOfRoom;
 			info += tileBelowMouse.Walkable ? " is WALKABLE " : " no access ";
-				
+
 			if (!room.ResourcesAvailable) {
 				foreach (var need in room.NeededResources) {
 
-					info += " ,needs " + need.amount + " " + need.unit;
+					info += " ,needs " + (int)Math.Floor (need.amount * room.Size) + " " + need.unit;
 				}
 			}
 		}
@@ -260,18 +232,49 @@ public class MouseController : MonoBehaviour {
 		}
 	}
 
+	// Room buttons use this to set the room type that will be build
+	public void SetRoomTypeToBeBuild () {
+		ToggleGroup toggleGroup_Rooms = GameObject.FindWithTag ("ToggleGroup_Rooms").GetComponent<ToggleGroup> ();
+		if (toggleGroup_Rooms != null) {
+			Toggle activeRoomToggle = toggleGroup_Rooms.ActiveToggles ().FirstOrDefault ();
+			if (activeRoomToggle != null) {
+				string nameOfRoomType = activeRoomToggle.name;
+				string typeOfRoom = nameOfRoomType.Split ('_') [2]; // Toggle_Room_xxxx
+				// set room type to be build
+				RoomTypeToBeBuild = (RoomType)Enum.Parse (typeof(RoomType), typeOfRoom);
+				//TODO: other way then creating a room ?
+				// create 'prototype' of room to get the validation text as validation text is set in Constructor and uses needs requirements
+				Room prototypeRoom = Room.CreateRoomOfType (RoomTypeToBeBuild, world.mySub);
+				// show building rules
+				UI_Room_Info_Text.text = prototypeRoom.ValidationText;
+			}
+		}
+	}
+
+	// Set piece type to be build
+	public void SetPieceUnitsToBeBuild (string unitString) {
+		unitOfCarrierToBuild = (Units)Enum.Parse (typeof(Units), unitString);
+		unitConnectionPieceToBuild = Units.None;
+	}
+	// Add connection
+	public void SetConnectionPieceUnitsToBeBuild (string unitString) {
+		unitConnectionPieceToBuild = (Units)Enum.Parse (typeof(Units), unitString);
+		unitOfCarrierToBuild = Units.None;
+	}
+
+	// add crew of a CrewType
 	public void AddCrew (string typeOfCrew) {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
 		world.mySub.AddCrew (crewType);
 		world.UpdateUIpanels ();
 	}
-
+	// remove crew of a CrewType
 	public void RemoveCrew (string typeOfCrew) {
 		Units crewType = (Units)Enum.Parse (typeof(Units), typeOfCrew);
 		world.mySub.RemoveCrewOfType (crewType);
 		world.UpdateUIpanels ();
 	}
-
+	// Set Crew Mode
 	public void SetAllCrewMode (string crewModeString) {
 		CrewMode setMode = (CrewMode)Enum.Parse (typeof(CrewMode), crewModeString);
 		world.mySub.SetAllCrewMode (setMode);

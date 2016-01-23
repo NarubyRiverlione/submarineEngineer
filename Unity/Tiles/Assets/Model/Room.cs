@@ -244,20 +244,21 @@ namespace Submarine.Model {
 		public bool NeededCrewIsInRoom (Resource needResource) {
 			bool AllNeededCrewIsInRoom = true; 
 			int amountOfCrewInRoom = 0;
-//			// crew as needed resource, check crew coords
-//			foreach (var crewPair in inSub.CrewList) {
-//				if (crewPair.Value.Type == needResource.unit) {
-//					if (LowestCoordInRoom.Contains (crewPair.Value.coord)) {
-//						UnityEngine.Debug.Log ("Found a " + crewPair.Value.Type + " on a walkable tile in the " + TypeOfRoom + " roomID:" + RoomID);
-//						amountOfCrewInRoom++;
-//					}
-//				}
-//			}
-//			UnityEngine.Debug.Log ("Found total of " + amountOfCrewInRoom + " in the " + TypeOfRoom + " roomID:" + RoomID);
-//			amountOfCrewInRoom = inSub.AmountOfCrewType (needResource.unit);
+	
+			foreach (var crewPair in inSub.CrewList) {
+				if (crewPair.Value.Type == needResource.unit) {
+					// check coord of correct needed crewType
+					if (LowestCoordInRoom.Contains (crewPair.Value.coord)) {
+						UnityEngine.Debug.Log ("Found a " + crewPair.Value.Type + " on a walkable tile in the " + TypeOfRoom + " roomID:" + RoomID);
+						amountOfCrewInRoom++;
+					}
+				}
+			}
+			UnityEngine.Debug.Log ("Found total of " + amountOfCrewInRoom + " in the " + TypeOfRoom + " roomID:" + RoomID);
+			amountOfCrewInRoom = inSub.AmountOfCrewType (needResource.unit);
 //
 
-			amountOfCrewInRoom = inSub.AmountOfCrewType (needResource.unit);
+//			amountOfCrewInRoom = inSub.AmountOfCrewType (needResource.unit);
 
 			// now available is know check it agains needs
 			if (amountOfCrewInRoom < (int)Math.Floor (needResource.amount * Size))

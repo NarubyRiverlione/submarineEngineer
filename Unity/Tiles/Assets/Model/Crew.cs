@@ -14,7 +14,7 @@ namespace Submarine.Model {
 	public class Crew:Item {
 		public Units Type { get; set; }
 
-		private CrewMode _mode;
+		private CrewMode _mode = CrewMode.Resting;
 
 		public CrewMode Mode {
 			get{ return _mode; }
@@ -29,9 +29,11 @@ namespace Submarine.Model {
 
 		#region CONSTRUCTOR
 
-		public Crew (Units crewType, Sub sub, Point onCoord) : base (sub, onCoord) {
+		public Crew (Units crewType, Sub sub, CrewMode currentMode) : base (sub, new Point (0, 0)) { // create at dummy point, set via Mode
 			Type = crewType;
-			Mode = CrewMode.Resting;
+			inSub = sub;
+
+			Mode = currentMode; // also sets coord of crew
 		}
 
 		#endregion
@@ -43,10 +45,14 @@ namespace Submarine.Model {
 					GotoWorkFrom (oldMode);
 					break;
 				case CrewMode.Eating:
-					GotoEatingFrom (oldMode);
+					//TODO remove dummy setpoint
+					coord = new Point (0, 0);
+					//GotoEatingFrom (oldMode);
 					break;
 				case CrewMode.Resting:
-					GotoRestFrom (oldMode);
+					//TODO remove dummy setpoint
+					coord = new Point (1, 1);
+					//GotoRestFrom (oldMode);
 					break;
 				case CrewMode.Walking:
 					
@@ -56,7 +62,10 @@ namespace Submarine.Model {
 
 		private void GotoWorkFrom (CrewMode oldMode) {
 			switch (Type) {
-				case Units.Officers:
+				case Units.Officers:	
+					targetRoomType = RoomType.Conn;
+					break;
+				case Units.Watchstanders:	
 					targetRoomType = RoomType.Conn;
 					break;
 				case Units.Sonarman:
@@ -91,34 +100,30 @@ namespace Submarine.Model {
 		}
 
 		private void MoveFrom (CrewMode oldMode) {
-			UnityEngine.Debug.Log ("Move crew to a " + targetRoomType);
+			UnityEngine.Debug.Log ("Move " + Type + " to a " + targetRoomType);
 			List<int> roomIDsToGoto = inSub.GetRoomIDsForRoomType (targetRoomType);
 			if (roomIDsToGoto.Count == 0) {
 				UnityEngine.Debug.Log ("No " + targetRoomType + " found in sub. No where to go to !");
 				return;
 			}
+			foreach (int roomID in roomIDsToGoto) {
+				Room gotoRoom = inSub.GetRoom (roomID);
 
-			if (roomIDsToGoto.Count == 1) {
-				Room targetRoom = inSub.GetRoom (roomIDsToGoto [0]);
-				List<Point> walkableCoordInTargetRoom = targetRoom.LowestCoordInRoom;
-				//TODO: don't set all crew on same tile
-				Point targetCoord = walkableCoordInTargetRoom [0];
-				// TODO: don't beam me up scotty: crew needs to walk to target coord
-				coord = targetCoord;
-				UnityEngine.Debug.Log ("Crew is moved to " + coord.x + "," + coord.y + " in roomID " + targetRoom.RoomID);
-			}
-			else {
-				//TODO: multple rooms to go to ...
-				UnityEngine.Debug.Log ("Oops multiple same type of rooms to go to. Don't know witch crew should go to....");
-				foreach (int roomID in roomIDsToGoto) {
-					Room gotoRoom = inSub.GetRoom (roomID);
-					if (gotoRoom.ResourcesAvailable == false) {
-						
-					}
+				Resource crewNeed = new Resource (Type, gotoRoom.GetResouceNeeded (Type));
+
+
+				if (gotoRoom.NeededCrewIsInRoom (crewNeed) == false) {
+					List<Point> walkableCoordInTargetRoom = gotoRoom.LowestCoordInRoom;
+					//TODO: don't set all crew on same tile
+					Point targetCoord = walkableCoordInTargetRoom [0];
+					// TODO: don't beam me up scotty: crew needs to walk to target coord
+					coord = targetCoord;
+					UnityEngine.Debug.Log (Type + " is moved to " + coord.x + "," + coord.y + " in roomID " + gotoRoom.RoomID);
 				}
-
 			}
+
 		}
+
 	}
 }
 
