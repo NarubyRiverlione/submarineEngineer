@@ -271,6 +271,11 @@ public class MouseController : MonoBehaviour {
 		world.mySub.RemoveCrewOfType (crewType);
 		world.UpdateUIpanels ();
 	}
+
+	public void SetAllCrewMode (string crewModeString) {
+		CrewMode setMode = (CrewMode)Enum.Parse (typeof(CrewMode), crewModeString);
+		world.mySub.SetAllCrewMode (setMode);
+	}
 }
 	
 

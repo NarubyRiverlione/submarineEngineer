@@ -486,6 +486,11 @@ namespace Submarine.Model {
 			return rooms.ContainsKey (RoomID) ? rooms [RoomID] : null;
 		}
 
+		public List<int> GetRoomIDsForRoomType (RoomType findRoomType) {
+			return rooms.Where (r => r.Value.TypeOfRoom == findRoomType).Select (r => r.Key).ToList ();
+		}
+
+
 		private void MergeRooms (int newRoomID, int oldRoomID) {
 			Room oldRoom = GetRoom (oldRoomID);
 			if (oldRoom == null) {
@@ -525,8 +530,6 @@ namespace Submarine.Model {
 				}
 			}
 		}
-
-
 
 		private void RebuildRoom (int roomID) {
 			if (rooms.ContainsKey (roomID) == false) {
@@ -886,42 +889,12 @@ namespace Submarine.Model {
 				RemoveCrewOfType (foundCrew.Type);
 			else // found a officer, try again
 				RemoveRandomEnlisted ();
+		}
 
-//			int enlistedType = rnd.Next (0, 4);
-//			// recall if there are no crew of this type to be removed
-//			switch (enlistedType) {
-//				case 0:
-//					if (AmountOfCrewType (Units.Engineers) == 0)
-//						RemoveRandomEnlisted ();
-//					else
-//						RemoveCrewOfType (Units.Engineers);
-//					break;
-//				case 1:
-//					if (AmountOfCrewType (Units.Radioman) == 0)
-//						RemoveRandomEnlisted ();
-//					else
-//						RemoveCrewOfType (Units.Radioman);
-//					break;
-//				case 2:
-//					if (AmountOfCrewType (Units.Sonarman) == 0)
-//						RemoveRandomEnlisted ();
-//					else
-//						RemoveCrewOfType (Units.Sonarman);
-//					break;
-//				case 3:
-//					if (AmountOfCrewType (Units.Torpedoman) == 0)
-//						RemoveRandomEnlisted ();
-//					else
-//						RemoveCrewOfType (Units.Torpedoman);
-//					break;
-//				case 4:
-//					if (AmountOfCrewType (Units.Watchstanders) == 0)
-//						RemoveRandomEnlisted ();
-//					else
-//						RemoveCrewOfType (Units.Watchstanders);
-//					break;
-//			}
-
+		public void SetAllCrewMode (CrewMode setMode) {
+			foreach (var crewPair in CrewList) {
+				crewPair.Value.Mode = setMode;
+			}
 		}
 
 		#endregion

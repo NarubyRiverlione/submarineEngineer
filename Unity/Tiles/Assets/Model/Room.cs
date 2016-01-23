@@ -188,13 +188,6 @@ namespace Submarine.Model {
 			// as removing will trigger a complete rebuild of the room
 		}
 
-		//		public void WarnTilesIfRoomLayoutValidationIsChanged (bool oldRoomLayoutValid) {
-		//			if (oldRoomLayoutValid != IsLayoutValid) {
-		//				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
-		//				WarnTilesOfChange ();
-		//
-		//			}
-		//		}
 
 		private void WarnTilesOfChange () {
 			foreach (Point coord in coordinatesOfTilesInRoom) {
@@ -215,31 +208,66 @@ namespace Submarine.Model {
 		}
 
 		private bool AreAllResourcesAvailable () {
-			bool AllAvailable = true; // asume all resources are available so 1 not available resource will detected in the for each search
+			//bool AllAvailable = true; // asume all resources are available so 1 not available resource will detected in the for each search
+			bool allCrewIsInRoom = true;
+			bool allResourcesInRoom = true;
+
 			if (NeededResources != null) {
 				foreach (Resource needResource in NeededResources) {
-					int resouceAvailable = 0;
+					int amountOfResouceInRoom = 0;
 					// get available resouces
 					if (inSub != null && needResource.unit != Units.None) {
 						if (Resource.isCrewType (needResource.unit)) {
-							// crew as needed resource, check CrewList
-							resouceAvailable = inSub.AmountOfCrewType (needResource.unit);
+							// crew as needed resource, check if correct crewType is in room
+							allCrewIsInRoom = allCrewIsInRoom && NeededCrewIsInRoom (needResource);
 						}
-						else // no crew = normal resource
+						else {
+							// no crew = normal resource
 							if (needResource.unit == Units.food || needResource.unit == Units.tins)
 								// no carrier for food: crew needs to go to the gallery
 								// no carrier for tins: cook get (invisible?) tins for the storage
-								resouceAvailable = inSub.GetAllOutputOfUnit (needResource.unit);
-						else
-							resouceAvailable = ConnectedResource (needResource.unit);
+								amountOfResouceInRoom = inSub.GetAllOutputOfUnit (needResource.unit);
+							else
+								amountOfResouceInRoom = ConnectedResource (needResource.unit);
+							// now available is know check it agains needs
+							if (amountOfResouceInRoom < inSub.GetAllNeededResourcesOfUnit (needResource.unit))		// don't check needs of just this room but similar needs of all rooms (aka 2 bunks need together food)
+								allResourcesInRoom = false;
+						}
 					}
-					// now available is know check it agains needs
-					if (resouceAvailable < inSub.GetAllNeededResourcesOfUnit (needResource.unit))		// don't check needs of just this room but similar needs of all rooms (aka 2 bunks need together food)
-						AllAvailable = false;
+
 				}
 			}
-			return AllAvailable;
+			return allCrewIsInRoom && allResourcesInRoom;
 		}
+
+
+		public bool NeededCrewIsInRoom (Resource needResource) {
+			bool AllNeededCrewIsInRoom = true; 
+			int amountOfCrewInRoom = 0;
+//			// crew as needed resource, check crew coords
+//			foreach (var crewPair in inSub.CrewList) {
+//				if (crewPair.Value.Type == needResource.unit) {
+//					if (LowestCoordInRoom.Contains (crewPair.Value.coord)) {
+//						UnityEngine.Debug.Log ("Found a " + crewPair.Value.Type + " on a walkable tile in the " + TypeOfRoom + " roomID:" + RoomID);
+//						amountOfCrewInRoom++;
+//					}
+//				}
+//			}
+//			UnityEngine.Debug.Log ("Found total of " + amountOfCrewInRoom + " in the " + TypeOfRoom + " roomID:" + RoomID);
+//			amountOfCrewInRoom = inSub.AmountOfCrewType (needResource.unit);
+//
+
+			amountOfCrewInRoom = inSub.AmountOfCrewType (needResource.unit);
+
+			// now available is know check it agains needs
+			if (amountOfCrewInRoom < (int)Math.Floor (needResource.amount * Size))
+				AllNeededCrewIsInRoom = false;
+
+			return AllNeededCrewIsInRoom;
+		}
+
+
+
 
 		public int GetResouceNeeded (Units reqUnit) {
 			Resource foundResource = NeededResources.Where (res => res.unit == reqUnit).FirstOrDefault ();
