@@ -497,8 +497,8 @@ namespace Submarine.Model {
 					UnityEngine.Debug.LogError ("ERROR: cannot change room because new room (ID:" + newRoomID + ") doesn't exist");
 				}
 				else {
-					// remember is room was (in)valid before adding this tile
-					bool newRoomValid = newRoom.IsLayoutValid;	
+//					// remember is room was (in)valid before adding this tile
+//					bool newRoomValid = newRoom.IsLayoutValid;	
 
 					foreach (Point coord in oldRoom.coordinatesOfTilesInRoom) {
 						Tile oldRoomTile = GetTileAt (coord.x, coord.y);
@@ -508,8 +508,8 @@ namespace Submarine.Model {
 						newRoom.AddTile (oldRoomTile);
 					}
 
-					// compare new valid layout
-					newRoom.WarnTilesIfRoomLayoutValidationIsChanged (newRoomValid);  
+//					// compare new valid layout
+//					newRoom.WarnTilesIfRoomLayoutValidationIsChanged (newRoomValid);  
 					// remove old room form sub											 
 					RemoveRoomFromSubmarine (oldRoomID);  
 
@@ -535,7 +535,7 @@ namespace Submarine.Model {
 			}
 			else {
 				RoomType rebuildRoomType = rooms [roomID].TypeOfRoom;
-
+	
 				List<Point> remeberCoordinatesOfTiles = rooms [roomID].coordinatesOfTilesInRoom;
 				List<Piece> remeberPieces = new List<Piece> ();
 				// remove tiles in the old room (does also reset tile)
@@ -559,12 +559,7 @@ namespace Submarine.Model {
 					rebuiledCarriers = RebuildCarrierForPieces (rebuildTile.PiecesOnTile, rebuiledCarriers);
 				}
 
-//				// room is rebuilt, get new roomID
-//				Point coordToGetRoomID = remeberCoordinatesOfTiles [0];	// get X,Y coordinates so tile can be found in sub
-//				int newRoomID = GetTileAt (coordToGetRoomID.x, coordToGetRoomID.y).RoomID;
-//
-//				// return new room
-//				return rooms [newRoomID];
+
 			}
 		}
 
@@ -647,6 +642,7 @@ namespace Submarine.Model {
 							newRoom.RoomID = _nextRoomID;					// set RoomID in new room
 							AddRoomToSubmarine (newRoom);                   // add new room to submarine, _nextRoomID well be inc.
 							newRoom.AddTile (newRoomTile);                  // add Tile to room
+
 							// set RoomID in Tile, this will also fire the Update Sprite so be sure everything else is set !!
 							newRoomTile.RoomID = newRoom.RoomID;           	
 
@@ -677,6 +673,9 @@ namespace Submarine.Model {
 					// remember layout validation before removing tile
 					//bool oldRoomLayoutValid = removeFromThisRoom.IsLayoutValid;             
 
+					// remember how much space there was in the submarine for enlisted
+					RoomType typeOfRoom = removeFromThisRoom.TypeOfRoom;
+
 					// reset tile
 					TileToBeRemoved.Reset ();
 
@@ -687,6 +686,21 @@ namespace Submarine.Model {
 						// rebuild room to be sure the wall type and layout is still OK
 						RebuildRoom (roomID);    
 						removeFromThisRoom = null; 			// set to null be sure it isn't used anymore, the room is rebuild
+
+						// if this a bunk, remove enlisted if needed
+						if (typeOfRoom == RoomType.Bunks) {
+							int placesForEnlisted = GetAllOutputOfUnit (Units.Enlisted);
+							while (AmountOfEnlisted () > placesForEnlisted) {
+								RemoveRandomEnlisted ();
+							}
+						}
+						if (typeOfRoom == RoomType.Cabin) {
+							int placesForOfficers = GetAllOutputOfUnit (Units.Officers);
+							while (AmountOfOfficers > placesForOfficers) {
+								RemoveCrewOfType (Units.Officers);
+							}
+						}
+
 						// compare new valid layout
 						//newRoom.WarnTilesIfRoomLayoutValidationIsChanged (oldRoomLayoutValid);	 
 					}
@@ -787,10 +801,10 @@ namespace Submarine.Model {
 				Room addToThisRoom = rooms [neigboreTile.RoomID];	// room to add this tile too
 
 				//UnityEngine.Debug.Log ("Add Tile (" + newRoomTile.X + "," + newRoomTile.Y + ") to existing room ID:" + neigboreTile.RoomID);
-				bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
+				//bool oldRoomLayoutValid = addToThisRoom.IsLayoutValid;      // remember layout validation before removing tile
 				newRoomTile.RoomID = neigboreTile.RoomID;                              // store existing RoomID in newRoomTile
 				addToThisRoom.AddTile (newRoomTile);                                // add Tile to room
-				addToThisRoom.WarnTilesIfRoomLayoutValidationIsChanged (oldRoomLayoutValid);	// compare new valid layout 
+				//addToThisRoom.WarnTilesIfRoomLayoutValidationIsChanged (oldRoomLayoutValid);	// compare new valid layout 
 				
 			}
 			else {// Tile is already in a room: check if neighborer is in same room
@@ -854,6 +868,60 @@ namespace Submarine.Model {
 			amount += CrewList.Where (c => c.Value.Type == Units.Torpedoman).Count ();
 			amount += CrewList.Where (c => c.Value.Type == Units.Watchstanders).Count ();
 			return amount;
+		}
+
+		// remove a random type of enlisted crew
+		private void RemoveRandomEnlisted () {
+			Random rnd = new Random ();
+			int removeCrew = 0;
+			do {
+				removeCrew = rnd.Next (1, _nextCrewID);
+			}
+			while  (CrewList.ContainsKey (removeCrew) == false);
+		
+			
+			Crew foundCrew = CrewList [removeCrew];
+
+			if (foundCrew.Type != Units.Officers)
+				RemoveCrewOfType (foundCrew.Type);
+			else // found a officer, try again
+				RemoveRandomEnlisted ();
+
+//			int enlistedType = rnd.Next (0, 4);
+//			// recall if there are no crew of this type to be removed
+//			switch (enlistedType) {
+//				case 0:
+//					if (AmountOfCrewType (Units.Engineers) == 0)
+//						RemoveRandomEnlisted ();
+//					else
+//						RemoveCrewOfType (Units.Engineers);
+//					break;
+//				case 1:
+//					if (AmountOfCrewType (Units.Radioman) == 0)
+//						RemoveRandomEnlisted ();
+//					else
+//						RemoveCrewOfType (Units.Radioman);
+//					break;
+//				case 2:
+//					if (AmountOfCrewType (Units.Sonarman) == 0)
+//						RemoveRandomEnlisted ();
+//					else
+//						RemoveCrewOfType (Units.Sonarman);
+//					break;
+//				case 3:
+//					if (AmountOfCrewType (Units.Torpedoman) == 0)
+//						RemoveRandomEnlisted ();
+//					else
+//						RemoveCrewOfType (Units.Torpedoman);
+//					break;
+//				case 4:
+//					if (AmountOfCrewType (Units.Watchstanders) == 0)
+//						RemoveRandomEnlisted ();
+//					else
+//						RemoveCrewOfType (Units.Watchstanders);
+//					break;
+//			}
+
 		}
 
 		#endregion

@@ -497,7 +497,7 @@ public class WorldController : MonoBehaviour {
 
 					// show text (available / needed)
 					Text resourceText = resourceGameObject.GetComponent<Text> ();
-					resourceText.text = neededCount.ToString () + " / " + outputCount.ToString ();
+					resourceText.text = outputCount.ToString () + " / " + neededCount.ToString ();
 					// not enough resources = show text in red
 					resourceText.color = neededCount > outputCount ? Color.red : Color.white;
 				}
@@ -537,7 +537,10 @@ public class WorldController : MonoBehaviour {
 
 	// update free slots in Add Crew Panel
 	void UpdateCrewFreeSpaces () {
-		if (GameObject.Find ("ScrollView_CrewButtons") != null && mySub != null) { // only when Crew panel is shown and sub is fully loaded
+		
+		if (GameObject.Find ("ScrollView_CrewButtons") != null && mySub != null) { 
+			// only when Crew panel is shown and sub is fully loaded
+
 			GameObject.Find ("Officer place").GetComponent<Text> ().text = mySub.SpacesForOfficers.ToString ();
 
 			//GameObject.Find ("Cook place").GetComponent<Text> ().text = mySub.SpacesForCooks.ToString ();

@@ -127,9 +127,10 @@ public class MouseController : MonoBehaviour {
 				if (RoomTypeToBeBuild != RoomType.Empty && RoomTypeToBeBuild != RoomType.Remove)
 					world.mySub.AddTileToRoom (tileBelowMouse.X, tileBelowMouse.Y, RoomTypeToBeBuild);  
 				// remove tile form room
-				if (RoomTypeToBeBuild == RoomType.Remove)
+				if (RoomTypeToBeBuild == RoomType.Remove) {
 					world.mySub.RemoveTileOfRoom (tileBelowMouse.X, tileBelowMouse.Y);                 
-
+					world.UpdateUIpanels (); // removing a tile can change amount of crew
+				}
 				// add piece
 				if (unitConnectionPieceToBuild == Units.None && unitOfCarrierToBuild != Units.Remove)
 					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, unitOfCarrierToBuild);
@@ -141,7 +142,9 @@ public class MouseController : MonoBehaviour {
 				if (unitConnectionPieceToBuild != Units.None) {
 					world.mySub.AddPieceToTile (tileBelowMouse.X, tileBelowMouse.Y, unitConnectionPieceToBuild, true);
 				}
+		
 			}
+		
 		}
             
 	}

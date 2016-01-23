@@ -160,33 +160,48 @@ namespace Submarine.Model {
 		}
 
 		public void AddTile (Tile addTile) {
+			// remmeber layout validation before adding this tile
+			bool oldRoomLayoutValid = IsLayoutValid;   
+
 			Point coord = new Point (addTile.X, addTile.Y);
 			coordinatesOfTilesInRoom.Add (coord);
+
 			// update lowest tiles as walkable
 			SetLowestTilesInRoomWalkable ();
+
+			// update tiles is layout validation has changed
+			if (oldRoomLayoutValid != IsLayoutValid && addTile.RoomID != 0) { 
+				// first tile of a new room hasn't a roomID yet, don't call Warn, it will be called when the roomID is set
+				Debug.WriteLine ("Validation of room layout has changed, warn title of room");
+				WarnTilesOfChange ();
+			}
 		}
 
 		public void RemoveTile (Tile removeTile) {
 			Point coord = new Point (removeTile.X, removeTile.Y);
 			coordinatesOfTilesInRoom.Remove (coord);
+
 			// update lowest tiles as walkable
 			SetLowestTilesInRoomWalkable ();
+
+			// no need to check if valid layout of room has changed by removing this tile
+			// as removing will trigger a complete rebuild of the room
 		}
 
-		public void WarnTilesIfRoomLayoutValidationIsChanged (bool oldRoomLayoutValid) {
-			if (oldRoomLayoutValid != IsLayoutValid) {
-				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
-				WarnTilesOfChange ();
-
-			}				
-		}
+		//		public void WarnTilesIfRoomLayoutValidationIsChanged (bool oldRoomLayoutValid) {
+		//			if (oldRoomLayoutValid != IsLayoutValid) {
+		//				//Debug.WriteLine ("Validation of room layout has changed, warn title of room");
+		//				WarnTilesOfChange ();
+		//
+		//			}
+		//		}
 
 		private void WarnTilesOfChange () {
 			foreach (Point coord in coordinatesOfTilesInRoom) {
 				Tile warnTile = inSub.GetTileAt (coord.x, coord.y);
 				#if DEBUG
 				if (warnTile.RoomID != RoomID)
-					UnityEngine.Debug.LogError ("I don't belong here !!");
+					UnityEngine.Debug.LogError ("I don't belong here !! Should be in room " + warnTile.RoomID + " but are in  " + RoomID);
 				#endif
 
 				if (warnTile.TileChangedActions != null)
@@ -200,7 +215,7 @@ namespace Submarine.Model {
 		}
 
 		private bool AreAllResourcesAvailable () {
-			bool AllAvailable = true; // amuse all resources are available so 1 not available resource will detected in the for each search
+			bool AllAvailable = true; // asume all resources are available so 1 not available resource will detected in the for each search
 			if (NeededResources != null) {
 				foreach (Resource needResource in NeededResources) {
 					int resouceAvailable = 0;
